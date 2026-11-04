@@ -189,9 +189,6 @@ function calculateGlobalPages() {
   return { totalCount, pageMapping };
 }
 
-
-
-// ZOOM-FUNKSJONER
 // ZOOM-FUNKSJONER
 function updatePageScale() {
     const container = document.getElementById('viewportContainer');
@@ -484,8 +481,6 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
       ` : ''}
 
 
-
-
       <!-- INNHOLDSFORTEGNELSE -->
       ${page.type === 'toc' ? `
         <div class="flex-1 flex flex-col justify-start py-4 px-6 font-trykkskrift">
@@ -544,9 +539,9 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
             <div class="my-4 pl-8">
               <h3 class="text-4xl font-bold text-slate-900 mb-4">${page.wordsTitle || 'Les tre ganger:'}</h3>
               <div class="flex justify-between items-start pr-8">
-                <div class="flex flex-wrap gap-x-8 gap-y-3 max-w-[360px]">
-                  ${page.words.map(w => `<span class="reading-font text-4xl font-normal text-slate-900">${w.word}</span>`).join('')}
-                </div>
+<div class="${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'flex flex-nowrap justify-between items-center gap-x-3 w-full' : 'flex flex-wrap gap-x-8 gap-y-3 max-w-[360px]'}">
+  ${page.words.map(w => `<span class="reading-font ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'text-3xl whitespace-nowrap' : 'text-4xl'} font-normal text-slate-900">${w.word}</span>`).join('')}
+</div>
                 ${page.wordsSideImage ? `<img src="${page.wordsSideImage}" class="h-24 object-contain shrink-0 mt-1 mr-4">` : ''}
               </div>
             </div>
@@ -602,14 +597,41 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
                 <div class="flex justify-between items-center reading-font text-3xl text-slate-900 px-2">
                   ${page.matchTask.words.map(w => `<span class="${page.matchTask.boxed ? 'border-2 border-slate-900 px-3 py-0.5 rounded-sm' : ''}">${w}</span>`).join('')}
                 </div>
-                <div class="space-y-4 pt-2">
-                  <div class="flex justify-between items-center px-2">
-                    ${page.matchTask.row1.map(img => `<div class="w-24 flex justify-center items-center"><img src="${img.src}" class="${img.size || 'h-16'} object-contain"></div>`).join('')}
-                  </div>
-                  <div class="flex justify-center items-center gap-12 pr-12">
-                    ${page.matchTask.row2.map(img => `<div class="w-24 flex justify-center items-center"><img src="${img.src}" class="${img.size || 'h-16'} object-contain"></div>`).join('')}
-                  </div>
-                </div>
+<div class="space-y-4 pt-2">
+
+  ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? `
+
+    <!-- NY BILDEFORDELING FOR ARK 13 OG 14 -->
+    <div class="grid grid-cols-3 gap-4 items-center w-full px-2">
+      ${page.matchTask.row1.map(img => `
+        <div class="flex justify-center items-center">
+          <img src="${img.src}" class="${img.size || 'h-16'} object-contain">
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 items-center w-full px-12">
+      ${page.matchTask.row2.map(img => `
+        <div class="flex justify-center items-center">
+          <img src="${img.src}" class="${img.size || 'h-16'} object-contain">
+        </div>
+      `).join('')}
+    </div>
+
+  ` : `
+
+    <!-- OPPRINNELIG BILDEFORDELING FOR DE ANDRE ARKENE -->
+    <div class="flex justify-between items-center px-2">
+      ${page.matchTask.row1.map(img => `<div class="w-24 flex justify-center items-center"><img src="${img.src}" class="${img.size || 'h-16'} object-contain"></div>`).join('')}
+    </div>
+
+    <div class="flex justify-center items-center gap-12 pr-12">
+      ${page.matchTask.row2.map(img => `<div class="w-24 flex justify-center items-center"><img src="${img.src}" class="${img.size || 'h-16'} object-contain"></div>`).join('')}
+    </div>
+
+  `}
+
+</div>
               </div>
             </div>
           ` : ''}
@@ -621,7 +643,12 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
                 <div class="space-y-1 reading-font text-3xl text-slate-900 w-fit">
                   ${page.topReadingTask.sentences.map(s => `<p class="leading-snug whitespace-nowrap">${s}</p>`).join('')}
                 </div>
-                ${page.topReadingTask.image ? `<img src="${page.topReadingTask.image}" class="${page.topReadingTask.imageSize || 'h-32'} object-contain shrink-0 mt-2 mr-4">` : ''}
+${page.topReadingTask.image ? `
+  <img
+    src="${page.topReadingTask.image}"
+    class="${page.topReadingTask.imageSize || 'h-32'} object-contain shrink-0 ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? (page.topReadingTask.imageMargin || 'mt-6') : 'mt-2'} mr-4 ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'photo-frame' : ''}"
+  >
+` : ''}
               </div>
             </div>
           ` : ''}
