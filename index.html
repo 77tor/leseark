@@ -1,0 +1,451 @@
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leseark 1. Klasse</title>
+  <link rel="icon" type="image/svg+xml" href="leselekser-favicon.svg">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome for ikoner -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Eget stilark -->
+  <link rel="stylesheet" href="styles.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Open Sans', 'sans-serif'],
+            display: ['Fredoka', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-slate-100 h-screen font-sans text-slate-800 flex flex-col md:flex-row overflow-hidden">
+
+  <!-- Sidebar Navigasjon / Kontrollpanel -->
+  <aside class="no-print w-full md:w-80 bg-white border-r border-slate-200 p-5 flex flex-col justify-between shrink-0 shadow-sm z-10 overflow-y-auto">
+
+    <div class="space-y-6">
+
+<!-- Tittel / Logo -->
+<div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+
+    <img
+        src="leselekser-favicon.svg"
+        alt="Logo"
+        class="w-9 h-9 object-contain flex-shrink-0"
+    >
+
+    <div>
+        <h1 class="font-display font-bold text-lg leading-tight text-slate-800">
+            Leseark 1. Klasse
+        </h1>
+        <p class="text-xs text-slate-500">
+            Utskriftsklare leselekser
+        </p>
+    </div>
+
+</div>
+
+      <!-- Velg Uke / Ark -->
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+          Velg Uke / Ark
+        </label>
+
+        <div id="sheetsList" class="space-y-1.5 max-h-64 overflow-y-auto pr-1">
+          <!-- Dynamiske ark-knapper genereres via app.js -->
+        </div>
+      </div>
+
+      <!-- Innstilling for utskrift -->
+      <div class="pt-4 border-t border-slate-100 space-y-4">
+
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">
+          Innstilling for utskrift
+        </label>
+
+        <!-- Knapp for å åpne Ukenummer-modal -->
+        <button
+          onclick="openWeekModal()"
+          class="w-full flex items-center justify-between p-2.5 bg-white border border-slate-200 hover:border-sky-300 rounded-xl text-sm font-semibold text-slate-700 shadow-sm transition">
+
+          <span class="flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-sky-600"></i>
+            Rediger ukenumre...
+          </span>
+
+          <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+        </button>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input
+            type="checkbox"
+            id="showPageNumbersCheck"
+            onchange="updateHeaderOptions()"
+            class="w-4 h-4 text-sky-600 rounded cursor-pointer">
+
+          <label for="showPageNumbersCheck" class="text-xs font-semibold text-slate-700 cursor-pointer">
+            Vis sidetall i bunntekst
+          </label>
+        </div>
+      </div>
+
+      <!-- Zoom-kontroll -->
+      <div class="pt-4 border-t border-slate-100">
+
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+          Skjermvisning (Zoom)
+        </label>
+
+        <div class="flex items-center gap-2">
+
+          <button
+            onclick="changeZoom(-0.05)"
+            class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-bold transition">
+            <i class="fa-solid fa-minus"></i>
+          </button>
+
+          <button
+            onclick="resetZoom()"
+            class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-semibold transition"
+            id="zoomValText">
+            Auto
+          </button>
+
+          <button
+            onclick="changeZoom(0.05)"
+            class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-bold transition">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Handlingsknapper -->
+    <div class="pt-4 border-t border-slate-100 mt-6">
+
+      <button
+        onclick="openPrintModal()"
+        class="w-full py-3 px-4 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-bold text-sm shadow-sm flex items-center justify-center gap-2 transition transform active:scale-95">
+
+        <i class="fa-solid fa-print"></i>
+        Skriv ut
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- Hovedområde for visning av lesearkene -->
+  <main class="flex-1 min-h-0 min-w-0 p-2 md:p-6 overflow-hidden flex flex-col items-center">
+
+    <!-- Container som holder A4-arkene -->
+    <div
+    id="viewportContainer"
+    class="w-full flex-1 min-h-0 flex flex-col items-center justify-start gap-0 overflow-hidden">
+
+      <!-- Innholdet og sidene bygges dynamisk via app.js -->
+
+    </div>
+
+  </main>
+
+
+  <!-- MODAL FOR REDIGERING AV UKENUMRE PER ARK -->
+  <div
+    id="weekModal"
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-100 max-w-lg w-full p-6 m-4 max-h-[85vh] flex flex-col">
+
+      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">
+            Sett ukenumre per ark
+          </h3>
+
+          <p class="text-xs text-slate-500">
+            Tilpass hvilken uke hvert enkelt leseark tilhører.
+          </p>
+        </div>
+
+        <button
+          onclick="closeWeekModal()"
+          class="text-slate-400 hover:text-slate-600 p-1 text-base">
+
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+      <!-- Automatisk generert liste -->
+      <div
+        id="weekModalList"
+        class="flex-1 overflow-y-auto py-4 space-y-3">
+
+        <!-- Fylles dynamisk fra JavaScript -->
+
+      </div>
+
+      <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+
+        <button
+          onclick="resetDefaultWeeks()"
+          class="text-xs text-slate-500 hover:text-sky-600 underline">
+          Tilbakestill standarduker
+        </button>
+
+        <div class="flex gap-2">
+
+          <button
+            onclick="closeWeekModal()"
+            class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+            Lukk
+          </button>
+
+          <button
+            onclick="saveWeekSettings()"
+            class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-xl shadow-sm transition">
+            Lagre innstillinger
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- UTSKRIFTSMODAL -->
+  <div
+    id="printModal"
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+
+      <!-- Modal Header -->
+      <div class="bg-indigo-600 px-6 py-4 flex justify-between items-center text-white">
+
+        <div class="flex items-center gap-2.5">
+
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v2zm8-12V5a2 2 0 00-2-2H7a2 2 0 00-2 2v4h10z"/>
+
+          </svg>
+
+          <h3 class="text-xl font-bold tracking-tight">
+            Skriv ut leseark
+          </h3>
+
+        </div>
+
+        <button
+          onclick="closePrintModal()"
+          class="text-indigo-200 hover:text-white rounded-lg p-1 hover:bg-indigo-700/50 transition">
+
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+
+        </button>
+
+      </div>
+
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-6 text-slate-700">
+
+        <!-- Seksjon 1: Hva skal skrives ut? -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+            Hva vil du skrive ut?
+          </label>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+            <!-- Valg 1: Alle ark -->
+            <label
+              class="flex items-center gap-3 p-3.5 border-2 border-indigo-600 bg-indigo-50/40 rounded-xl cursor-pointer hover:bg-slate-50 transition print-option"
+              id="opt-all-label">
+
+              <input
+                type="radio"
+                name="printScope"
+                value="all"
+                checked
+                onchange="updatePrintScopeOptions()"
+                class="text-indigo-600 focus:ring-indigo-500">
+
+              <div>
+                <div class="font-bold text-slate-900 text-sm">
+                  Alle ark
+                </div>
+                <div class="text-xs text-slate-500">
+                  Alle ark i leseheftet
+                </div>
+              </div>
+            </label>
+
+            <!-- Valg 2: Ark valgt i venstremenyen -->
+            <label
+              class="flex items-center gap-3 p-3.5 border-2 border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition print-option"
+              id="opt-selected-label">
+
+              <input
+                type="radio"
+                name="printScope"
+                value="selected"
+                onchange="updatePrintScopeOptions()"
+                class="text-indigo-600 focus:ring-indigo-500">
+
+              <div>
+                <div class="font-bold text-slate-900 text-sm">
+                  Ark valgt i venstremenyen
+                </div>
+                <div class="text-xs text-slate-500">
+                  Følger synlige/valgte ark
+                </div>
+              </div>
+            </label>
+
+            <!-- Valg 3: Gjeldende ark -->
+            <label
+              class="flex items-center gap-3 p-3.5 border-2 border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition print-option"
+              id="opt-current-label">
+
+              <input
+                type="radio"
+                name="printScope"
+                value="current"
+                onchange="updatePrintScopeOptions()"
+                class="text-indigo-600 focus:ring-indigo-500">
+
+              <div>
+                <div class="font-bold text-slate-900 text-sm">
+                  Gjeldende side
+                </div>
+                <div class="text-xs text-slate-500" id="currentSheetName">
+                  Arket som vises nå
+                </div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Seksjon 3: Tilleggsvalg -->
+        <div class="pt-2 border-t border-slate-100">
+
+          <label class="flex items-center gap-3 cursor-pointer">
+
+            <input
+              type="checkbox"
+              id="includeCoverCheckbox"
+              checked
+              class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500">
+
+            <span class="text-sm font-medium text-slate-800">
+              Inkluder Forside og Innholdsfortegnelse (Ark 0)
+            </span>
+
+          </label>
+        </div>
+
+
+        <!-- Sammendrag / Info-boks -->
+        <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex items-center justify-between text-sm">
+
+          <span class="text-slate-600 font-medium">
+            Beregnet utskrift:
+          </span>
+
+          <span
+            class="font-bold text-indigo-700 text-base"
+            id="printSummaryText">
+            13 ark (26 sider)
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Modal Footer -->
+      <div class="bg-slate-50 px-6 py-4 flex justify-end gap-3 border-t border-slate-100">
+
+        <button
+          onclick="closePrintModal()"
+          class="px-5 py-2.5 rounded-xl border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100 transition text-sm">
+          Avbryt
+        </button>
+
+        <button
+          onclick="executePrint()"
+          class="px-6 py-2.5 rounded-xl bg-indigo-600 font-bold text-white hover:bg-indigo-700 transition shadow-md shadow-indigo-200 text-sm flex items-center gap-2">
+
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 002 2v2zm8-12V5a2 2 0 00-2-2H7a2 2 0 00-2 2v4h10z"/>
+          </svg>
+
+          Skriv ut nå
+
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- DATAFILER -->
+  <script src="data/ark_00.js"></script>
+  <script src="data/ark_01.js"></script>
+  <script src="data/ark_02.js"></script>
+  <script src="data/ark_03.js"></script>
+  <script src="data/ark_04.js"></script>
+  <script src="data/ark_05.js"></script>
+  <script src="data/ark_06.js"></script>
+  <script src="data/ark_07.js"></script>
+  <script src="data/ark_08.js"></script>
+  <script src="data/ark_09.js"></script>
+  <script src="data/ark_10.js"></script>
+  <script src="data/ark_11.js"></script>
+  <script src="data/ark_12.js"></script>
+
+  <!-- Hovedlogikk -->
+  <script src="app.js"></script>
+
+</body>
+</html>

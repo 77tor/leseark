@@ -1,0 +1,360 @@
+/* ==========================================================================
+   LESELEKSER 1. TRINN – STILARK
+   Skjermvisning og utskrift bruker samme A4-layout.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. FONTER OG TYPOGRAFI
+   ========================================================================== */
+
+@font-face {
+    font-family: 'Trykkskrift';
+    src: url('Skrift/trykkskrift.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.font-trykkskrift,
+.font-trykkskrift .reading-font {
+    font-family: 'Trykkskrift', 'Open Sans', sans-serif !important;
+}
+
+.size-normal {
+    font-size: 1.2em;
+}
+
+.size-normal .reading-font {
+    font-size: 2.3rem !important;
+    line-height: 1.4 !important;
+}
+
+.size-normal .task-spacing {
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+
+/* ==========================================================================
+   2. A4-ARK – FELLES GRUNNOPPSETT FOR SKJERM OG UTSKRIFT
+   ========================================================================== */
+
+.a4-preview,
+.print-page {
+    width: 210mm;
+    height: 297mm;
+    min-width: 210mm;
+    min-height: 297mm;
+    max-width: 210mm;
+    max-height: 297mm;
+
+    box-sizing: border-box;
+    flex: 0 0 210mm;
+
+    padding: 12mm !important;
+
+    position: relative;
+    background: #ffffff;
+    color: #0f172a;
+
+    transform-origin: top center;
+}
+
+/* Skygge brukes bare som visuell hjelp på skjermen. */
+.a4-preview {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Bilder skal beholde størrelsen som er angitt i HTML/Tailwind-klassene. */
+.a4-preview img,
+.print-page img {
+    object-fit: contain;
+}
+
+/* Bildeinnramming på forsiden. */
+.photo-frame {
+    background-color: #ffffff;
+    padding: 6px 6px 10px 6px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 6px 8px 18px rgba(0, 0, 0, 0.2);
+    transform: rotate(-5deg);
+}
+
+
+/* ==========================================================================
+   3. UTSKRIFT – BEHOLD SAMME STØRRELSER OG AVSTANDER SOM PÅ SKJERM
+   ========================================================================== */
+
+@media print {
+
+    /* A4 uten ekstra marg fra nettleseren.
+       Velg også A4, 100 % skalering og ingen marger i utskriftsdialogen. */
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    /* Fjern skjermens sideoppsett og rullefelt. */
+    html,
+    body {
+        width: 210mm !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: visible !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+
+        display: block !important;
+
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Hovedområdet skal ikke lenger være en flex-container fra Tailwind. */
+    main {
+        display: block !important;
+
+        width: 210mm !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: visible !important;
+        background: #ffffff !important;
+    }
+
+    /* Skjul navigasjon, knapper og dialogvinduer. */
+    aside,
+    #printModal,
+    #weekModal,
+    .no-print,
+    button,
+    header {
+        display: none !important;
+    }
+
+    /* Utskriftscontaineren skal ikke arve flex, gap eller zoom fra skjermen. */
+    #viewportContainer {
+        display: block !important;
+
+        width: 210mm !important;
+        min-width: 210mm !important;
+        max-width: 210mm !important;
+
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        gap: 0 !important;
+        overflow: visible !important;
+
+        transform: none !important;
+        background: #ffffff !important;
+    }
+
+    /* Selve arket.
+       Viktig: transform:none overstyrer zoom som settes inline av app.js. */
+    #viewportContainer .a4-preview,
+    #viewportContainer .print-page {
+        display: flex !important;
+
+        width: 210mm !important;
+        min-width: 210mm !important;
+        max-width: 210mm !important;
+
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+
+        box-sizing: border-box !important;
+        flex: 0 0 297mm !important;
+
+        margin: 0 !important;
+        padding: 12mm !important;
+
+        transform: none !important;
+        transform-origin: top left !important;
+
+        box-shadow: none !important;
+
+        overflow: hidden !important;
+
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+
+        page-break-after: always !important;
+        break-after: page !important;
+
+        background: #ffffff !important;
+        color: #000000 !important;
+
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Ikke legg inn et ekstra, tomt ark etter siste side. */
+    #viewportContainer .a4-preview:last-child,
+    #viewportContainer .print-page:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+    }
+
+    /* Ikke endre bildehøyde, bredde eller plassering ved utskrift.
+       Størrelsene fra arkets egne HTML-klasser skal gjelde. */
+    #viewportContainer .a4-preview img,
+    #viewportContainer .print-page img {
+        object-fit: contain;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    /* Behold den visuelle innrammingen på bilder. */
+    .photo-frame {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Behold fontene også ved utskrift. */
+    .font-trykkskrift,
+    .font-trykkskrift .reading-font {
+        font-family: 'Trykkskrift', 'Open Sans', sans-serif !important;
+    }
+
+    /* Ingen egne utskriftsmarginer på lydoppgaver eller andre oppgaver.
+       Dermed beholdes avstandene som er definert i skjermoppsettet. */
+
+    /* Støtte for eksisterende utskriftsvalg i app.js. */
+    #viewportContainer.print-single-only .a4-preview:nth-child(even),
+    #viewportContainer.print-single-only .print-page:nth-child(even) {
+        display: none !important;
+    }
+
+    #viewportContainer.hide-cover-on-print .a4-preview[data-sheet-id="sheet-0"],
+    #viewportContainer.hide-cover-on-print .print-page[data-sheet-id="sheet-0"] {
+        display: none !important;
+    }
+}
+
+
+/* ==========================================================================
+   4. SKJERM – BEHOLD SKJERMENS EKSISTERENDE VISNING
+   ========================================================================== */
+
+@media screen {
+
+    .a4-preview,
+    .print-page {
+        background: #ffffff;
+    }
+}
+
+/* ==========================================================================
+   5. UTSKRIFTSMODAL – BREDERE VINDU OG BEDRE PLASS TIL VALGENE
+   ========================================================================== */
+
+/* Gjør selve modalen bredere */
+#printModal > div {
+    width: 560px !important;
+    max-width: calc(100vw - 32px) !important;
+}
+
+/* De tre valgene får lik bredde */
+#printModal .print-scope-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+/* Sørg for at teksten holder seg innenfor boksene */
+#printModal .print-scope-options label {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Litt bedre plass til overskriftene */
+#printModal .print-scope-options label span {
+    overflow-wrap: break-word;
+}
+
+/* ==========================================================================
+   6. SKJERMVISNING – TILPASS A4-ARKET TIL TILGJENGELIG SKJERMPLASS
+   ========================================================================== */
+
+@media screen {
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    body {
+        min-height: 0;
+    }
+
+main {
+    min-height: 0;
+    min-width: 0;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+#viewportContainer {
+    width: 100%;
+    min-height: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    overflow: visible;
+    gap: 0;
+    padding: 25px 0 60px;
+    margin: 0;
+}
+
+/* Tydelig papirfølelse mellom sidene */
+#viewportContainer .print-page {
+    background: #ffffff;
+    box-shadow:
+        0 2px 5px rgba(15, 23, 42, 0.08),
+        0 8px 20px rgba(15, 23, 42, 0.10);
+}
+
+    #viewportContainer .print-page {
+        flex-shrink: 0;
+        transform-origin: top center;
+    }
+}
+/* ==========================================================================
+   7. EKSTRA LUFT ETTER SISTE VISTE ARK
+   ========================================================================== */
+
+@media screen {
+
+#viewportContainer::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 45px;
+    min-height: 45px;
+    flex: 0 0 45px;
+}
+
+}
