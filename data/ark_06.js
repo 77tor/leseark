@@ -53,7 +53,22 @@ window.lesearkData.push({
       bottomImages: [
         { src: "Bilder/tog.png", size: "h-20" },
         { src: "Bilder/bil.png", size: "h-20" }
-      ]
+],
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+        instruction: "Hvor mange er det i hver tier-ramme?",
+
+        tasks: [
+          {
+            image: "matte/ark_06_01.png",
+            alt: "Telle",
+            imageSize: "size-xxxl"
+          }
+
+        ]
+      }
     }
   ]
 });

@@ -52,7 +52,29 @@ window.lesearkData.push({
       mouseImage: "Bilder/tekst_01.png",
       imageStyle: "photo-frame",
       imageMargin: "ml-[70px]",
-      imageSize: "max-h-64 max-w-[280px]"
+      imageSize: "max-h-64 max-w-[280px]",
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+        instruction: "Hvor mange kuler er det? Tegn strek.",
+
+        taskGap: 80,
+        tasks: [
+        {
+            image: "matte/ark_01_01.png",
+            alt: "kuler",
+            imageSize: "size-xl",
+
+        },
+
+    {
+        image: "matte/ark_01_02.png",
+        alt: "Terninger",
+        imageSize: "size-small"
+    }
+    ]
+      }
     }
   ]
 });

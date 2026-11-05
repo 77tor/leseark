@@ -50,7 +50,23 @@ window.lesearkData.push({
       ],
       mouseImage: "Bilder/mus.png", // Eventuelt "Bilder/mus_ost.png" dersom filen har spesifikt navn
       imageMargin: "ml-8",
-      imageSize: "max-h-72 max-w-[220px]"
+      imageSize: "max-h-72 max-w-[220px]",
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+        instruction: "Sorter fruktene etter størrelse.\nSkriv 1 på den minste, 2 på den mellomste, og 3 på den største.",
+
+        tasks: [
+          {
+            image: "matte/ark_04_01.png",
+            alt: "Telle",
+            imageSize: "size-xxxl"
+          }
+
+        ]
+      }
     }
   ]
 });

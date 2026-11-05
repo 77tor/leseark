@@ -59,8 +59,7 @@ window.lesearkData.push({
           "Zara ser en zebra i en zoo.",
           "Zebraen går rolig.",
           "Hun tar taxi hjem.",
-          "Hjemme spiller hun på xylofon.",
-          "Det er gøy!"
+          "Hjemme spiller hun på xylofon."
         ],
         image: "Bilder/zoo.png",
         imageSize: "h-36 max-w-[220px]"
@@ -69,16 +68,31 @@ window.lesearkData.push({
       extraTitle: "Ekstra leselekser:",
       extraSentences: [
         "Vi lager wok til mat.",
-        "Live elsker wok!",
-        "De vasker opp.",
+        "Etterpå vasker de opp.",
         "Pappa tar i mye Zalo.",
         "Det blir masse skum!"
       ],
 
       mouseImage: "Bilder/tekst_14.png",
-      imageMargin: "mt-6",
-      imageSize: "max-h-56 max-w-[280px]",
-      imageStyle: "photo-frame"
+      imageMargin: "relative -left-[80px] mt-[-5px]",
+      imageSize: "max-h-52 max-w-[220px]",
+      imageStyle: "photo-frame",
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+
+    tasks: [
+        {
+            image: "matte/ark_14_01.png",
+            alt: "Telle",
+            imageSize: "size-large",
+            instruction: "Øv på å skrive tallene."
+        }
+
+        ]
+      }
     }
   ]
 });

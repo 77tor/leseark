@@ -44,7 +44,29 @@ window.lesearkData.push({
       ],
       mouseImage: "Bilder/mus_i_mur.png", // Bildet av musa i murveggen
       imageMargin: "ml-8",
-      imageSize: "max-h-72 max-w-[260px]"
+      imageSize: "max-h-72 max-w-[260px]",
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+
+    tasks: [
+        {
+            image: "matte/ark_05_01.png",
+            alt: "Telle",
+            imageSize: "size-large",
+            instruction: "Sett ring rundt den største mengden."
+        },
+        {
+            image: "matte/ark_05_02.png",
+            alt: "Telle",
+            imageSize: "size-large",
+            instruction: "Sett kryss over den minste mengden."
+        }
+
+        ]
+      }
     }
   ]
 });

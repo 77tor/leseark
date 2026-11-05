@@ -56,7 +56,23 @@ window.lesearkData.push({
       mouseImage: "Bilder/troll.png",
       imageMargin: "relative -left-[20px] mt-[40px]",
       imageSize: "max-h-56 max-w-[260px]",
-      imageStyle: "photo-frame"
+      imageStyle: "photo-frame",
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+
+    tasks: [
+        {
+            image: "matte/ark_10_01.png",
+            alt: "Telle",
+            imageSize: "size-xxxxl",
+            instruction: "Hvor mange? Tegn strek til tallinja."
+        }
+
+        ]
+      }
     }
   ]
 });

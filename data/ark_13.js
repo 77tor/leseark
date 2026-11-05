@@ -54,8 +54,7 @@ window.lesearkData.push({
       "Ali og Mia skal på camping.",
       "De har med telt og mat.",
       "Ali liker å gå med caps.",
-      "Mia vil ha cola.",
-      "Etterpå skal de ha quiz."
+      "Mia vil ha cola."
     ],
     image: "Bilder/tekst_13.png",
     imageMargin: "mt-12",
@@ -68,14 +67,29 @@ window.lesearkData.push({
     "Mamma har kjøpt Q-tips.",
     "Vi skal ha quiz i dag.",
     "Ali liker cola.",
-    "Mia har vært på cup i helga.",
-    "Qatar er et land."
+    "Mia har vært på cup i helga."
   ],
 
   mouseImage: "Bilder/cup.png",
   imageMargin: "mt-6",
   imageSize: "max-h-56 max-w-[250px]",
-  imageStyle: "photo-frame"
-}
+  imageStyle: "photo-frame",
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+
+    tasks: [
+        {
+            image: "matte/ark_13_01.png",
+            alt: "Telle",
+            imageSize: "size-large",
+            instruction: "Øv på å skrive tallene."
+        }
+
+        ]
+      }
+    }
   ]
 });

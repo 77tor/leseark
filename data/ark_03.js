@@ -50,7 +50,23 @@ window.lesearkData.push({
       ],
       mouseImage: "Bilder/syl.png",
       imageMargin: "ml-[140px]",
-      imageSize: "max-h-72 max-w-[200px]"
+      imageSize: "max-h-72 max-w-[200px]",
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+        instruction: "Hva hører sammen?\nSett strek mellom det som har lik verdi.",
+
+        tasks: [
+          {
+            image: "matte/ark_03_01.png",
+            alt: "Telle",
+            imageSize: "size-xxxl"
+          }
+
+        ]
+      }
     }
   ]
 });

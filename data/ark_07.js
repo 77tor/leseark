@@ -70,7 +70,23 @@ window.lesearkData.push({
       mouseImage: "Bilder/tekst_07.png",
       imageMargin: "relative -left-[40px] mt-[40px]",
       imageSize: "max-h-56 max-w-[280px]",
-      imageStyle: "photo-frame"
+      imageStyle: "photo-frame",
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+
+    tasks: [
+        {
+            image: "matte/ark_07_01.png",
+            alt: "Telle",
+            imageSize: "size-large",
+            instruction: "Hvor mange? Sett ring rundt riktig antall."
+        }
+
+        ]
+      }
     }
   ]
 });

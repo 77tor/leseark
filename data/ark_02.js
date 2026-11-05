@@ -50,7 +50,29 @@ window.lesearkData.push({
       ],
       mouseImage: "Bilder/solo.png",
       imageMargin: "ml-[140px]",
-      imageSize: "max-h-50 max-w-[65px]"
+      imageSize: "max-h-50 max-w-[65px]",
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+
+        taskGap: 10,
+    tasks: [
+        {
+            image: "matte/ark_02_01.png",
+            alt: "Telle",
+            imageSize: "size-large",
+            instruction: "Hvor mange? Sett ring rundt riktig tall."
+        },
+        {
+            image: "matte/ark_02_02.png",
+            alt: "Telle",
+            imageSize: "size-large",
+            instruction: "Hvor mange? Skriv riktig antall."
+        }
+
+        ]
+      }
     }
   ]
 });

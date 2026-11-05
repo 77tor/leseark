@@ -53,10 +53,25 @@ window.lesearkData.push({
         "Nam, nam, de er gode."
       ],
       mouseImage: "Bilder/krabbe_strand.png",
-      imagePosition: "bottom",
-      imageSize: "max-h-56 max-w-[300px]",
-      imageMargin: "mt-6",
-      imageStyle: "photo-frame"
+      imageMargin: "relative -left-[80px] mt-[-70px]",
+      imageSize: "max-h-52 max-w-[220px]",
+      imageStyle: "photo-frame",
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+
+    tasks: [
+        {
+            image: "matte/ark_12_01.png",
+            alt: "Telle",
+            imageSize: "size-xxl",
+            instruction: "Øv på å skrive tallene."
+        }
+
+        ]
+      }
     }
   ]
 });

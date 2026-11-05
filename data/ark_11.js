@@ -53,10 +53,26 @@ window.lesearkData.push({
         "Alle biene er flinke og glade."
       ],
       mouseImage: "Bilder/bie.png",
-      imagePosition: "bottom",
-      imageSize: "max-h-56 max-w-[300px]",
-      imageMargin: "mt-6",
-      imageStyle: "photo-frame"
+      imageMargin: "relative -left-[80px] mt-[-50px]",
+      imageSize: "max-h-52 max-w-[260px]",
+      imageStyle: "photo-frame",
+
+
+
+      // MATTEOPPGAVE
+      mathTask: {
+        title: "Matteoppgave:",
+
+    tasks: [
+        {
+            image: "matte/ark_11_01.png",
+            alt: "Telle",
+            imageSize: "size-xxl",
+            instruction: "Øv på å skrive tallene."
+        }
+
+        ]
+      }
     }
   ]
 });
