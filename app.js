@@ -21,6 +21,7 @@ const defaultWeekMapping = {
 let sheetVisibility = JSON.parse(localStorage.getItem('leseark_visibility')) || {};
 let sheetMode = JSON.parse(localStorage.getItem('leseark_sheetmode')) || {};
 let sheetWeeks = JSON.parse(localStorage.getItem('leseark_sheetweeks')) || { ...defaultWeekMapping };
+let sheetMathVisibility = JSON.parse(localStorage.getItem('leseark_math_visibility')) || {};
 
 let currentSheetId = initialSheets[0] ? initialSheets[0].id : "sheet-1";
 let showPageNumbers = localStorage.getItem('leseark_pagenums') !== "false";
@@ -114,51 +115,115 @@ function setSheetMode(e, sheetId, mode) {
   renderSheet();
 }
 
+// VIS / SKJUL MATTEOPPGAVE FOR DET AKTUELLE LESEARKET
+function toggleMathTask(e, sheetId) {
+    e.stopPropagation();
+
+    sheetMathVisibility[sheetId] = !sheetMathVisibility[sheetId];
+
+    localStorage.setItem(
+        'leseark_math_visibility',
+        JSON.stringify(sheetMathVisibility)
+    );
+
+    renderSidebar();
+    renderSheet();
+}
+
 function renderSidebar() {
-  const container = document.getElementById('sheetsList');
-  if (!container) return;
-  container.innerHTML = '';
+    const container = document.getElementById('sheetsList');
+    if (!container) return;
 
-  initialSheets.forEach(sheet => {
-    const isActive = sheet.id === currentSheetId;
-    const isHidden = sheetVisibility[sheet.id] === true;
-    const currentMode = getMode(sheet.id);
-    const weekStr = getWeekText(sheet.id);
+    container.innerHTML = '';
 
-    const btn = document.createElement('div');
-    btn.className = `group flex flex-col p-2.5 rounded-xl text-sm font-semibold transition ${
-      isActive
-        ? 'bg-sky-50 text-sky-700 border border-sky-200 shadow-sm'
-        : 'text-slate-600 hover:bg-slate-100 border border-transparent'
-    } ${isHidden ? 'opacity-50' : ''}`;
+    initialSheets.forEach(sheet => {
+        const isActive = sheet.id === currentSheetId;
+        const isHidden = sheetVisibility[sheet.id] === true;
+        const currentMode = getMode(sheet.id);
+        const weekStr = getWeekText(sheet.id);
 
-    btn.innerHTML = `
-      <div class="flex items-center justify-between cursor-pointer" onclick="selectSheet('${sheet.id}')">
-        <div class="flex items-center gap-2 overflow-hidden flex-1">
-          <i class="fa-solid fa-file-lines ${isActive ? 'text-sky-600' : 'text-slate-400'}"></i>
-          <span class="truncate ${isHidden ? 'line-through text-slate-400' : ''}">${sheet.title}</span>
-          ${weekStr ? `<span class="text-[10px] font-normal px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${weekStr}</span>` : ''}
-        </div>
-        <button onclick="toggleHideSheet(event, '${sheet.id}')" class="text-slate-400 hover:text-sky-600 p-1 text-xs transition" title="${isHidden ? 'Vis ark' : 'Skjul ark'}">
-          <i class="fa-solid ${isHidden ? 'fa-eye-slash text-amber-500' : 'fa-eye'}"></i>
-        </button>
-      </div>
+        const hasMathTask = (sheet.pages || [sheet])
+            .some(page => page.mathTask);
 
-      ${!isHidden ? `
-        <div class="flex gap-1.5 mt-2 pl-6 text-xs font-normal">
-          <button onclick="setSheetMode(event, '${sheet.id}', 'page1')"
-                  class="px-2 py-0.5 rounded border transition ${currentMode === 'page1' ? 'bg-sky-600 text-white border-sky-600 font-medium' : 'bg-white text-slate-500 border-slate-300 hover:bg-slate-50'}">
-            Kun Side 1
-          </button>
-          <button onclick="setSheetMode(event, '${sheet.id}', 'both')"
-                  class="px-2 py-0.5 rounded border transition ${currentMode === 'both' ? 'bg-sky-600 text-white border-sky-600 font-medium' : 'bg-white text-slate-500 border-slate-300 hover:bg-slate-50'}">
-            Side 1 & 2
-          </button>
-        </div>
-      ` : ''}
-    `;
-    container.appendChild(btn);
-  });
+        const showMathTask = sheetMathVisibility[sheet.id] === true;
+
+        const btn = document.createElement('div');
+
+        btn.className = `
+            sheet-menu-item
+            ${isActive ? 'sheet-menu-active' : ''}
+            ${isHidden ? 'sheet-menu-hidden' : ''}
+        `;
+
+        btn.innerHTML = `
+            <!-- RAD 1: ARKNAVN, UKENUMMER OG VIS/SKJUL -->
+            <div class="sheet-menu-header">
+
+                <div
+                    class="sheet-menu-title"
+                    onclick="selectSheet('${sheet.id}')"
+                    title="${sheet.title}"
+                >
+                    <i class="fa-solid fa-file-lines sheet-menu-icon"></i>
+
+                    <span class="sheet-menu-name ${isHidden ? 'line-through' : ''}">
+                        ${sheet.title}
+                    </span>
+
+                    ${weekStr ? `
+                        <span class="sheet-menu-week">
+                            ${weekStr}
+                        </span>
+                    ` : ''}
+                </div>
+
+                <button
+                    onclick="toggleHideSheet(event, '${sheet.id}')"
+                    class="sheet-menu-eye"
+                    title="${isHidden ? 'Vis ark' : 'Skjul ark'}"
+                >
+                    <i class="fa-solid ${isHidden ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                </button>
+
+            </div>
+
+            ${!isHidden ? `
+
+                <!-- RAD 2: SIDEVALG -->
+                <div class="sheet-menu-options">
+
+                    <button
+                        onclick="setSheetMode(event, '${sheet.id}', 'page1')"
+                        class="sheet-mode-button ${currentMode === 'page1' ? 'sheet-mode-active' : ''}"
+                    >
+                        Kun side 1
+                    </button>
+
+                    <button
+                        onclick="setSheetMode(event, '${sheet.id}', 'both')"
+                        class="sheet-mode-button ${currentMode === 'both' ? 'sheet-mode-active' : ''}"
+                    >
+                        Side 1 og 2
+                    </button>
+
+                    ${hasMathTask ? `
+                        <button
+                            onclick="toggleMathTask(event, '${sheet.id}')"
+                            class="sheet-math-button ${showMathTask ? 'sheet-math-active' : ''}"
+                        >
+                            <i class="fa-solid fa-calculator"></i>
+                            ${showMathTask ? 'Skjul matte' : 'Vis matte'}
+                        </button>
+                    ` : ''}
+
+                </div>
+
+            ` : ''}
+
+        `;
+
+        container.appendChild(btn);
+    });
 }
 
 function selectSheet(id) {
@@ -677,9 +742,65 @@ ${page.topReadingTask.image ? `
             </div>
           ` : ''}
 
-          ${typeof renderSoundTask === 'function' ? renderSoundTask(page) : ''}
+${typeof renderSoundTask === 'function' ? renderSoundTask(page) : ''}
+
+<!-- MATTEOPPGAVE – VALGFRI PÅ SIDE 2 -->
+${realPageIndex > 0 && page.mathTask && sheetMathVisibility[activeSheet.id] === true ? `
+    <div class="math-task-block mt-4 mx-8 p-3 rounded-xl border-2 border-emerald-300 bg-emerald-50">
+
+        <h2 class="text-3xl font-bold text-slate-900 mb-1">
+            ${page.mathTask.title || 'Matteoppgave:'}
+        </h2>
+
+        ${page.mathTask.instruction ? `
+            <p class="text-xl text-slate-700 mb-1 text-center whitespace-pre-line font-bold">
+                ${page.mathTask.instruction}
+            </p>
+        ` : ''}
+
+        <div
+            class="flex flex-col text-slate-900"
+            style="gap: ${page.mathTask.taskGap ?? 16}px;"
+        >
+
+            ${(page.mathTask.tasks || []).map(task => {
+                const item = typeof task === 'string'
+                    ? { text: task }
+                    : task;
+
+                return `
+                    <div class="math-task-item flex flex-col items-center justify-center gap-2 min-w-0">
+
+${item.instruction ? `
+<div class="reading-font math-task-instruction text-center whitespace-pre-line font-bold">
+    ${item.instruction}
+</div>
+` : ''}
+
+                        ${item.image ? `
+                            <img
+                                src="${item.image}"
+                                alt="${item.alt || ''}"
+                                class="math-task-image object-contain ${item.imageSize || ''}"
+                            >
+                        ` : ''}
+
+                        ${item.text ? `
+                            <div class="reading-font text-2xl text-center whitespace-pre-line font-bold">
+                                ${item.text}
+                            </div>
+                        ` : ''}
+
+                    </div>
+                `;
+            }).join('')}
 
         </div>
+
+    </div>
+` : ''}
+
+</div>
       ` : ''}
 
       <!-- BUNNTEKST OG SIDETALL -->

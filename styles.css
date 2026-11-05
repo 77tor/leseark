@@ -358,3 +358,322 @@ main {
 }
 
 }
+
+/* ==========================================================================
+   8. MATTEOPPGAVE PÅ SIDE 2
+   ========================================================================== */
+
+.math-task-block {
+    flex-shrink: 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.math-task-block h2 {
+    line-height: 1.2;
+}
+
+.math-task-block p {
+    line-height: 1.3;
+}
+
+@media print {
+    .math-task-block {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+
+/* ==========================================================================
+   9. FORBEDRET VENSTREMENY
+   ========================================================================== */
+
+@media screen {
+
+    /* Selve sidepanelet */
+    .sidebar-panel {
+        background: #ffffff;
+        border-right: 1px solid #cbd5e1;
+    }
+
+    /* Overskrifter i menyen */
+    .sidebar-panel > div > div > label {
+        color: #475569 !important;
+        font-size: 0.75rem;
+        letter-spacing: 0.07em;
+    }
+
+    /* Skillelinjer mellom innstillingene */
+    .sidebar-panel .border-t {
+        border-color: #cbd5e1 !important;
+    }
+
+    /* Knappen for ukenummer */
+    .sidebar-panel button[onclick="openWeekModal()"] {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        min-height: 44px;
+    }
+
+    .sidebar-panel button[onclick="openWeekModal()"]:hover {
+        background: #eff6ff;
+        border-color: #60a5fa;
+    }
+
+    /* Avkrysningsfelt */
+    .sidebar-panel input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #0284c7;
+    }
+
+    /* Utskriftsknappen */
+    .sidebar-panel button[onclick="openPrintModal()"] {
+        min-height: 46px;
+        font-size: 0.9rem;
+    }
+
+    /* Litt tydeligere avstand mellom innstillingsgruppene */
+    .sidebar-panel > div > div {
+        scroll-margin-top: 12px;
+    }
+}
+
+/* ==========================================================================
+   10. NYTT OPPSETT FOR LESERKLISTEN I VENSTREMENYEN
+   ========================================================================== */
+
+@media screen {
+
+    /* Listen med leseark */
+    #sheetsList {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        max-height: 45vh !important;
+        padding: 3px;
+        overflow-y: auto;
+    }
+
+    /* Hvert enkelt leseark */
+    .sheet-menu-item {
+        padding: 10px;
+        border: 1px solid #dbe3ec;
+        border-radius: 10px;
+        background: #ffffff;
+        transition: background 0.15s, border-color 0.15s;
+    }
+
+    .sheet-menu-item:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+    }
+
+    /* Aktivt leseark */
+    .sheet-menu-item.sheet-menu-active {
+        background: #eff6ff;
+        border: 1.5px solid #38a5e8;
+        box-shadow: 0 1px 4px rgba(2, 132, 199, 0.12);
+    }
+
+    /* Skjult leseark */
+    .sheet-menu-hidden {
+        opacity: 0.55;
+        background: #f8fafc;
+    }
+
+    /* Første rad */
+    .sheet-menu-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    /* Tittelområde */
+    .sheet-menu-title {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+        flex: 1;
+        cursor: pointer;
+    }
+
+    .sheet-menu-icon {
+        flex-shrink: 0;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .sheet-menu-active .sheet-menu-icon {
+        color: #0284c7;
+    }
+
+    /* Navnet på lesearket */
+    .sheet-menu-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #334155;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .sheet-menu-active .sheet-menu-name {
+        color: #075985;
+    }
+
+    /* Ukenummer */
+    .sheet-menu-week {
+        flex-shrink: 0;
+        padding: 3px 6px;
+        border-radius: 5px;
+        background: #e2e8f0;
+        color: #475569;
+        font-size: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .sheet-menu-active .sheet-menu-week {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    /* Vis/skjul-ikon */
+    .sheet-menu-eye {
+        flex-shrink: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        color: #64748b;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .sheet-menu-eye:hover {
+        background: #dbeafe;
+        color: #0369a1;
+    }
+
+    /* Andre rad med knapper */
+    .sheet-menu-options {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        margin-top: 9px;
+        padding-left: 20px;
+    }
+
+    /* Sidevalg */
+    .sheet-mode-button {
+        padding: 6px 9px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        background: #ffffff;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.15s;
+    }
+
+    .sheet-mode-button:hover {
+        background: #e0f2fe;
+        border-color: #7dd3fc;
+    }
+
+    /* Aktivt sidevalg */
+    .sheet-mode-button.sheet-mode-active {
+        background: #0284c7;
+        color: #ffffff;
+        border-color: #0284c7;
+    }
+
+    /* Matteknapp */
+    .sheet-math-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 9px;
+        border: 1px solid #86cda8;
+        border-radius: 6px;
+        background: #f0fdf4;
+        color: #166534;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .sheet-math-button:hover {
+        background: #dcfce7;
+    }
+
+    /* Aktiv matteoppgave */
+    .sheet-math-button.sheet-math-active {
+        background: #15803d;
+        color: #ffffff;
+        border-color: #15803d;
+    }
+}
+
+/* ==========================================================================
+   11. BILDER I MATTEOPPGAVER
+   ========================================================================== */
+
+.math-task-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    width: 100%;
+
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.math-task-image {
+    max-width: 100%;
+    max-height: 105px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Mulighet for egne bildestørrelser */
+.math-task-image.size-small {
+    max-height: 65px;
+}
+
+.math-task-image.size-medium {
+    max-height: 105px;
+}
+
+.math-task-image.size-large {
+    max-height: 150px;
+}
+
+.math-task-image.size-xl {
+    max-height: 190px;
+}
+
+.math-task-image.size-xxl {
+    max-height: 240px;
+}
+
+.math-task-image.size-xxxl {
+    max-height: 300px;
+}
+.math-task-image.size-xxxxl {
+    max-height: 350px;
+}
+
+/* Egen skriftstørrelse for instruksjoner over mattebilder */
+.math-task-item .math-task-instruction {
+    font-size: 1.2rem !important;
+    line-height: 1.3 !important;
+}
