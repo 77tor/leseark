@@ -114,6 +114,7 @@
 
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        zoom: 1 !important;
     }
 
     /* Hovedområdet skal ikke lenger være en flex-container fra Tailwind. */
@@ -162,6 +163,8 @@
 
         transform: none !important;
         background: #ffffff !important;
+
+        zoom: 1 !important;
     }
 
     /* Selve arket.
@@ -202,6 +205,8 @@
 
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+
+        zoom: 1 !important;
     }
 
     /* Ikke legg inn et ekstra, tomt ark etter siste side. */
