@@ -87,7 +87,7 @@ window.lesearkData.push({
         {
             image: "matte/ark_14_01.png",
             alt: "Telle",
-            imageSize: "size-large",
+            imageSize: "size-xl",
             instruction: "Øv på å skrive tallene."
         }
 
