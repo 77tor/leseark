@@ -748,3 +748,80 @@ main {
     }
 
 }
+
+
+/* ==========================================================================
+   13. OPTIMALISERT VENSTREMENY – BEDRE PLASS TIL LESEHEFTENE
+   ========================================================================== */
+
+@media screen {
+
+    /* Hele venstremenyen skal holde seg innenfor skjermen */
+    aside.sidebar-panel {
+        overflow: hidden !important;
+        min-height: 0;
+        height: 100%;
+    }
+
+    /* Hovedområdet i venstremenyen */
+    aside.sidebar-panel > div:first-child {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+
+        gap: 12px !important;
+    }
+
+    /* Fjern store standardavstander fra space-y-6 */
+    aside.sidebar-panel > div:first-child > * {
+        margin-top: 0 !important;
+    }
+
+    /* Logo og overskrift */
+    aside.sidebar-panel > div:first-child > div:first-child {
+        padding-bottom: 10px !important;
+        flex-shrink: 0;
+    }
+
+    /* Området med overskriften VELG UKE / ARK */
+    aside.sidebar-panel > div:first-child > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    /* Overskriften VELG UKE / ARK */
+    #sheetsList {
+        flex: 1 1 auto;
+        min-height: 0;
+
+        max-height: none !important;
+
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+
+        padding: 2px 4px 4px 3px;
+    }
+
+    /* Litt mindre avstand mellom overskrift og første ark */
+    aside.sidebar-panel > div:first-child > div:nth-child(2) > label {
+        margin-bottom: 6px !important;
+        flex-shrink: 0;
+    }
+
+    /* Utskriftsinnstillingene skal ligge fast */
+    aside.sidebar-panel > div:first-child > div:nth-child(3) {
+        flex-shrink: 0;
+        padding-top: 10px !important;
+    }
+
+    /* Utskriftsknappen nederst skal også ligge fast */
+    aside.sidebar-panel > div:last-child {
+        flex-shrink: 0;
+        margin-top: 8px !important;
+        padding-top: 10px !important;
+    }
+
+}
