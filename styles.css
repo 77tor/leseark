@@ -147,3 +147,15 @@
     #viewportContainer.print-single-only .a4-preview:nth-child(even), #viewportContainer.print-single-only .print-page:nth-child(even) { display: none !important; }
     #viewportContainer.hide-cover-on-print .a4-preview[data-sheet-id="sheet-0"], #viewportContainer.hide-cover-on-print .print-page[data-sheet-id="sheet-0"] { display: none !important; }
 }
+
+
+/* ØYEIKON – AKTIVT LESEHEFTE */
+.sheet-menu-active .sheet-menu-eye {
+    color: #0284c7 !important;
+    background: #dbeafe;
+}
+
+.sheet-menu-active .sheet-menu-eye:hover {
+    color: #0369a1 !important;
+    background: #bfdbfe;
+}
