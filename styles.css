@@ -563,14 +563,15 @@ main {
     }
 
     /* Andre rad med knapper */
-    .sheet-menu-options {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 6px;
-        margin-top: 9px;
-        padding-left: 20px;
-    }
+.sheet-menu-options {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 9px;
+    padding-left: 20px;
+    white-space: nowrap;
+}
 
     /* Sidevalg */
     .sheet-mode-button {

@@ -1025,92 +1025,124 @@ function renderBlankPrintPage(pageNumber, totalPages) {
   `;
 }
 
+
 // EKSEKVERE UTSKRIFT
 
 let isPrintInProgress = false;
 
-async function executePrint() {
-  if (isPrintInProgress) return;
+async function executePrint(printMode = 'normal') {
+    if (isPrintInProgress) return;
 
-  isPrintInProgress = true;
+    isPrintInProgress = true;
 
-  const scopeInput = document.querySelector(
-    'input[name="printScope"]:checked'
-  );
+    const scopeInput = document.querySelector(
+        'input[name="printScope"]:checked'
+    );
 
-  const includeCoverInput = document.getElementById(
-    'includeCoverCheckbox'
-  );
+    const includeCoverInput = document.getElementById(
+        'includeCoverCheckbox'
+    );
 
-  const scope = scopeInput ? scopeInput.value : 'all';
-  const includeCover = includeCoverInput
-    ? includeCoverInput.checked
-    : true;
+    const scope = scopeInput ? scopeInput.value : 'all';
 
-  closePrintModal();
+    const includeCover = includeCoverInput
+        ? includeCoverInput.checked
+        : true;
 
-  const savedSheetId = currentSheetId;
-  const container = document.getElementById('viewportContainer');
+    closePrintModal();
 
-  if (!container) {
-    isPrintInProgress = false;
-    return;
-  }
+    const savedSheetId = currentSheetId;
+    const originalTitle = document.title;
 
-  try {
-    // Bygg utskriftsplanen ut fra valgene i utskriftsvinduet.
-    const printPlan = buildPrintPlan(scope, includeCover);
+    const container = document.getElementById('viewportContainer');
 
-    if (printPlan.pages.length === 0) {
-      alert('Det er ingen ark å skrive ut.');
-      return;
+    if (!container) {
+        isPrintInProgress = false;
+        return;
     }
 
-    let printHTML = '';
+    try {
 
-    printPlan.pages.forEach(item => {
-      if (item.type === 'blank') {
-        printHTML += renderBlankPrintPage(
-          item.pageNumber,
-          printPlan.totalPages
-        );
-        return;
-      }
+        // Bygg utskriftsplanen.
+        const printPlan = buildPrintPlan(scope, includeCover);
 
-      printHTML += renderPageHTML(
-        item.sheet,
-        item.page,
-        item.realPageIndex,
-        item.pageNumber,
-        printPlan.totalPages,
-        item.mode
-      );
-    });
+        if (printPlan.pages.length === 0) {
+            alert('Det er ingen ark å skrive ut.');
+            return;
+        }
 
-    // Vis utskriftsinnholdet.
-    container.innerHTML = printHTML;
+        let printHTML = '';
 
-    // Vent til alle bilder og skrifttyper er klare.
-    await waitForPrintAssets(container);
+        printPlan.pages.forEach(item => {
 
-    // Ekstra ventetid før utskriftsdialogen åpnes.
-    await new Promise(resolve => setTimeout(resolve, 100));
+            if (item.type === 'blank') {
+                printHTML += renderBlankPrintPage(
+                    item.pageNumber,
+                    printPlan.totalPages
+                );
+                return;
+            }
 
-    window.print();
+            printHTML += renderPageHTML(
+                item.sheet,
+                item.page,
+                item.realPageIndex,
+                item.pageNumber,
+                printPlan.totalPages,
+                item.mode
+            );
 
-  } catch (error) {
-    console.error('Feil før utskrift:', error);
-    alert('Utskriften kunne ikke klargjøres. Prøv igjen.');
+        });
 
-  } finally {
-    // Gjenopprett vanlig skjermvisning.
-    currentSheetId = savedSheetId;
+        // Vis utskriftsinnholdet.
+        container.innerHTML = printHTML;
 
-    renderSidebar();
-    renderSheet();
+        // Vent til bilder og skrifttyper er klare.
+        await waitForPrintAssets(container);
 
-    isPrintInProgress = false;
-  }
+        // Ekstra ventetid før utskrift.
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Velg passende filnavn for PDF.
+        if (printMode === 'booklet') {
+
+            document.title = 'Leseark 1. klasse - PDF for hefte';
+
+            alert(
+                'PDF FOR HEFTE\n\n' +
+                'I utskriftsvinduet gjør du følgende:\n\n' +
+                '1. Velg «Lagre som PDF» under Destinasjon.\n' +
+                '2. Behold A4 som papirstørrelse.\n' +
+                '3. La skalering stå på 100 %.\n' +
+                '4. Klikk «Lagre».\n\n' +
+                'Åpne deretter PDF-filen og velg hefteutskrift på A3.'
+            );
+
+        }
+
+        // Åpne nettleserens utskriftsdialog.
+        window.print();
+
+    } catch (error) {
+
+        console.error('Feil før utskrift:', error);
+
+        alert('Utskriften kunne ikke klargjøres. Prøv igjen.');
+
+    } finally {
+
+        // Gjenopprett dokumenttittel.
+        document.title = originalTitle;
+
+        // Gjenopprett vanlig skjermvisning.
+        currentSheetId = savedSheetId;
+
+        renderSidebar();
+        renderSheet();
+
+        isPrintInProgress = false;
+
+    }
 }
 
 
