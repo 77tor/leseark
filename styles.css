@@ -1,877 +1,149 @@
 /* ==========================================================================
    LESELEKSER 1. TRINN – STILARK
-   Skjermvisning og utskrift bruker samme A4-layout.
    ========================================================================== */
-
 
 /* ==========================================================================
    1. FONTER OG TYPOGRAFI
    ========================================================================== */
 
-@font-face {
-    font-family: 'Trykkskrift';
-    src: url('Skrift/trykkskrift.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-.font-trykkskrift,
-.font-trykkskrift .reading-font {
-    font-family: 'Trykkskrift', 'Open Sans', sans-serif !important;
-}
-
-.size-normal {
-    font-size: 1.2em;
-}
-
-.size-normal .reading-font {
-    font-size: 2.3rem !important;
-    line-height: 1.4 !important;
-}
-
-.size-normal .task-spacing {
-    margin-top: 1.2rem;
-    margin-bottom: 1.2rem;
-}
+@font-face { font-family: 'Trykkskrift'; src: url('Skrift/trykkskrift.otf') format('opentype'); font-weight: normal; font-style: normal; font-display: swap; }
+.font-trykkskrift, .font-trykkskrift .reading-font { font-family: 'Trykkskrift', 'Open Sans', sans-serif !important; }
+.size-normal { font-size: 1.2em; }
+.size-normal .reading-font { font-size: 2.3rem !important; line-height: 1.4 !important; }
+.size-normal .task-spacing { margin-top: 1.2rem; margin-bottom: 1.2rem; }
 
 
 /* ==========================================================================
-   2. A4-ARK – FELLES GRUNNOPPSETT FOR SKJERM OG UTSKRIFT
+   2. A4-ARK OG BILDER
    ========================================================================== */
 
-.a4-preview,
-.print-page {
-    width: 210mm;
-    height: 297mm;
-    min-width: 210mm;
-    min-height: 297mm;
-    max-width: 210mm;
-    max-height: 297mm;
+.a4-preview, .print-page { width: 210mm; height: 297mm; min-width: 210mm; min-height: 297mm; max-width: 210mm; max-height: 297mm; box-sizing: border-box; flex: 0 0 210mm; padding: 12mm 12mm 30mm !important; position: relative; background: #ffffff; color: #0f172a; transform-origin: top center; }
+.a4-preview img, .print-page img { object-fit: contain; }
+.photo-frame { background-color: #ffffff; padding: 6px 6px 10px; border: 1px solid #e2e8f0; box-shadow: 6px 8px 18px rgba(0, 0, 0, 0.2); transform: rotate(-5deg); }
 
-    box-sizing: border-box;
-    flex: 0 0 210mm;
 
-    padding: 12mm !important;
+/* ==========================================================================
+   3. MATTEOPPGAVER OG OPPGAVEBILDER
+   ========================================================================== */
 
-    position: relative;
-    background: #ffffff;
-    color: #0f172a;
+.math-task-block { flex-shrink: 0; break-inside: avoid; page-break-inside: avoid; }
+.math-task-block h2 { line-height: 1.2; }
+.math-task-block p { line-height: 1.3; }
+.math-task-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%; break-inside: avoid; page-break-inside: avoid; }
+.math-task-image { max-width: 100%; max-height: 105px; width: auto; height: auto; object-fit: contain; }
+.math-task-image.size-small { max-height: 65px; }
+.math-task-image.size-medium { max-height: 105px; }
+.math-task-image.size-large { max-height: 150px; }
+.math-task-image.size-xl { max-height: 190px; }
+.math-task-image.size-xxl { max-height: 240px; }
+.math-task-image.size-xxxl { max-height: 300px; }
+.math-task-image.size-xxxxl { max-height: 350px; }
+.math-task-item .math-task-instruction { font-size: 1.2rem !important; line-height: 1.3 !important; }
 
-    transform-origin: top center;
-}
 
-/* Skygge brukes bare som visuell hjelp på skjermen. */
-.a4-preview {
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-}
+/* ==========================================================================
+   4. UTSKRIFTSMODAL
+   ========================================================================== */
 
-/* Bilder skal beholde størrelsen som er angitt i HTML/Tailwind-klassene. */
-.a4-preview img,
-.print-page img {
-    object-fit: contain;
-}
+#printModal > div { width: 560px !important; max-width: calc(100vw - 32px) !important; }
+#printModal .print-scope-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+#printModal .print-scope-options label { min-width: 0; box-sizing: border-box; }
+#printModal .print-scope-options label span { overflow-wrap: break-word; }
 
-/* Bildeinnramming på forsiden. */
-.photo-frame {
-    background-color: #ffffff;
-    padding: 6px 6px 10px 6px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 6px 8px 18px rgba(0, 0, 0, 0.2);
-    transform: rotate(-5deg);
+/* ==========================================================================
+   5. SKJERMVISNING – ARBEIDSFLATE OG A4-ARK
+   ========================================================================== */
+
+@media screen {
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+    body { min-height: 0; }
+    main { min-height: 0; min-width: 0; overflow-y: auto !important; overflow-x: hidden !important; background-color: #cbd5e1 !important; }
+    #viewportContainer { width: 100%; min-height: 100%; min-width: 0; flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow: visible; gap: 0; padding: 25px 0 60px; margin: 0; background-color: #cbd5e1 !important; }
+    .a4-preview, #viewportContainer .print-page { background: #ffffff; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), 0 12px 26px rgba(15, 23, 42, 0.10); }
+    #viewportContainer .print-page { flex-shrink: 0; transform-origin: top center; }
+    #viewportContainer::after { content: ""; display: block; width: 100%; height: 45px; min-height: 45px; flex: 0 0 45px; }
 }
 
 
 /* ==========================================================================
-   3. UTSKRIFT – BEHOLD SAMME STØRRELSER OG AVSTANDER SOM PÅ SKJERM
+   6. VENSTREMENY – HOVEDOPPSETT OG PLASSBRUK
+   ========================================================================== */
+
+@media screen {
+    aside.sidebar-panel { height: 100%; min-height: 0; overflow: hidden !important; background-color: #e2e8f0 !important; border-right: 1px solid #cbd5e1; }
+    aside.sidebar-panel > div:first-child { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; gap: 12px !important; }
+    aside.sidebar-panel > div:first-child > * { margin-top: 0 !important; }
+    aside.sidebar-panel > div:first-child > div:first-child { padding-bottom: 10px !important; flex-shrink: 0; }
+    aside.sidebar-panel > div:first-child > div:nth-child(2) { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }
+    aside.sidebar-panel > div:first-child > div:nth-child(2) > label { flex-shrink: 0; margin-bottom: 6px !important; }
+    aside.sidebar-panel > div:first-child > div:nth-child(3) { flex-shrink: 0; padding-top: 10px !important; }
+    aside.sidebar-panel > div:last-child { flex-shrink: 0; margin-top: 8px !important; padding-top: 10px !important; }
+    .sidebar-panel > div > div > label { color: #475569 !important; font-size: 0.75rem; letter-spacing: 0.07em; }
+    .sidebar-panel .border-t { border-color: #cbd5e1 !important; }
+    .sidebar-panel button[onclick="openWeekModal()"] { min-height: 44px; background: #f8fafc; border-color: #cbd5e1; }
+    .sidebar-panel button[onclick="openWeekModal()"]:hover { background: #eff6ff; border-color: #60a5fa; }
+    .sidebar-panel input[type="checkbox"] { width: 18px; height: 18px; accent-color: #0284c7; }
+    .sidebar-panel button[onclick="openPrintModal()"] { min-height: 46px; font-size: 0.9rem; }
+    .sidebar-panel > div > div { scroll-margin-top: 12px; }
+}
+
+
+/* ==========================================================================
+   7. VENSTREMENY – LESEHEFTLISTE OG KORT
+   ========================================================================== */
+
+@media screen {
+    #sheetsList { display: flex; flex: 1 1 auto; flex-direction: column; gap: 7px; min-height: 0; max-height: none !important; overflow-x: hidden !important; overflow-y: auto !important; padding: 5px; border-radius: 10px; background: #f1f5f9; }
+    .sheet-menu-item { padding: 10px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; transition: background 0.15s, border-color 0.15s, box-shadow 0.15s; }
+    .sheet-menu-item:hover { background: #f8fafc; border-color: #94a3b8; }
+    .sheet-menu-item.sheet-menu-active { padding-left: 7px; border: 1.5px solid #38a5e8; border-left: 4px solid #0284c7; background: #eff6ff; box-shadow: 0 2px 7px rgba(2, 132, 199, 0.13); }
+    .sheet-menu-hidden { opacity: 0.55; background: #f8fafc; }
+    .sheet-menu-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; }
+    .sheet-menu-title { display: flex; flex: 1; align-items: center; gap: 7px; min-width: 0; cursor: pointer; }
+    .sheet-menu-icon { flex-shrink: 0; color: #64748b; font-size: 13px; }
+    .sheet-menu-active .sheet-menu-icon { color: #0284c7; }
+    .sheet-menu-name { overflow: hidden; flex: 1; color: #334155; font-size: 13px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .sheet-menu-active .sheet-menu-name { color: #075985; }
+    .sheet-menu-week { flex-shrink: 0; padding: 3px 6px; border-radius: 5px; background: #e2e8f0; color: #475569; font-size: 10px; font-weight: 600; white-space: nowrap; }
+    .sheet-menu-active .sheet-menu-week { background: #dbeafe; color: #1d4ed8; }
+    .sheet-menu-eye { display: flex; flex-shrink: 0; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 7px; color: #64748b; transition: background 0.15s, color 0.15s; }
+    .sheet-menu-eye:hover { background: #dbeafe; color: #0369a1; }
+    .sheet-menu-options { display: flex; flex-wrap: nowrap; align-items: center; gap: 6px; margin-top: 9px; padding-left: 20px; white-space: nowrap; }
+    .sheet-mode-button { padding: 6px 9px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; color: #475569; font-size: 11px; font-weight: 600; white-space: nowrap; transition: all 0.15s; }
+    .sheet-mode-button:hover { border-color: #7dd3fc; background: #e0f2fe; }
+    .sheet-mode-button.sheet-mode-active { border-color: #0284c7; background: #0284c7; color: #ffffff; }
+    .sheet-math-button { display: inline-flex; align-items: center; gap: 5px; padding: 6px 9px; border: 1px solid #86cda8; border-radius: 6px; background: #f0fdf4; color: #166534; font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .sheet-math-button:hover { background: #dcfce7; }
+    .sheet-math-button.sheet-math-active { border-color: #15803d; background: #15803d; color: #ffffff; }
+}
+
+/* ==========================================================================
+   8. FLYTENDE ZOOM-KONTROLL
+   ========================================================================== */
+
+@media screen {
+    #floatingZoom { position: fixed; top: 50%; right: 16px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 44px; padding: 5px; transform: translateY(-50%); border: 1px solid #e2e8f0; border-radius: 24px; background: #ffffff; box-shadow: 0 3px 12px rgba(15, 23, 42, 0.12); }
+    #floatingZoom button { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 0; border-radius: 50%; background: transparent; color: #475569; cursor: pointer; transition: background 0.15s, color 0.15s; }
+    #floatingZoom button:hover { background: #eff6ff; color: #0284c7; }
+    #floatingZoom #zoomValText { width: 38px; height: 28px; border-radius: 8px; color: #0284c7; font-size: 10px; font-weight: 700; }
+}
+
+
+/* ==========================================================================
+   9. UTSKRIFT – A4-SIDER OG SKJULING AV SKJERMELEMENTER
    ========================================================================== */
 
 @media print {
-
-    /* A4 uten ekstra marg fra nettleseren.
-       Velg også A4, 100 % skalering og ingen marger i utskriftsdialogen. */
-    @page {
-        size: A4 portrait;
-        margin: 0;
-    }
-
-    /* Fjern skjermens sideoppsett og rullefelt. */
-    html,
-    body {
-        width: 210mm !important;
-        height: auto !important;
-        min-height: 0 !important;
-        max-height: none !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        overflow: visible !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-
-        display: block !important;
-
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        zoom: 1 !important;
-    }
-
-    /* Hovedområdet skal ikke lenger være en flex-container fra Tailwind. */
-    main {
-        display: block !important;
-
-        width: 210mm !important;
-        height: auto !important;
-        min-height: 0 !important;
-        max-height: none !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        overflow: visible !important;
-        background: #ffffff !important;
-    }
-
-    /* Skjul navigasjon, knapper og dialogvinduer. */
-    aside,
-    #printModal,
-    #weekModal,
-    .no-print,
-    button,
-    header {
-        display: none !important;
-    }
-
-    /* Utskriftscontaineren skal ikke arve flex, gap eller zoom fra skjermen. */
-    #viewportContainer {
-        display: block !important;
-
-        width: 210mm !important;
-        min-width: 210mm !important;
-        max-width: 210mm !important;
-
-        height: auto !important;
-        min-height: 0 !important;
-        max-height: none !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        gap: 0 !important;
-        overflow: visible !important;
-
-        transform: none !important;
-        background: #ffffff !important;
-
-        zoom: 1 !important;
-    }
-
-    /* Selve arket.
-       Viktig: transform:none overstyrer zoom som settes inline av app.js. */
-    #viewportContainer .a4-preview,
-    #viewportContainer .print-page {
-        display: flex !important;
-
-        width: 210mm !important;
-        min-width: 210mm !important;
-        max-width: 210mm !important;
-
-        height: 297mm !important;
-        min-height: 297mm !important;
-        max-height: 297mm !important;
-
-        box-sizing: border-box !important;
-        flex: 0 0 297mm !important;
-
-        margin: 0 !important;
-        padding: 12mm !important;
-
-        transform: none !important;
-        transform-origin: top left !important;
-
-        box-shadow: none !important;
-
-        overflow: hidden !important;
-
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-
-        page-break-after: always !important;
-        break-after: page !important;
-
-        background: #ffffff !important;
-        color: #000000 !important;
-
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-
-        zoom: 1 !important;
-    }
-
-    /* Ikke legg inn et ekstra, tomt ark etter siste side. */
-    #viewportContainer .a4-preview:last-child,
-    #viewportContainer .print-page:last-child {
-        page-break-after: auto !important;
-        break-after: auto !important;
-    }
-
-    /* Ikke endre bildehøyde, bredde eller plassering ved utskrift.
-       Størrelsene fra arkets egne HTML-klasser skal gjelde. */
-    #viewportContainer .a4-preview img,
-    #viewportContainer .print-page img {
-        object-fit: contain;
-        print-color-adjust: exact !important;
-        -webkit-print-color-adjust: exact !important;
-    }
-
-    /* Behold den visuelle innrammingen på bilder. */
-    .photo-frame {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    /* Behold fontene også ved utskrift. */
-    .font-trykkskrift,
-    .font-trykkskrift .reading-font {
-        font-family: 'Trykkskrift', 'Open Sans', sans-serif !important;
-    }
-
-    /* Ingen egne utskriftsmarginer på lydoppgaver eller andre oppgaver.
-       Dermed beholdes avstandene som er definert i skjermoppsettet. */
-
-    /* Støtte for eksisterende utskriftsvalg i app.js. */
-    #viewportContainer.print-single-only .a4-preview:nth-child(even),
-    #viewportContainer.print-single-only .print-page:nth-child(even) {
-        display: none !important;
-    }
-
-    #viewportContainer.hide-cover-on-print .a4-preview[data-sheet-id="sheet-0"],
-    #viewportContainer.hide-cover-on-print .print-page[data-sheet-id="sheet-0"] {
-        display: none !important;
-    }
-}
-
-
-/* ==========================================================================
-   4. SKJERM – BEHOLD SKJERMENS EKSISTERENDE VISNING
-   ========================================================================== */
-
-@media screen {
-
-    .a4-preview,
-    .print-page {
-        background: #ffffff;
-    }
-}
-
-/* ==========================================================================
-   5. UTSKRIFTSMODAL – BREDERE VINDU OG BEDRE PLASS TIL VALGENE
-   ========================================================================== */
-
-/* Gjør selve modalen bredere */
-#printModal > div {
-    width: 560px !important;
-    max-width: calc(100vw - 32px) !important;
-}
-
-/* De tre valgene får lik bredde */
-#printModal .print-scope-options {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-}
-
-/* Sørg for at teksten holder seg innenfor boksene */
-#printModal .print-scope-options label {
-    min-width: 0;
-    box-sizing: border-box;
-}
-
-/* Litt bedre plass til overskriftene */
-#printModal .print-scope-options label span {
-    overflow-wrap: break-word;
-}
-
-/* ==========================================================================
-   6. SKJERMVISNING – TILPASS A4-ARKET TIL TILGJENGELIG SKJERMPLASS
-   ========================================================================== */
-
-@media screen {
-
-    html,
-    body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
-
-    body {
-        min-height: 0;
-    }
-
-main {
-    min-height: 0;
-    min-width: 0;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-}
-
-#viewportContainer {
-    width: 100%;
-    min-height: 100%;
-    min-width: 0;
-    flex: 1 1 auto;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-
-    overflow: visible;
-    gap: 0;
-    padding: 25px 0 60px;
-    margin: 0;
-}
-
-/* Tydelig papirfølelse mellom sidene */
-#viewportContainer .print-page {
-    background: #ffffff;
-    box-shadow:
-        0 2px 5px rgba(15, 23, 42, 0.08),
-        0 8px 20px rgba(15, 23, 42, 0.10);
-}
-
-    #viewportContainer .print-page {
-        flex-shrink: 0;
-        transform-origin: top center;
-    }
-}
-/* ==========================================================================
-   7. EKSTRA LUFT ETTER SISTE VISTE ARK
-   ========================================================================== */
-
-@media screen {
-
-#viewportContainer::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 45px;
-    min-height: 45px;
-    flex: 0 0 45px;
-}
-
-}
-
-/* ==========================================================================
-   8. MATTEOPPGAVE PÅ SIDE 2
-   ========================================================================== */
-
-.math-task-block {
-    flex-shrink: 0;
-    break-inside: avoid;
-    page-break-inside: avoid;
-}
-
-.math-task-block h2 {
-    line-height: 1.2;
-}
-
-.math-task-block p {
-    line-height: 1.3;
-}
-
-@media print {
-    .math-task-block {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-}
-
-/* ==========================================================================
-   9. FORBEDRET VENSTREMENY
-   ========================================================================== */
-
-@media screen {
-
-    /* Selve sidepanelet */
-    .sidebar-panel {
-        background: #ffffff;
-        border-right: 1px solid #cbd5e1;
-    }
-
-    /* Overskrifter i menyen */
-    .sidebar-panel > div > div > label {
-        color: #475569 !important;
-        font-size: 0.75rem;
-        letter-spacing: 0.07em;
-    }
-
-    /* Skillelinjer mellom innstillingene */
-    .sidebar-panel .border-t {
-        border-color: #cbd5e1 !important;
-    }
-
-    /* Knappen for ukenummer */
-    .sidebar-panel button[onclick="openWeekModal()"] {
-        background: #f8fafc;
-        border-color: #cbd5e1;
-        min-height: 44px;
-    }
-
-    .sidebar-panel button[onclick="openWeekModal()"]:hover {
-        background: #eff6ff;
-        border-color: #60a5fa;
-    }
-
-    /* Avkrysningsfelt */
-    .sidebar-panel input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        accent-color: #0284c7;
-    }
-
-    /* Utskriftsknappen */
-    .sidebar-panel button[onclick="openPrintModal()"] {
-        min-height: 46px;
-        font-size: 0.9rem;
-    }
-
-    /* Litt tydeligere avstand mellom innstillingsgruppene */
-    .sidebar-panel > div > div {
-        scroll-margin-top: 12px;
-    }
-}
-
-/* ==========================================================================
-   10. NYTT OPPSETT FOR LESERKLISTEN I VENSTREMENYEN
-   ========================================================================== */
-
-@media screen {
-
-    /* Listen med leseark */
-    #sheetsList {
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-        max-height: 45vh !important;
-        padding: 3px;
-        overflow-y: auto;
-    }
-
-    /* Hvert enkelt leseark */
-    .sheet-menu-item {
-        padding: 10px;
-        border: 1px solid #dbe3ec;
-        border-radius: 10px;
-        background: #ffffff;
-        transition: background 0.15s, border-color 0.15s;
-    }
-
-    .sheet-menu-item:hover {
-        background: #f8fafc;
-        border-color: #94a3b8;
-    }
-
-    /* Aktivt leseark */
-    .sheet-menu-item.sheet-menu-active {
-        background: #eff6ff;
-        border: 1.5px solid #38a5e8;
-        box-shadow: 0 1px 4px rgba(2, 132, 199, 0.12);
-    }
-
-    /* Skjult leseark */
-    .sheet-menu-hidden {
-        opacity: 0.55;
-        background: #f8fafc;
-    }
-
-    /* Første rad */
-    .sheet-menu-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-        min-width: 0;
-    }
-
-    /* Tittelområde */
-    .sheet-menu-title {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        min-width: 0;
-        flex: 1;
-        cursor: pointer;
-    }
-
-    .sheet-menu-icon {
-        flex-shrink: 0;
-        color: #64748b;
-        font-size: 13px;
-    }
-
-    .sheet-menu-active .sheet-menu-icon {
-        color: #0284c7;
-    }
-
-    /* Navnet på lesearket */
-    .sheet-menu-name {
-        font-size: 13px;
-        font-weight: 700;
-        color: #334155;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .sheet-menu-active .sheet-menu-name {
-        color: #075985;
-    }
-
-    /* Ukenummer */
-    .sheet-menu-week {
-        flex-shrink: 0;
-        padding: 3px 6px;
-        border-radius: 5px;
-        background: #e2e8f0;
-        color: #475569;
-        font-size: 10px;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-    .sheet-menu-active .sheet-menu-week {
-        background: #dbeafe;
-        color: #1d4ed8;
-    }
-
-    /* Vis/skjul-ikon */
-    .sheet-menu-eye {
-        flex-shrink: 0;
-        width: 30px;
-        height: 30px;
-        border-radius: 7px;
-        color: #64748b;
-        transition: background 0.15s, color 0.15s;
-    }
-
-    .sheet-menu-eye:hover {
-        background: #dbeafe;
-        color: #0369a1;
-    }
-
-    /* Andre rad med knapper */
-.sheet-menu-options {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 6px;
-    margin-top: 9px;
-    padding-left: 20px;
-    white-space: nowrap;
-}
-
-    /* Sidevalg */
-    .sheet-mode-button {
-        padding: 6px 9px;
-        border: 1px solid #cbd5e1;
-        border-radius: 6px;
-        background: #ffffff;
-        color: #475569;
-        font-size: 11px;
-        font-weight: 600;
-        white-space: nowrap;
-        transition: all 0.15s;
-    }
-
-    .sheet-mode-button:hover {
-        background: #e0f2fe;
-        border-color: #7dd3fc;
-    }
-
-    /* Aktivt sidevalg */
-    .sheet-mode-button.sheet-mode-active {
-        background: #0284c7;
-        color: #ffffff;
-        border-color: #0284c7;
-    }
-
-    /* Matteknapp */
-    .sheet-math-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        padding: 6px 9px;
-        border: 1px solid #86cda8;
-        border-radius: 6px;
-        background: #f0fdf4;
-        color: #166534;
-        font-size: 11px;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-    .sheet-math-button:hover {
-        background: #dcfce7;
-    }
-
-    /* Aktiv matteoppgave */
-    .sheet-math-button.sheet-math-active {
-        background: #15803d;
-        color: #ffffff;
-        border-color: #15803d;
-    }
-}
-
-/* ==========================================================================
-   11. BILDER I MATTEOPPGAVER
-   ========================================================================== */
-
-.math-task-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    width: 100%;
-
-    break-inside: avoid;
-    page-break-inside: avoid;
-}
-
-.math-task-image {
-    max-width: 100%;
-    max-height: 105px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
-
-/* Mulighet for egne bildestørrelser */
-.math-task-image.size-small {
-    max-height: 65px;
-}
-
-.math-task-image.size-medium {
-    max-height: 105px;
-}
-
-.math-task-image.size-large {
-    max-height: 150px;
-}
-
-.math-task-image.size-xl {
-    max-height: 190px;
-}
-
-.math-task-image.size-xxl {
-    max-height: 240px;
-}
-
-.math-task-image.size-xxxl {
-    max-height: 300px;
-}
-.math-task-image.size-xxxxl {
-    max-height: 350px;
-}
-
-/* Egen skriftstørrelse for instruksjoner over mattebilder */
-.math-task-item .math-task-instruction {
-    font-size: 1.2rem !important;
-    line-height: 1.3 !important;
-}
-
-/* ==========================================================================
-   12. FLYTENDE ZOOM-KONTROLL
-   ========================================================================== */
-
-@media screen {
-
-    #floatingZoom {
-        position: fixed;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 40;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        width: 44px;
-        padding: 5px;
-
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 24px;
-
-        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.12);
-
-        gap: 3px;
-    }
-
-    #floatingZoom button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        width: 34px;
-        height: 34px;
-
-        border: none;
-        border-radius: 50%;
-
-        background: transparent;
-        color: #475569;
-
-        cursor: pointer;
-        transition: background 0.15s, color 0.15s;
-    }
-
-    #floatingZoom button:hover {
-        background: #eff6ff;
-        color: #0284c7;
-    }
-
-    #floatingZoom #zoomValText {
-        width: 38px;
-        height: 28px;
-
-        font-size: 10px;
-        font-weight: 700;
-        color: #0284c7;
-
-        border-radius: 8px;
-    }
-
-}
-
-
-/* ==========================================================================
-   13. OPTIMALISERT VENSTREMENY – BEDRE PLASS TIL LESEHEFTENE
-   ========================================================================== */
-
-@media screen {
-
-    /* Hele venstremenyen skal holde seg innenfor skjermen */
-    aside.sidebar-panel {
-        overflow: hidden !important;
-        min-height: 0;
-        height: 100%;
-    }
-
-    /* Hovedområdet i venstremenyen */
-    aside.sidebar-panel > div:first-child {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-        min-height: 0;
-
-        gap: 12px !important;
-    }
-
-    /* Fjern store standardavstander fra space-y-6 */
-    aside.sidebar-panel > div:first-child > * {
-        margin-top: 0 !important;
-    }
-
-    /* Logo og overskrift */
-    aside.sidebar-panel > div:first-child > div:first-child {
-        padding-bottom: 10px !important;
-        flex-shrink: 0;
-    }
-
-    /* Området med overskriften VELG UKE / ARK */
-    aside.sidebar-panel > div:first-child > div:nth-child(2) {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-        min-height: 0;
-    }
-
-    /* Overskriften VELG UKE / ARK */
-    #sheetsList {
-        flex: 1 1 auto;
-        min-height: 0;
-
-        max-height: none !important;
-
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-
-        padding: 2px 4px 4px 3px;
-    }
-
-    /* Litt mindre avstand mellom overskrift og første ark */
-    aside.sidebar-panel > div:first-child > div:nth-child(2) > label {
-        margin-bottom: 6px !important;
-        flex-shrink: 0;
-    }
-
-    /* Utskriftsinnstillingene skal ligge fast */
-    aside.sidebar-panel > div:first-child > div:nth-child(3) {
-        flex-shrink: 0;
-        padding-top: 10px !important;
-    }
-
-    /* Utskriftsknappen nederst skal også ligge fast */
-    aside.sidebar-panel > div:last-child {
-        flex-shrink: 0;
-        margin-top: 8px !important;
-        padding-top: 10px !important;
-    }
-
-}
-
-/* Bakgrunn bak A4-arkene */
-@media screen {
-    main {
-        background-color: #cbd5e1 !important;
-    }
-
-    #viewportContainer {
-        background-color: #cbd5e1 !important;
-    }
-}
-
-
-/* ==========================================================================
-   14. FARGER OG KONTRAST I VENSTREMENYEN
-   ========================================================================== */
-
-@media screen {
-
-    /* Hele venstremenyen */
-    aside.sidebar-panel {
-        background-color: #e2e8f0 !important;
-    }
-
-    /* Området med leseheftene */
-    #sheetsList {
-        background-color: #f1f5f9;
-        border-radius: 10px;
-        padding: 5px;
-    }
-
-    /* Kortene med leseheftene */
-    #sheetsList > div {
-        background-color: #ffffff;
-        border-color: #cbd5e1;
-    }
-
-    /* Litt tydeligere skille mellom kortene */
-    #sheetsList > div:not(:last-child) {
-        margin-bottom: 8px;
-    }
-
-    /* Behold tydelig blå markering på valgt lesehefte */
-    #sheetsList > div.active,
-    #sheetsList > div.selected {
-        background-color: #dbeafe;
-        border-color: #38bdf8;
-    }
-
+    @page { size: A4 portrait; margin: 0; }
+    html, body { display: block !important; width: 210mm !important; height: auto !important; min-height: 0 !important; max-height: none !important; margin: 0 !important; padding: 0 !important; overflow: visible !important; background: #ffffff !important; color: #000000 !important; zoom: 1 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    main { display: block !important; width: 210mm !important; height: auto !important; min-height: 0 !important; max-height: none !important; margin: 0 !important; padding: 0 !important; overflow: visible !important; background: #ffffff !important; }
+    aside, #printModal, #weekModal, .no-print, button, header { display: none !important; }
+    #viewportContainer { display: block !important; width: 210mm !important; min-width: 210mm !important; max-width: 210mm !important; height: auto !important; min-height: 0 !important; max-height: none !important; margin: 0 !important; padding: 0 !important; gap: 0 !important; overflow: visible !important; transform: none !important; background: #ffffff !important; zoom: 1 !important; }
+    #viewportContainer .a4-preview, #viewportContainer .print-page { display: flex !important; width: 210mm !important; min-width: 210mm !important; max-width: 210mm !important; height: 297mm !important; min-height: 297mm !important; max-height: 297mm !important; box-sizing: border-box !important; flex: 0 0 297mm !important; margin: 0 !important; padding: 12mm 12mm 30mm !important; transform: none !important; transform-origin: top left !important; box-shadow: none !important; overflow: hidden !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: always !important; break-after: page !important; background: #ffffff !important; color: #000000 !important; zoom: 1 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    #viewportContainer .a4-preview:last-child, #viewportContainer .print-page:last-child { page-break-after: auto !important; break-after: auto !important; }
+    #viewportContainer .a4-preview img, #viewportContainer .print-page img { object-fit: contain; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .photo-frame, .math-task-block { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .font-trykkskrift, .font-trykkskrift .reading-font { font-family: 'Trykkskrift', 'Open Sans', sans-serif !important; }
+    #viewportContainer.print-single-only .a4-preview:nth-child(even), #viewportContainer.print-single-only .print-page:nth-child(even) { display: none !important; }
+    #viewportContainer.hide-cover-on-print .a4-preview[data-sheet-id="sheet-0"], #viewportContainer.hide-cover-on-print .print-page[data-sheet-id="sheet-0"] { display: none !important; }
 }

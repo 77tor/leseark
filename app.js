@@ -803,19 +803,54 @@ ${item.instruction ? `
 </div>
       ` : ''}
 
+
+
+
+
+
+
+
       <!-- BUNNTEKST OG SIDETALL -->
       ${page.type !== 'cover' ? `
-        <div style="transform: translateY(8px);" class="flex justify-between items-center min-h-[36px] text-base leading-none text-slate-500 font-medium">
-          <div>
-  ${footerNotice ? `
-    <span class="inline-block bg-amber-50 text-amber-800 font-bold text-base px-3 py-1 rounded-md border border-amber-200">
-      ${footerNotice}
-    </span>
-  ` : ''}
-</div>
-          <div>${showPageNumbers ? `Side ${globalPageNumber} av ${totalCount}` : ''}</div>
+        <div
+          style="position: absolute; left: 12mm; right: 12mm; bottom: 7mm;"
+          class="px-2"
+        >
+          <div class="border-t-2 border-slate-300 pt-3 flex justify-between items-center gap-3 min-h-[48px]">
+
+            <div class="flex items-center gap-2 flex-wrap">
+
+              ${footerNotice ? `
+                <span class="inline-block bg-amber-50 text-amber-800 font-bold text-base px-3 py-1 rounded-md border border-amber-200">
+                  ${footerNotice}
+                </span>
+              ` : ''}
+
+              ${realPageIndex === 0 &&
+                hasNextPageOnSheet &&
+                pagesData.slice(1).some(p => p.mathTask) &&
+                sheetMathVisibility[activeSheet.id] === true ? `
+                <span class="inline-block bg-emerald-50 text-emerald-800 font-bold text-base px-3 py-1 rounded-md border border-emerald-200">
+                  Matteoppgaver på baksiden!
+                </span>
+              ` : ''}
+
+            </div>
+
+            <div class="text-sm text-slate-500 font-bold whitespace-nowrap">
+              ${showPageNumbers ? `Side ${globalPageNumber} av ${totalCount}` : ''}
+            </div>
+
+          </div>
         </div>
       ` : ''}
+
+
+
+
+
+
+
 
     </div>
   `;
