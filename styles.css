@@ -825,3 +825,53 @@ main {
     }
 
 }
+
+/* Bakgrunn bak A4-arkene */
+@media screen {
+    main {
+        background-color: #cbd5e1 !important;
+    }
+
+    #viewportContainer {
+        background-color: #cbd5e1 !important;
+    }
+}
+
+
+/* ==========================================================================
+   14. FARGER OG KONTRAST I VENSTREMENYEN
+   ========================================================================== */
+
+@media screen {
+
+    /* Hele venstremenyen */
+    aside.sidebar-panel {
+        background-color: #e2e8f0 !important;
+    }
+
+    /* Området med leseheftene */
+    #sheetsList {
+        background-color: #f1f5f9;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    /* Kortene med leseheftene */
+    #sheetsList > div {
+        background-color: #ffffff;
+        border-color: #cbd5e1;
+    }
+
+    /* Litt tydeligere skille mellom kortene */
+    #sheetsList > div:not(:last-child) {
+        margin-bottom: 8px;
+    }
+
+    /* Behold tydelig blå markering på valgt lesehefte */
+    #sheetsList > div.active,
+    #sheetsList > div.selected {
+        background-color: #dbeafe;
+        border-color: #38bdf8;
+    }
+
+}
