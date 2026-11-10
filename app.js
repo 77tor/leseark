@@ -1047,10 +1047,10 @@ const visiblePages = pagesData.filter((_, pageIndex) => {
 }
 
 
-// Lager en helt blank side i hefteutskriften.
+// Lager en helt blank side i hefteutskriften (uten ytre marginer som påvirker A4-høyden)
 function renderBlankPrintPage(pageNumber, totalPages) {
   return `
-    <div class="a4-preview print-page text-slate-900 relative flex flex-col justify-between font-trykkskrift size-normal border-none mb-8 print:mb-0">
+    <div class="a4-preview print-page text-slate-900 relative flex flex-col justify-between font-trykkskrift size-normal border-none m-0 print:m-0">
       <div></div>
       <div style="transform: translateY(8px);" class="flex justify-between items-end h-[25px] border-t border-slate-100 pt-2 text-base leading-none text-slate-500 font-medium">
         <div></div>
@@ -1060,35 +1060,85 @@ function renderBlankPrintPage(pageNumber, totalPages) {
   `;
 }
 
+// FORSTØRRE BILDER I MODAL (LIGHTBOX)
+function zoomImage(src, title) {
+  const lightbox = document.getElementById('imageLightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxTitle = document.getElementById('lightboxTitle');
+
+  if (lightbox && lightboxImg) {
+    lightboxImg.src = src;
+    if (lightboxTitle) lightboxTitle.innerText = title || '';
+    lightbox.classList.remove('hidden');
+  }
+}
+
+function closeImageZoom() {
+  const lightbox = document.getElementById('imageLightbox');
+  if (lightbox) {
+    lightbox.classList.add('hidden');
+  }
+}
+
+function closeBookletModal() {
+  const bookletModal = document.getElementById('bookletInfoModal');
+  if (bookletModal) {
+    bookletModal.classList.add('hidden');
+  }
+  isPrintInProgress = false;
+  window.pendingPrintConfig = null;
+}
 
 // EKSEKVERE UTSKRIFT
-
 let isPrintInProgress = false;
 
-async function executePrint(printMode = 'normal') {
-    if (isPrintInProgress) return;
-
-    isPrintInProgress = true;
-
-    const scopeInput = document.querySelector(
-        'input[name="printScope"]:checked'
-    );
-
-    const includeCoverInput = document.getElementById(
-        'includeCoverCheckbox'
-    );
+function executePrint(printMode = 'normal') {
+    const scopeInput = document.querySelector('input[name="printScope"]:checked');
+    const includeCoverInput = document.getElementById('includeCoverCheckbox');
 
     const scope = scopeInput ? scopeInput.value : 'all';
+    const includeCover = includeCoverInput ? includeCoverInput.checked : true;
 
-    const includeCover = includeCoverInput
-        ? includeCoverInput.checked
-        : true;
+    // Lagre konfigurasjonen midlertidig
+    window.pendingPrintConfig = { scope, includeCover, printMode };
 
+    // Lukk første modal umiddelbart
     closePrintModal();
+
+    // Vis hefteveiledningen direkte dersom hefteutskrift er valgt
+    if (printMode === 'booklet') {
+        const bookletModal = document.getElementById('bookletInfoModal');
+        if (bookletModal) {
+            bookletModal.classList.remove('hidden');
+            return;
+        }
+    }
+
+    // Vanlig utskrift
+    confirmBookletPrint();
+}
+
+// Kalles når brukeren klikker "Fortsett og lagre PDF" i hefteveiledningen
+async function confirmBookletPrint() {
+    const bookletModal = document.getElementById('bookletInfoModal');
+    if (bookletModal) {
+        bookletModal.classList.add('hidden');
+    }
+
+    if (window.pendingPrintConfig) {
+        const { scope, includeCover, printMode } = window.pendingPrintConfig;
+        window.pendingPrintConfig = null;
+        await startPrintProcess(scope, includeCover, printMode);
+    }
+}
+
+// Klargjøring og åpning av utskriftsdialog
+async function startPrintProcess(scope, includeCover, printMode) {
+    if (isPrintInProgress) return;
+    isPrintInProgress = true;
 
     const savedSheetId = currentSheetId;
     const originalTitle = document.title;
-
     const container = document.getElementById('viewportContainer');
 
     if (!container) {
@@ -1097,24 +1147,19 @@ async function executePrint(printMode = 'normal') {
     }
 
     try {
-
-        // Bygg utskriftsplanen.
         const printPlan = buildPrintPlan(scope, includeCover);
 
         if (printPlan.pages.length === 0) {
             alert('Det er ingen ark å skrive ut.');
+            isPrintInProgress = false;
             return;
         }
 
         let printHTML = '';
 
         printPlan.pages.forEach(item => {
-
             if (item.type === 'blank') {
-                printHTML += renderBlankPrintPage(
-                    item.pageNumber,
-                    printPlan.totalPages
-                );
+                printHTML += renderBlankPrintPage(item.pageNumber, printPlan.totalPages);
                 return;
             }
 
@@ -1126,57 +1171,30 @@ async function executePrint(printMode = 'normal') {
                 printPlan.totalPages,
                 item.mode
             );
-
         });
 
-        // Vis utskriftsinnholdet.
         container.innerHTML = printHTML;
 
-        // Vent til bilder og skrifttyper er klare.
         await waitForPrintAssets(container);
-
-        // Ekstra ventetid før utskrift.
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Velg passende filnavn for PDF.
         if (printMode === 'booklet') {
-
             document.title = 'Leseark 1. klasse - PDF for hefte';
-
-            alert(
-                'PDF FOR HEFTE\n\n' +
-                'I utskriftsvinduet gjør du følgende:\n\n' +
-                '1. Velg «Lagre som PDF» under Destinasjon.\n' +
-                '2. Behold A4 som papirstørrelse.\n' +
-                '3. La skalering stå på 100 %.\n' +
-                '4. Klikk «Lagre».\n\n' +
-                'Åpne deretter PDF-filen og velg hefteutskrift på A3.'
-            );
-
         }
 
-        // Åpne nettleserens utskriftsdialog.
         window.print();
 
     } catch (error) {
-
         console.error('Feil før utskrift:', error);
-
         alert('Utskriften kunne ikke klargjøres. Prøv igjen.');
-
     } finally {
-
-        // Gjenopprett dokumenttittel.
         document.title = originalTitle;
-
-        // Gjenopprett vanlig skjermvisning.
         currentSheetId = savedSheetId;
 
         renderSidebar();
         renderSheet();
 
         isPrintInProgress = false;
-
     }
 }
 
@@ -1186,6 +1204,9 @@ async function executePrint(printMode = 'normal') {
 function openPrintModal() {
   const modal = document.getElementById('printModal');
   if (!modal) return;
+
+  // Nullstill utskriftslås når modalen åpnes på nytt
+  isPrintInProgress = false;
 
   // Velg Alle ark som standard.
   const allInput = document.querySelector(
