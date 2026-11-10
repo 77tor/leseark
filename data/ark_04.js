@@ -56,7 +56,7 @@ window.lesearkData.push({
       // MATTEOPPGAVE
       mathTask: {
         title: "Matteoppgave:",
-        instruction: "Sorter fruktene etter størrelse.\nSkriv 1 på den minste, 2 på den mellomste, og 3 på den største.",
+        instruction: "En skal ut, hvilken? Sett ring rundt den som skal ut.",
 
         tasks: [
           {

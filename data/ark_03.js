@@ -56,13 +56,13 @@ window.lesearkData.push({
       // MATTEOPPGAVE
       mathTask: {
         title: "Matteoppgave:",
-        instruction: "Hva hører sammen?\nSett strek mellom det som har lik verdi.",
+        instruction: "Hvor mange hjørner?",
 
         tasks: [
           {
             image: "matte/ark_03_01.png",
             alt: "Telle",
-            imageSize: "size-xxxl"
+            imageSize: "size-xxxxl"
           }
 
         ]

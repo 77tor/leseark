@@ -55,20 +55,14 @@ window.lesearkData.push({
       // MATTEOPPGAVE
       mathTask: {
         title: "Matteoppgave:",
+        instruction: "Hvor mange hjørner?",
 
-        taskGap: 10,
     tasks: [
         {
             image: "matte/ark_02_01.png",
             alt: "Telle",
-            imageSize: "size-large",
-            instruction: "Hvor mange? Sett ring rundt riktig tall."
-        },
-        {
-            image: "matte/ark_02_02.png",
-            alt: "Telle",
-            imageSize: "size-large",
-            instruction: "Hvor mange? Skriv riktig antall."
+            imageSize: "size-xxxl"
+
         }
 
         ]

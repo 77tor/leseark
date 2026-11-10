@@ -57,21 +57,20 @@ window.lesearkData.push({
       // MATTEOPPGAVE
       mathTask: {
         title: "Matteoppgave:",
-        instruction: "Hvor mange kuler er det? Tegn strek.",
+        instruction: "Fargelegg formene med rett farge.",
 
-        taskGap: 80,
+        taskGap: 40,
         tasks: [
         {
             image: "matte/ark_01_01.png",
-            alt: "kuler",
-            imageSize: "size-xl",
-
+            alt: "Farger",
+            imageSize: "size-xs",
         },
 
     {
         image: "matte/ark_01_02.png",
-        alt: "Terninger",
-        imageSize: "size-small"
+        alt: "Former",
+        imageSize: "size-xxxl"
     }
     ]
       }
