@@ -68,7 +68,7 @@ window.lesearkData.push({
       extraTitle: "Ekstra leselekser:",
       extraSentences: [
         "Vi lager wok til mat.",
-        "Etterpå vasker de opp.",
+        "Etterpå vasker vi opp.",
         "Pappa tar i mye Zalo.",
         "Det blir masse skum!"
       ],

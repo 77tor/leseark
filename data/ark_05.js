@@ -18,14 +18,14 @@ window.lesearkData.push({
       
       wordsTitle: "Les tre ganger:",
       words: [
-        { word: "ro" }, { word: "ri" }, { word: "re" },
-        { word: "bi" }, { word: "ba" }, { word: "bo" }
+        { word: "ro" }, { word: "ta" }, { word: "re" },
+        { word: "bi" }, { word: "ba" }, { word: "te" }
       ],
 
       // Ny oppgavetype nederst på Side 1
       sentenceTaskTitle: "Les tre ganger:",
       sentenceTask: [
-        { text: "Se is.", image: "Bilder/is.png" },
+        { text: "Se tre.", image: "Bilder/tre.png" },
         { text: "Se sol.", image: "Bilder/sol.png" },
         { text: "Se bil.", image: "Bilder/bil.png" }
       ]
