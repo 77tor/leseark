@@ -1235,18 +1235,18 @@ function openSelectedPdfFile(event) {
     if (!file) return;
 
     const fileURL = URL.createObjectURL(file);
-
-    // Bruk en dynamisk lenke i stedet for window.open() slik at popup-blokkering ikke stopper den
-    const link = document.createElement('a');
-    link.href = fileURL;
-    link.target = '_blank';
-    link.rel = 'noopener';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // Nullstill input slik at samme fil kan velges på nytt ved behov
     event.target.value = '';
+
+    // Vent til filvelgeren er helt lukket før fanen åpnes, så Chrome ikke blokkerer den
+    setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = fileURL;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }, 150);
 }
 
 function openPrintModal() {
@@ -1309,6 +1309,31 @@ function updatePrintScopeOptions() {
   updatePrintSummary();
 }
 
+
+
+// Bytter mellom nettleser- og Adobe Reader-veiledning i utskriftsmodalene
+function switchGuideTab(modalPrefix, target) {
+    const browserTab = document.getElementById(`${modalPrefix}-tab-browser`);
+    const adobeTab = document.getElementById(`${modalPrefix}-tab-adobe`);
+    const browserContent = document.getElementById(`${modalPrefix}-content-browser`);
+    const adobeContent = document.getElementById(`${modalPrefix}-content-adobe`);
+
+    if (!browserTab || !adobeTab || !browserContent || !adobeContent) return;
+
+    const activeTextColor = modalPrefix === 'booklet' ? 'text-emerald-700' : 'text-sky-700';
+
+    if (target === 'browser') {
+        browserTab.className = `px-3 py-1 rounded-md bg-white ${activeTextColor} shadow-sm transition`;
+        adobeTab.className = 'px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition';
+        browserContent.classList.remove('hidden');
+        adobeContent.classList.add('hidden');
+    } else {
+        adobeTab.className = `px-3 py-1 rounded-md bg-white ${activeTextColor} shadow-sm transition`;
+        browserTab.className = 'px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition';
+        adobeContent.classList.remove('hidden');
+        browserContent.classList.add('hidden');
+    }
+}
 
 
 // BEREGNER ANTALL ARK OG SIDER

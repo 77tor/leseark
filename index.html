@@ -319,10 +319,9 @@
     </div>
   </div>
 
-
-<!-- POPUP FOR HEFTE-VEILEDNING OG SIKKER PRINT (PLASSERT UTENFOR PRINTMODAL) -->
+<!-- POPUP FOR HEFTE-VEILEDNING OG SIKKER PRINT (STEG 1) -->
   <div id="bookletInfoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
       
       <!-- Header -->
       <div class="bg-emerald-600 px-6 py-4 flex justify-between items-center text-white shrink-0">
@@ -330,7 +329,7 @@
           <i class="fa-solid fa-file-pdf text-2xl"></i>
           <div>
             <h3 class="text-xl font-bold leading-tight">Lag PDF for hefteutskrift</h3>
-            <p class="text-xs text-emerald-100">Veiledning for hefte og Sikker print</p>
+            <p class="text-xs text-emerald-100">Veiledning for lagring av PDF og hefteutskrift</p>
           </div>
         </div>
         <button onclick="closeBookletModal()" class="text-emerald-200 hover:text-white p-1 rounded-lg transition">
@@ -338,49 +337,85 @@
         </button>
       </div>
 
-      <!-- Innhold i 3 deler -->
+      <!-- Innhold -->
       <div class="p-6 space-y-4 text-slate-700 text-sm overflow-y-auto flex-1">
         
         <!-- Del 1: Lagre som PDF -->
         <div class="space-y-1.5">
           <p class="font-bold text-slate-900 border-b border-slate-100 pb-1">1. Lagre som PDF:</p>
           <ol class="space-y-1 pl-5 list-decimal font-medium text-slate-800 text-xs">
-            <li>Velg <strong>«Lagre som PDF»</strong> under Destinasjon.</li>
+            <li>
+              Velg 
+              <button type="button" onclick="zoomImage('utskrift/03.png', 'Velg «Lagre som PDF» under Destinasjon')" class="inline-flex items-center gap-1 font-bold text-emerald-700 hover:text-emerald-800 underline decoration-emerald-400 underline-offset-2 cursor-pointer">
+                «Lagre som PDF» <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
+              </button> 
+              under Destinasjon.
+            </li>
             <li>Behold <strong>A4</strong> som papirstørrelse og <strong>100 % skalering</strong>.</li>
             <li>Klikk <strong>«Lagre»</strong>.</li>
           </ol>
         </div>
 
-        <!-- Del 2: Åpne PDF -->
-        <div class="space-y-1.5 pt-2 border-t border-slate-100">
-          <p class="font-bold text-slate-900 border-b border-slate-100 pb-1">2. Åpne den lagrede PDF og velg skriv ut:</p>
-          <p class="text-xs text-slate-600 font-medium pl-1">
-            Finn PDF-filen du nettopp lagret på datamaskinen, åpne den i nettleseren eller Adobe Acrobat, og velg Skriv ut (Ctrl + P).
-          </p>
-        </div>
-
-        <!-- Del 3: Sikker print / Hefteutskrift -->
+        <!-- Del 2: Velg metode for utskrift -->
         <div class="space-y-3 pt-2 border-t border-slate-100">
-          <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-            <p class="font-bold text-slate-900">3. Innstillinger ved utskrift til hefte (Sikker print):</p>
-            <span class="text-[11px] text-sky-600 font-semibold cursor-pointer">(Klikk på et bilde for å forstørre)</span>
-          </div>
-          
-          <div class="grid grid-cols-2 gap-3 pt-1">
-            <div onclick="zoomImage('utskrift/01.png', 'Velg Hefte/Layout')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
-              <span class="text-[11px] font-bold text-slate-700 mb-1 group-hover:text-sky-600 flex items-center gap-1">
-                Velg Hefte/Layout <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
-              </span>
-              <img src="utskrift/01.png" alt="Veiledning utskrift 1" class="max-h-32 object-contain rounded border border-slate-300 shadow-sm">
+          <div class="flex flex-wrap justify-between items-center gap-2 border-b border-slate-100 pb-2">
+            <p class="font-bold text-slate-900">2. Skriv ut PDF-filen som hefte:</p>
+            <div class="flex bg-slate-100 p-1 rounded-lg text-xs font-bold">
+              <button type="button" onclick="switchGuideTab('booklet', 'browser')" id="booklet-tab-browser" class="px-3 py-1 rounded-md bg-white text-emerald-700 shadow-sm transition">
+                I nettleseren
+              </button>
+              <button type="button" onclick="switchGuideTab('booklet', 'adobe')" id="booklet-tab-adobe" class="px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">
+                I Adobe Reader
+              </button>
             </div>
+          </div>
 
-            <div onclick="zoomImage('utskrift/02.png', 'Velg Papirstørrelse (A3)')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
-              <span class="text-[11px] font-bold text-slate-700 mb-1 group-hover:text-sky-600 flex items-center gap-1">
-                Velg Papirstørrelse (A3) <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
-              </span>
-              <img src="utskrift/02.png" alt="Veiledning utskrift 2" class="max-h-32 object-contain rounded border border-slate-300 shadow-sm">
+          <!-- FANE A: NETTLESER -->
+          <div id="booklet-content-browser" class="space-y-3">
+            <ol class="space-y-1 pl-5 list-decimal text-xs text-slate-700 font-medium">
+              <li>Velg <strong>Sikkerprint</strong>, åpne <strong>Flere innstillinger</strong>, fjern krysset for <strong>Tosidig</strong> og klikk <strong>Skriv ut med systemdialogen (Ctrl+Shift+P)</strong>.</li>
+              <li>Fjern krysset for <strong>La appen endre utskriftsinnstillingene</strong> og klikk <strong>Flere innstillinger</strong>.</li>
+              <li>Velg <strong>A3</strong> som papirstørrelse, <strong>Venstre til høyre</strong> under Hefteutskrift og <strong>2 i midten</strong> under Hefting.</li>
+            </ol>
+            <div class="grid grid-cols-3 gap-2.5 pt-1">
+              <div onclick="zoomImage('utskrift/01_01.png', '1. Velg Sikkerprint og systemdialog (Ctrl+Shift+P)')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-emerald-400 hover:shadow-md transition group">
+                <span class="text-[10px] font-bold text-slate-700 mb-1 text-center group-hover:text-emerald-700">1. Systemdialog <i class="fa-solid fa-magnifying-glass-plus"></i></span>
+                <img src="utskrift/01_01.png" alt="Nettleser utskrift 1" class="max-h-28 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
+              <div onclick="zoomImage('utskrift/01_02.png', '2. Fjern avhuking nederst og velg Flere innstillinger')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-emerald-400 hover:shadow-md transition group">
+                <span class="text-[10px] font-bold text-slate-700 mb-1 text-center group-hover:text-emerald-700">2. Flere innstillinger <i class="fa-solid fa-magnifying-glass-plus"></i></span>
+                <img src="utskrift/01_02.png" alt="Nettleser utskrift 2" class="max-h-28 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
+              <div onclick="zoomImage('utskrift/01_03.png', '3. Velg A3, Hefteutskrift og 2 i midten')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-emerald-400 hover:shadow-md transition group">
+                <span class="text-[10px] font-bold text-slate-700 mb-1 text-center group-hover:text-emerald-700">3. A3 og Hefting <i class="fa-solid fa-magnifying-glass-plus"></i></span>
+                <img src="utskrift/01_03.png" alt="Nettleser utskrift 3" class="max-h-28 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
             </div>
           </div>
+
+          <!-- FANE B: ADOBE READER -->
+          <div id="booklet-content-adobe" class="space-y-3 hidden">
+            <ol class="space-y-1 pl-5 list-decimal text-xs text-slate-700 font-medium">
+              <li>Åpne PDF-filen i <strong>Adobe Reader</strong> og trykk <strong>Skriv ut (Ctrl + P)</strong>.</li>
+              <li>Velg <strong>Hefte</strong> under Sidestørrelse og håndtering, og sett papirstørrelse til <strong>A3</strong> (samt <strong>2 i midten</strong> under Hefting i skriveregenskapene).</li>
+            </ol>
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div onclick="zoomImage('utskrift/01.png', 'Velg Hefte/Layout i Adobe Reader')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-emerald-400 hover:shadow-md transition group">
+                <span class="text-[11px] font-bold text-slate-700 mb-1 group-hover:text-emerald-700 flex items-center gap-1">
+                  1. Velg Hefte/Layout <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
+                </span>
+                <img src="utskrift/01.png" alt="Adobe Reader utskrift 1" class="max-h-32 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
+              <div onclick="zoomImage('utskrift/02.png', 'Velg Papirstørrelse (A3) i Adobe Reader')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-emerald-400 hover:shadow-md transition group">
+                <span class="text-[11px] font-bold text-slate-700 mb-1 group-hover:text-emerald-700 flex items-center gap-1">
+                  2. Velg Papirstørrelse (A3) <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
+                </span>
+                <img src="utskrift/02.png" alt="Adobe Reader utskrift 2" class="max-h-32 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
+            </div>
+          </div>
+
+          <p class="text-[11px] text-slate-500 text-right italic">Klikk på et bilde for å forstørre det.</p>
         </div>
       </div>
 
@@ -401,7 +436,7 @@
 
   <!-- POPUP ETTER PDF-LAGRING (STEG 2: SKRIV UT HEFTE) -->
   <div id="afterPdfModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
       
       <!-- Header -->
       <div class="bg-sky-600 px-6 py-4 flex justify-between items-center text-white shrink-0">
@@ -424,39 +459,77 @@
         <div class="bg-sky-50 border border-sky-200 rounded-xl p-4 space-y-2.5">
           <p class="font-bold text-slate-900">1. Åpne den lagrede PDF-filen:</p>
           <p class="text-xs text-slate-600 font-medium">
-            Finn PDF-filen du nettopp lagret på datamaskinen og åpne den, eller klikk på knappen under for å åpne den rett i en ny fane:
+            Klikk på knappen under for å åpne PDF-en i nettleseren, eller åpne filen direkte i <strong>Adobe Reader</strong> fra datamaskinen:
           </p>
           <div>
             <input type="file" id="openSavedPdfInput" accept="application/pdf" class="hidden" onchange="openSelectedPdfFile(event)">
             <button onclick="document.getElementById('openSavedPdfInput').click()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg text-xs shadow-sm transition inline-flex items-center gap-2">
               <i class="fa-solid fa-folder-open"></i>
-              Velg og åpne PDF-filen
+              Velg og åpne PDF-filen i nettleser
             </button>
           </div>
         </div>
 
-        <!-- Steg 2: Skriv ut som hefte -->
+        <!-- Steg 2: Velg veiledning ut fra hvor filen åpnes -->
         <div class="space-y-3 pt-1">
-          <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-            <p class="font-bold text-slate-900">2. Trykk Skriv ut (Ctrl + P) og velg hefte:</p>
-            <span class="text-[11px] text-sky-600 font-semibold">(Klikk på et bilde for å forstørre)</span>
-          </div>
-          
-          <div class="grid grid-cols-2 gap-3 pt-1">
-            <div onclick="zoomImage('utskrift/01.png', 'Velg Hefte/Layout')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
-              <span class="text-[11px] font-bold text-slate-700 mb-1 group-hover:text-sky-600 flex items-center gap-1">
-                Velg Hefte/Layout <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
-              </span>
-              <img src="utskrift/01.png" alt="Veiledning utskrift 1" class="max-h-32 object-contain rounded border border-slate-300 shadow-sm">
+          <div class="flex flex-wrap justify-between items-center gap-2 border-b border-slate-100 pb-2">
+            <p class="font-bold text-slate-900">2. Trykk Skriv ut (Ctrl + P) og følg veiledningen:</p>
+            <div class="flex bg-slate-100 p-1 rounded-lg text-xs font-bold">
+              <button type="button" onclick="switchGuideTab('after', 'browser')" id="after-tab-browser" class="px-3 py-1 rounded-md bg-white text-sky-700 shadow-sm transition">
+                Åpnet i nettleser
+              </button>
+              <button type="button" onclick="switchGuideTab('after', 'adobe')" id="after-tab-adobe" class="px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">
+                Åpnet i Adobe Reader
+              </button>
             </div>
+          </div>
 
-            <div onclick="zoomImage('utskrift/02.png', 'Velg Papirstørrelse (A3)')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
-              <span class="text-[11px] font-bold text-slate-700 mb-1 group-hover:text-sky-600 flex items-center gap-1">
-                Velg Papirstørrelse (A3) <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
-              </span>
-              <img src="utskrift/02.png" alt="Veiledning utskrift 2" class="max-h-32 object-contain rounded border border-slate-300 shadow-sm">
+          <!-- FANE A: ÅPNET I NETTLESER -->
+          <div id="after-content-browser" class="space-y-3">
+            <ol class="space-y-1 pl-5 list-decimal text-xs text-slate-700 font-medium">
+              <li>Velg <strong>Sikkerprint</strong>, åpne <strong>Flere innstillinger</strong>, fjern krysset for <strong>Tosidig</strong> og klikk <strong>Skriv ut med systemdialogen (Ctrl+Shift+P)</strong>.</li>
+              <li>Fjern krysset for <strong>La appen endre utskriftsinnstillingene</strong> og klikk <strong>Flere innstillinger</strong>.</li>
+              <li>Velg <strong>A3</strong> som papirstørrelse, <strong>Venstre til høyre</strong> under Hefteutskrift og <strong>2 i midten</strong> under Hefting.</li>
+            </ol>
+            <div class="grid grid-cols-3 gap-2.5 pt-1">
+              <div onclick="zoomImage('utskrift/01_01.png', '1. Velg Sikkerprint og systemdialog (Ctrl+Shift+P)')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
+                <span class="text-[10px] font-bold text-slate-700 mb-1 text-center group-hover:text-sky-600">1. Systemdialog <i class="fa-solid fa-magnifying-glass-plus"></i></span>
+                <img src="utskrift/01_01.png" alt="Nettleser utskrift 1" class="max-h-28 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
+              <div onclick="zoomImage('utskrift/01_02.png', '2. Fjern avhuking nederst og velg Flere innstillinger')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
+                <span class="text-[10px] font-bold text-slate-700 mb-1 text-center group-hover:text-sky-600">2. Flere innstillinger <i class="fa-solid fa-magnifying-glass-plus"></i></span>
+                <img src="utskrift/01_02.png" alt="Nettleser utskrift 2" class="max-h-28 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
+              <div onclick="zoomImage('utskrift/01_03.png', '3. Velg A3, Hefteutskrift og 2 i midten')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
+                <span class="text-[10px] font-bold text-slate-700 mb-1 text-center group-hover:text-sky-600">3. A3 og Hefting <i class="fa-solid fa-magnifying-glass-plus"></i></span>
+                <img src="utskrift/01_03.png" alt="Nettleser utskrift 3" class="max-h-28 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
             </div>
           </div>
+
+          <!-- FANE B: ÅPNET I ADOBE READER -->
+          <div id="after-content-adobe" class="space-y-3 hidden">
+            <ol class="space-y-1 pl-5 list-decimal text-xs text-slate-700 font-medium">
+              <li>Åpne PDF-filen i <strong>Adobe Reader</strong> og trykk <strong>Skriv ut (Ctrl + P)</strong>.</li>
+              <li>Velg <strong>Hefte</strong> under Sidestørrelse og håndtering, og sett papirstørrelse til <strong>A3</strong> (samt <strong>2 i midten</strong> under Hefting i skriveregenskapene).</li>
+            </ol>
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div onclick="zoomImage('utskrift/01.png', 'Velg Hefte/Layout i Adobe Reader')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
+                <span class="text-[11px] font-bold text-slate-700 mb-1 group-hover:text-sky-600 flex items-center gap-1">
+                  1. Velg Hefte/Layout <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
+                </span>
+                <img src="utskrift/01.png" alt="Adobe Reader utskrift 1" class="max-h-32 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
+              <div onclick="zoomImage('utskrift/02.png', 'Velg Papirstørrelse (A3) i Adobe Reader')" class="border border-slate-200 rounded-xl p-2 bg-slate-50 flex flex-col items-center cursor-pointer hover:border-sky-400 hover:shadow-md transition group">
+                <span class="text-[11px] font-bold text-slate-700 mb-1 group-hover:text-sky-600 flex items-center gap-1">
+                  2. Velg Papirstørrelse (A3) <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
+                </span>
+                <img src="utskrift/02.png" alt="Adobe Reader utskrift 2" class="max-h-32 object-contain rounded border border-slate-300 shadow-sm">
+              </div>
+            </div>
+          </div>
+
+          <p class="text-[11px] text-slate-500 text-right italic">Klikk på et bilde for å forstørre det.</p>
         </div>
 
       </div>
