@@ -147,132 +147,151 @@ function toggleMathTask(e, sheetId) {
 }
 
 
-
 function renderSidebar() {
-    const container = document.getElementById('sheetsList');
-    if (!container) return;
+  const container = document.getElementById('sheetsList');
+  if (!container) return;
 
-    container.innerHTML = '';
+  // Ta vare på nåværende rulleposisjon i sidemenyen
+  const sidebar = container.closest('.sidebar-panel');
+  const savedScrollTop = sidebar ? sidebar.scrollTop : 0;
 
-    initialSheets.forEach(sheet => {
-        const isActive = sheet.id === currentSheetId;
-        const isHidden = sheetVisibility[sheet.id] === true;
-        const currentMode = getMode(sheet.id);
-        const weekStr = getWeekText(sheet.id);
+  container.innerHTML = '';
 
-        // Sjekk om arket har enten matte- eller norsk-oppgave
-        const pages = sheet.pages || [sheet];
-        const hasMathTask = pages.some(page => page.mathTask);
-        const hasNorskTask = pages.some(page => page.norskTask);
+  initialSheets.forEach(sheet => {
+    const isActive = sheet.id === currentSheetId;
+    const isHidden = sheetVisibility[sheet.id] === true;
+    const currentMode = getMode(sheet.id);
+    const weekStr = getWeekText(sheet.id);
 
-        // Hent gjeldende valg ('none', 'math', eller 'norsk')
-        const currentExtraMode = getExtraTaskMode(sheet.id);
+    // Sjekk om arket har enten matte- eller norsk-oppgave
+    const pages = sheet.pages || [sheet];
+    const hasMathTask = pages.some(page => page.mathTask);
+    const hasNorskTask = pages.some(page => page.norskTask);
 
-        const btn = document.createElement('div');
+    // Hent gjeldende valg ('none', 'math', eller 'norsk')
+    const currentExtraMode = getExtraTaskMode(sheet.id);
 
-        btn.className = `
-            sheet-menu-item
-            ${isActive ? 'sheet-menu-active' : ''}
-            ${isHidden ? 'sheet-menu-hidden' : ''}
-        `;
+    const btn = document.createElement('div');
+    btn.dataset.sheetId = sheet.id; // Brukes av selectSheet() for rask markering
 
-        btn.innerHTML = `
-            <!-- RAD 1: ARKNAVN, UKENUMMER OG VIS/SKJUL -->
-            <div class="sheet-menu-header">
+    btn.className = `
+      sheet-menu-item
+      ${isActive ? 'sheet-menu-active' : ''}
+      ${isHidden ? 'sheet-menu-hidden' : ''}
+    `;
 
-                <div
-                    class="sheet-menu-title"
-                    onclick="selectSheet('${sheet.id}')"
-                    title="${sheet.title}"
+    btn.innerHTML = `
+      <!-- RAD 1: ARKNAVN, UKENUMMER OG VIS/SKJUL -->
+      <div class="sheet-menu-header">
+
+        <div
+          class="sheet-menu-title"
+          onclick="selectSheet('${sheet.id}')"
+          title="${sheet.title}"
+        >
+          <i class="fa-solid fa-file-lines sheet-menu-icon"></i>
+
+          <span class="sheet-menu-name ${isHidden ? 'line-through' : ''}">
+            ${sheet.title}
+          </span>
+
+          ${weekStr ? `
+            <span class="sheet-menu-week">
+              ${weekStr}
+            </span>
+          ` : ''}
+        </div>
+
+        <button
+          onclick="toggleHideSheet(event, '${sheet.id}')"
+          class="sheet-menu-eye"
+          title="${isHidden ? 'Vis ark' : 'Skjul ark'}"
+        >
+          <i class="fa-solid ${isHidden ? 'fa-eye-slash' : 'fa-eye'}"></i>
+        </button>
+
+      </div>
+
+      ${!isHidden ? `
+
+        <!-- RAD 2: SIDEVALG OG 3-DELT EKSTRAOPPGAVE-VELGER -->
+        <div class="sheet-menu-options flex-wrap">
+
+          <button
+            onclick="setSheetMode(event, '${sheet.id}', 'page1')"
+            class="sheet-mode-button ${currentMode === 'page1' ? 'sheet-mode-active' : ''}"
+          >
+            Kun side 1
+          </button>
+
+          <button
+            onclick="setSheetMode(event, '${sheet.id}', 'both')"
+            class="sheet-mode-button ${currentMode === 'both' ? 'sheet-mode-active' : ''}"
+          >
+            Side 1 og 2
+          </button>
+
+          ${(hasMathTask || hasNorskTask) ? `
+            <div class="sheet-extra-toggle ml-auto">
+              <button 
+                onclick="setExtraTaskMode(event, '${sheet.id}', 'none')" 
+                class="sheet-extra-btn ${currentExtraMode === 'none' ? 'bg-slate-200 font-bold text-slate-800' : ''}"
+                title="Ingen ekstraoppgave"
+              >
+                Ingen
+              </button>
+
+              ${hasMathTask ? `
+                <button 
+                  onclick="setExtraTaskMode(event, '${sheet.id}', 'math')" 
+                  class="sheet-extra-btn ${currentExtraMode === 'math' ? 'active-math' : ''}"
+                  title="Vis matteoppgave"
                 >
-                    <i class="fa-solid fa-file-lines sheet-menu-icon"></i>
-
-                    <span class="sheet-menu-name ${isHidden ? 'line-through' : ''}">
-                        ${sheet.title}
-                    </span>
-
-                    ${weekStr ? `
-                        <span class="sheet-menu-week">
-                            ${weekStr}
-                        </span>
-                    ` : ''}
-                </div>
-
-                <button
-                    onclick="toggleHideSheet(event, '${sheet.id}')"
-                    class="sheet-menu-eye"
-                    title="${isHidden ? 'Vis ark' : 'Skjul ark'}"
-                >
-                    <i class="fa-solid ${isHidden ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                  <i class="fa-solid fa-calculator"></i> Matte
                 </button>
+              ` : ''}
 
+              ${hasNorskTask ? `
+                <button 
+                  onclick="setExtraTaskMode(event, '${sheet.id}', 'norsk')" 
+                  class="sheet-extra-btn ${currentExtraMode === 'norsk' ? 'active-norsk' : ''}"
+                  title="Vis norskoppgave"
+                >
+                  <i class="fa-solid fa-pen-line"></i> Norsk
+                </button>
+              ` : ''}
             </div>
+          ` : ''}
 
-            ${!isHidden ? `
+        </div>
 
-                <!-- RAD 2: SIDEVALG OG 3-DELT EKSTRAOPPGAVE-VELGER -->
-                <div class="sheet-menu-options flex-wrap">
+      ` : ''}
+    `;
 
-                    <button
-                        onclick="setSheetMode(event, '${sheet.id}', 'page1')"
-                        class="sheet-mode-button ${currentMode === 'page1' ? 'sheet-mode-active' : ''}"
-                    >
-                        Kun side 1
-                    </button>
+    container.appendChild(btn);
+  });
 
-                    <button
-                        onclick="setSheetMode(event, '${sheet.id}', 'both')"
-                        class="sheet-mode-button ${currentMode === 'both' ? 'sheet-mode-active' : ''}"
-                    >
-                        Side 1 og 2
-                    </button>
-
-                    ${(hasMathTask || hasNorskTask) ? `
-                        <div class="sheet-extra-toggle ml-auto">
-                            <button 
-                                onclick="setExtraTaskMode(event, '${sheet.id}', 'none')" 
-                                class="sheet-extra-btn ${currentExtraMode === 'none' ? 'bg-slate-200 font-bold text-slate-800' : ''}"
-                                title="Ingen ekstraoppgave"
-                            >
-                                Ingen
-                            </button>
-
-                            ${hasMathTask ? `
-                                <button 
-                                    onclick="setExtraTaskMode(event, '${sheet.id}', 'math')" 
-                                    class="sheet-extra-btn ${currentExtraMode === 'math' ? 'active-math' : ''}"
-                                    title="Vis matteoppgave"
-                                >
-                                    <i class="fa-solid fa-calculator"></i> Matte
-                                </button>
-                            ` : ''}
-
-                            ${hasNorskTask ? `
-                                <button 
-                                    onclick="setExtraTaskMode(event, '${sheet.id}', 'norsk')" 
-                                    class="sheet-extra-btn ${currentExtraMode === 'norsk' ? 'active-norsk' : ''}"
-                                    title="Vis norskoppgave"
-                                >
-                                    <i class="fa-solid fa-pen-line"></i> Norsk
-                                </button>
-                            ` : ''}
-                        </div>
-                    ` : ''}
-
-                </div>
-
-            ` : ''}
-
-        `;
-
-        container.appendChild(btn);
-    });
+  // Gjenopprett rulleposisjonen slik at menyen ikke hopper
+  if (sidebar) {
+    sidebar.scrollTop = savedScrollTop;
+  }
 }
 
 
 function selectSheet(id) {
+  if (currentSheetId === id) return;
   currentSheetId = id;
-  renderSidebar();
+
+  // Oppdater aktiv markering direkte uten å tegne hele menyen på nytt
+  const menuItems = document.querySelectorAll('#sheetsList .sheet-menu-item');
+  menuItems.forEach(item => {
+    if (item.dataset.sheetId === id) {
+      item.classList.add('sheet-menu-active');
+    } else {
+      item.classList.remove('sheet-menu-active');
+    }
+  });
+
   renderSheet();
 }
 
@@ -488,9 +507,9 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
         </div>
       ` : ''}
 
-      <!-- FORSIDE -->
+<!-- FORSIDE -->
       ${page.type === 'cover' ? `
-        <div class="flex-1 relative flex flex-col items-center text-center overflow-hidden bg-white rounded-2xl border-[3px] border-sky-600 my-1">
+        <div style="position: absolute; top: 12mm; left: 12mm; right: 12mm; bottom: 12mm;" class="flex flex-col items-center text-center overflow-hidden bg-white rounded-2xl border-[3px] border-sky-600">
           <div class="absolute inset-1 border border-slate-200 rounded-xl pointer-events-none z-20"></div>
           <div class="absolute top-0 left-0 right-0 h-12 overflow-hidden pointer-events-none">
             <div class="absolute -top-10 left-1/4 w-2/3 h-20 bg-sky-100 rounded-full"></div>
@@ -924,7 +943,6 @@ async function waitForPrintAssets(container) {
 
 // UTSKRIFTSPLAN
 // Beregner nøyaktig hvilke sider som skal skrives ut.
-
 function buildPrintPlan(scope, includeCover) {
   const coverSheet = initialSheets.find(sheet => sheet.id === 'sheet-0');
   const regularSheets = initialSheets.filter(sheet => sheet.id !== 'sheet-0');
@@ -932,28 +950,19 @@ function buildPrintPlan(scope, includeCover) {
   let sheetsToPrint = [];
 
   if (scope === 'current') {
-    // Bare arket som vises i hovedvinduet.
     const activeSheet = getActiveSheet();
-    if (activeSheet && activeSheet.id !== 'sheet-0') {
-      sheetsToPrint = [activeSheet];
-    } else if (activeSheet) {
+    if (activeSheet) {
       sheetsToPrint = [activeSheet];
     }
-
-  } else if (scope === 'selected') {
-    // Følger synlig/skjult-valgene i venstremenyen.
+  } else {
+    // 'selected': Følger synlig/skjult-valgene i venstremenyen
     sheetsToPrint = regularSheets.filter(
       sheet => sheetVisibility[sheet.id] !== true
     );
-
-  } else {
-    // Alle vanlige ark, også de som er skjult i venstremenyen.
-    sheetsToPrint = regularSheets;
   }
 
   const sheetsWithCover = [];
 
-  // Forside og innholdsfortegnelse er et separat valg.
   if (includeCover && coverSheet) {
     sheetsWithCover.push(coverSheet);
   }
@@ -967,11 +976,9 @@ function buildPrintPlan(scope, includeCover) {
   sheetsWithCover.forEach(sheet => {
     const pagesData = sheet.pages || [sheet];
     const isCover = sheet.id === 'sheet-0';
-
-    // Gjeldende ark følger sideinnstillingen i venstremenyen.
     const mode = getMode(sheet.id);
 
-    // Hefteformat brukes bare når arkene fra venstremenyen velges.
+    // Hefteformat: sett inn blank side ved behov når arkene fra venstremenyen velges
     if (
       scope === 'selected' &&
       !isCover &&
@@ -986,22 +993,11 @@ function buildPrintPlan(scope, includeCover) {
       blankPages++;
     }
 
-// Bestem hvilke sider som skal skrives ut.
-const visiblePages = pagesData.filter((_, pageIndex) => {
-
-  // ALLE ARK: Skriv ut alle sider, uansett valg i venstremenyen.
-  if (scope === 'all') {
-    return true;
-  }
-
-  // Forside og innholdsfortegnelse skal alltid ha begge sider.
-  if (isCover) {
-    return true;
-  }
-
-  // De andre utskriftsvalgene følger sideinnstillingen i venstremenyen.
-  return pageIndex === 0 || mode === 'both';
-});
+    // Bestem hvilke sider som skal skrives ut
+    const visiblePages = pagesData.filter((_, pageIndex) => {
+      if (isCover) return true;
+      return pageIndex === 0 || mode === 'both';
+    });
 
     visiblePages.forEach(page => {
       plan.push({
@@ -1075,16 +1071,13 @@ function executePrint(printMode = 'normal') {
     const scopeInput = document.querySelector('input[name="printScope"]:checked');
     const includeCoverInput = document.getElementById('includeCoverCheckbox');
 
-    const scope = scopeInput ? scopeInput.value : 'all';
+    const scope = scopeInput ? scopeInput.value : 'selected';
     const includeCover = includeCoverInput ? includeCoverInput.checked : true;
 
-    // Lagre konfigurasjonen midlertidig
     window.pendingPrintConfig = { scope, includeCover, printMode };
 
-    // Lukk første modal umiddelbart
     closePrintModal();
 
-    // Vis hefteveiledningen direkte dersom hefteutskrift er valgt
     if (printMode === 'booklet') {
         const bookletModal = document.getElementById('bookletInfoModal');
         if (bookletModal) {
@@ -1093,7 +1086,6 @@ function executePrint(printMode = 'normal') {
         }
     }
 
-    // Vanlig utskrift
     confirmBookletPrint();
 }
 
@@ -1112,6 +1104,10 @@ async function confirmBookletPrint() {
 }
 
 // Klargjøring og åpning av utskriftsdialog
+
+
+// UTSKRIFTSMODAL
+// Klargjøring og åpning av utskriftsdialog
 async function startPrintProcess(scope, includeCover, printMode) {
     if (isPrintInProgress) return;
     isPrintInProgress = true;
@@ -1124,6 +1120,50 @@ async function startPrintProcess(scope, includeCover, printMode) {
         isPrintInProgress = false;
         return;
     }
+
+    let cleanedUp = false;
+    const printMediaQuery = window.matchMedia('print');
+
+    const finishPrintAndShowGuide = () => {
+        if (cleanedUp) return;
+        cleanedUp = true;
+
+        window.onafterprint = null;
+        window.removeEventListener('focus', onReturn);
+        window.removeEventListener('mousemove', onReturn);
+        if (printMediaQuery.removeEventListener) {
+            printMediaQuery.removeEventListener('change', onMediaChange);
+        }
+
+        document.title = originalTitle;
+        currentSheetId = savedSheetId;
+
+        renderSidebar();
+        renderSheet();
+
+        isPrintInProgress = false;
+
+        if (printMode === 'booklet') {
+            // Lukk eventuelle andre modaler først for sikkerhets skyld
+            closePrintModal();
+            closeBookletModal();
+
+            const afterPdfModal = document.getElementById('afterPdfModal');
+            if (afterPdfModal) {
+                afterPdfModal.classList.remove('hidden');
+            }
+        }
+    };
+
+    const onReturn = () => {
+        setTimeout(finishPrintAndShowGuide, 100);
+    };
+
+    const onMediaChange = (e) => {
+        if (!e.matches) {
+            setTimeout(finishPrintAndShowGuide, 100);
+        }
+    };
 
     try {
         const printPlan = buildPrintPlan(scope, includeCover);
@@ -1161,45 +1201,59 @@ async function startPrintProcess(scope, includeCover, printMode) {
             document.title = 'Leseark 1. klasse - PDF for hefte';
         }
 
+        // Lytt på alle måter nettleseren kan signalisere at utskriften er ferdig
+        window.onafterprint = finishPrintAndShowGuide;
+        if (printMediaQuery.addEventListener) {
+            printMediaQuery.addEventListener('change', onMediaChange);
+        }
+
         window.print();
+
+        // Når window.print() er ferdig (eller ikke-blokkerende), lytt etter retur til siden
+        setTimeout(() => {
+            window.addEventListener('focus', onReturn, { once: true });
+            window.addEventListener('mousemove', onReturn, { once: true });
+        }, 400);
 
     } catch (error) {
         console.error('Feil før utskrift:', error);
         alert('Utskriften kunne ikke klargjøres. Prøv igjen.');
-    } finally {
-        document.title = originalTitle;
-        currentSheetId = savedSheetId;
-
-        renderSidebar();
-        renderSheet();
-
-        isPrintInProgress = false;
+        finishPrintAndShowGuide();
     }
 }
 
 
-// UTSKRIFTSMODAL
+function closeAfterPdfModal() {
+    const modal = document.getElementById('afterPdfModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+function openSelectedPdfFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const fileURL = URL.createObjectURL(file);
+    window.open(fileURL, '_blank');
+
+    // Nullstill input slik at samme fil kan velges på nytt ved behov
+    event.target.value = '';
+}
 
 function openPrintModal() {
   const modal = document.getElementById('printModal');
   if (!modal) return;
 
-  // Nullstill utskriftslås når modalen åpnes på nytt
   isPrintInProgress = false;
 
-  // Velg Alle ark som standard.
-  const allInput = document.querySelector(
-    'input[name="printScope"][value="all"]'
-  );
-
-  if (allInput) {
-    allInput.checked = true;
+  // Velg "Ark valgt i venstremenyen" som standard
+  const selectedInput = document.querySelector('input[name="printScope"][value="selected"]');
+  if (selectedInput) {
+    selectedInput.checked = true;
   }
 
-  const coverCheckbox = document.getElementById(
-    'includeCoverCheckbox'
-  );
-
+  const coverCheckbox = document.getElementById('includeCoverCheckbox');
   if (coverCheckbox) {
     coverCheckbox.checked = true;
   }
@@ -1221,84 +1275,44 @@ function closePrintModal() {
 
 
 // OPPDATERER MARKERINGEN AV UTSKRIFTSVALG
-
 function updatePrintScopeOptions() {
-  const selectedInput = document.querySelector(
-    'input[name="printScope"]:checked'
-  );
+  const selectedInput = document.querySelector('input[name="printScope"]:checked');
+  const scope = selectedInput ? selectedInput.value : 'selected';
 
-  const scope = selectedInput ? selectedInput.value : 'all';
-
-  const allLabel = document.getElementById('opt-all-label');
   const selectedLabel = document.getElementById('opt-selected-label');
   const currentLabel = document.getElementById('opt-current-label');
 
-  // Fjern aktiv markering fra alle alternativene.
-  [allLabel, selectedLabel, currentLabel].forEach(label => {
+  // Fjern aktiv markering fra alle alternativene
+  [selectedLabel, currentLabel].forEach(label => {
     if (label) {
-      label.classList.remove(
-        'border-indigo-600',
-        'bg-indigo-50/40'
-      );
-
+      label.classList.remove('border-indigo-600', 'bg-indigo-50/40');
       label.classList.add('border-slate-200');
     }
   });
 
-  // Finn riktig etikett for valgt alternativ.
-  let activeLabel = allLabel;
+  // Finn og marker valgt alternativ
+  const activeLabel = (scope === 'current') ? currentLabel : selectedLabel;
 
-  if (scope === 'selected') {
-    activeLabel = selectedLabel;
-  } else if (scope === 'current') {
-    activeLabel = currentLabel;
-  }
-
-  // Marker valgt alternativ.
   if (activeLabel) {
     activeLabel.classList.remove('border-slate-200');
-
-    activeLabel.classList.add(
-      'border-indigo-600',
-      'bg-indigo-50/40'
-    );
-  }
-
-  // Forsidevalget skal alltid være synlig.
-  const coverOptionContainer = document.getElementById(
-    'coverOptionContainer'
-  );
-
-  if (coverOptionContainer) {
-    coverOptionContainer.classList.remove('hidden');
+    activeLabel.classList.add('border-indigo-600', 'bg-indigo-50/40');
   }
 
   updatePrintSummary();
 }
 
 
+
 // BEREGNER ANTALL ARK OG SIDER
-
 function updatePrintSummary() {
-  const scopeInput = document.querySelector(
-    'input[name="printScope"]:checked'
-  );
-
-  const includeCoverInput = document.getElementById(
-    'includeCoverCheckbox'
-  );
-
-  const summaryEl = document.getElementById(
-    'printSummaryText'
-  );
+  const scopeInput = document.querySelector('input[name="printScope"]:checked');
+  const includeCoverInput = document.getElementById('includeCoverCheckbox');
+  const summaryEl = document.getElementById('printSummaryText');
 
   if (!summaryEl) return;
 
-  const scope = scopeInput ? scopeInput.value : 'all';
-
-  const includeCover = includeCoverInput
-    ? includeCoverInput.checked
-    : true;
+  const scope = scopeInput ? scopeInput.value : 'selected';
+  const includeCover = includeCoverInput ? includeCoverInput.checked : true;
 
   const plan = buildPrintPlan(scope, includeCover);
 
@@ -1313,6 +1327,7 @@ function updatePrintSummary() {
 
   summaryEl.textContent = summary;
 }
+
 
 
 // LYTTER PÅ ENDRINGER I UTSKRIFTSVINDUET
