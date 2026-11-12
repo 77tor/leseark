@@ -86,10 +86,21 @@ window.lesearkData.push({
             alt: "Telle",
             imageSize: "size-large",
             instruction: "Øv på å skrive tallene."
-        }
-
-        ]
-      }
-    }
+     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på c og q.",
+      tasks: [
+        {
+          image: "norsk/bokstav_cq.png",
+        imageSize: "size-xxl"
+        }
+      ]
+    }
+  }
+]
+
 });

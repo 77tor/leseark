@@ -63,10 +63,21 @@ window.lesearkData.push({
             alt: "Telle",
             imageSize: "size-large",
             instruction: "Sett kryss over den minste mengden."
-        }
-
-        ]
-      }
-    }
+     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på b og t.",
+      tasks: [
+        {
+          image: "norsk/bokstav_bt.png",
+        imageSize: "size-xxxl"
+        }
+      ]
+    }
+  }
+]
+
 });

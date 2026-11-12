@@ -89,10 +89,21 @@ window.lesearkData.push({
             alt: "Telle",
             imageSize: "size-xl",
             instruction: "Øv på å skrive tallene."
-        }
-
-        ]
-      }
-    }
+     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på w, x og z.",
+      tasks: [
+        {
+          image: "norsk/bokstav_wxz.png",
+        imageSize: "size-xxl"
+        }
+      ]
+    }
+  }
+]
+
 });

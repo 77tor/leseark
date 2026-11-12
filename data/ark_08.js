@@ -47,8 +47,7 @@ window.lesearkData.push({
           "Ser du et tre?",
           "Ser du ei lue?",
           "Ja sier Trine.",
-          "Nei sier Ola.",
-          "Trine ler."
+          "Nei sier Ola."
         ],
         image: "Bilder/lue.png",
         imageSize: "h-36 max-w-[160px]"
@@ -59,13 +58,12 @@ window.lesearkData.push({
         "Åge og Pål er ute på tur i bilen.",        
         "Det er sol i dag.",
         "Bilen er rød.",
-        "Den er kul.",
-        "Begge ler."
+        "Den er kul."
 
       ],
       mouseImage: "Bilder/tekst_08.png",
       imageMargin: "relative -left-[80px] mt-[50px]",
-      imageSize: "max-h-52 max-w-[280px]",
+      imageSize: "max-h-52 max-w-[220px]",
       imageStyle: "photo-frame",
 
 
@@ -79,10 +77,21 @@ window.lesearkData.push({
             alt: "Telle",
             imageSize: "size-large",
             instruction: "Tegn prikkene som mangler. Terningene skal stå i stigende rekkefølge."
-        }
-
-        ]
-      }
-    }
+     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på d og u.",
+      tasks: [
+        {
+          image: "norsk/bokstav_du.png",
+        imageSize: "size-xxxl"
+        }
+      ]
+    }
+  }
+]
+
 });

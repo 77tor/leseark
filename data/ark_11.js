@@ -69,10 +69,21 @@ window.lesearkData.push({
             alt: "Telle",
             imageSize: "size-xxl",
             instruction: "Øv på å skrive tallene."
-        }
-
-        ]
-      }
-    }
+     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på h og f.",
+      tasks: [
+        {
+          image: "norsk/bokstav_hf.png",
+        imageSize: "size-xxxl"
+        }
+      ]
+    }
+  }
+]
+
 });

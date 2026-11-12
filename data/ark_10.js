@@ -69,10 +69,21 @@ window.lesearkData.push({
             alt: "Telle",
             imageSize: "size-xxxxl",
             instruction: "Hvor mange? Tegn strek til tallinja."
-        }
-
-        ]
-      }
-    }
+     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på p og y.",
+      tasks: [
+        {
+          image: "norsk/bokstav_py.png",
+        imageSize: "size-xxxl"
+        }
+      ]
+    }
+  }
+]
+
 });

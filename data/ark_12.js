@@ -68,10 +68,21 @@ window.lesearkData.push({
             alt: "Telle",
             imageSize: "size-xxl",
             instruction: "Øv på å skrive tallene."
-        }
-
-        ]
-      }
-    }
+     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på k og æ.",
+      tasks: [
+        {
+          image: "norsk/bokstav_kae.png",
+        imageSize: "size-xxxl"
+        }
+      ]
+    }
+  }
+]
+
 });

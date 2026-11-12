@@ -62,11 +62,21 @@ window.lesearkData.push({
             image: "matte/ark_02_01.png",
             alt: "Telle",
             imageSize: "size-xxxl"
-
-        }
-
-        ]
-      }
     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på l og o.",
+      tasks: [
+        {
+          image: "norsk/bokstav_lo.png",
+        imageSize: "size-xxxl"
+        }
+      ]
+    }
+  }
+]
+
 });

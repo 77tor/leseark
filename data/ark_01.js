@@ -72,8 +72,20 @@ window.lesearkData.push({
         alt: "Former",
         imageSize: "size-xxxl"
     }
-    ]
-      }
-    }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på i og s.",
+      tasks: [
+        {
+          image: "norsk/bokstav_is.png",
+        imageSize: "size-xxxl"
+        }
+      ]
+    }
+  }
+]
+
 });

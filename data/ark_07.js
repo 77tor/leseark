@@ -64,11 +64,10 @@ window.lesearkData.push({
         "Per bor i en by.",
         "Han bor i et hus.",
         "Han bor med mor og far.",
-        "Per har en katt.",
-        "Katten heter Pus."
+        "Per har en katt."
       ],
       mouseImage: "Bilder/tekst_07.png",
-      imageMargin: "relative -left-[40px] mt-[40px]",
+      imageMargin: "relative -left-[40px] mt-[1px]",
       imageSize: "max-h-56 max-w-[280px]",
       imageStyle: "photo-frame",
 
@@ -83,10 +82,21 @@ window.lesearkData.push({
             alt: "Telle",
             imageSize: "size-large",
             instruction: "Hvor mange? Sett ring rundt riktig antall."
-        }
-
-        ]
-      }
-    }
+     }
   ]
+},
+// NY norskoppgave / skriveoppgave (hentes fra mappen norsk/)
+    norskTask: {
+      title: "Skriveoppgave:",
+      instruction: "Øv på å og j.",
+      tasks: [
+        {
+          image: "norsk/bokstav_aaj.png",
+        imageSize: "size-xxxl"
+        }
+      ]
+    }
+  }
+]
+
 });
