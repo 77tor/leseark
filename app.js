@@ -1235,7 +1235,15 @@ function openSelectedPdfFile(event) {
     if (!file) return;
 
     const fileURL = URL.createObjectURL(file);
-    window.open(fileURL, '_blank');
+
+    // Bruk en dynamisk lenke i stedet for window.open() slik at popup-blokkering ikke stopper den
+    const link = document.createElement('a');
+    link.href = fileURL;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     // Nullstill input slik at samme fil kan velges på nytt ved behov
     event.target.value = '';
