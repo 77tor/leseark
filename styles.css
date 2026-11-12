@@ -23,23 +23,89 @@
 
 
 /* ==========================================================================
-   3. MATTEOPPGAVER OG OPPGAVEBILDER
+   3. MATTE- OG NORSKOPPGAVER OG OPPGAVEBILDER
    ========================================================================== */
 
-.math-task-block { flex-shrink: 0; break-inside: avoid; page-break-inside: avoid; }
-.math-task-block h2 { line-height: 1.2; }
-.math-task-block p { line-height: 1.3; }
-.math-task-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%; break-inside: avoid; page-break-inside: avoid; }
-.math-task-image { max-width: 100%; max-height: 105px; width: auto; height: auto; object-fit: contain; }
-.math-task-image.size-small { max-height: 65px; }
-.math-task-image.size-medium { max-height: 105px; }
-.math-task-image.size-large { max-height: 150px; }
-.math-task-image.size-xl { max-height: 190px; }
-.math-task-image.size-xxl { max-height: 240px; }
-.math-task-image.size-xxxl { max-height: 300px; }
-.math-task-image.size-xxxxl { max-height: 350px; }
-.math-task-item .math-task-instruction { font-size: 1.2rem !important; line-height: 1.3 !important; }
+.math-task-block, .norsk-task-block { 
+  flex-shrink: 0; 
+  break-inside: avoid; 
+  page-break-inside: avoid; 
+}
 
+.math-task-block h2, .norsk-task-block h2 { line-height: 1.2; }
+.math-task-block p, .norsk-task-block p { line-height: 1.3; }
+
+.math-task-item { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; 
+  width: 100%; 
+  break-inside: avoid; 
+  page-break-inside: avoid; 
+}
+
+.math-task-item .math-task-instruction { 
+  font-size: 1.2rem !important; 
+  line-height: 1.3 !important; 
+}
+
+/* Felles bildestørrelser for både matte- og norskoppgaver */
+.math-task-image, .norsk-task-image { 
+  max-width: 100%; 
+  max-height: 105px; 
+  width: auto; 
+  height: auto; 
+  object-fit: contain; 
+}
+
+.math-task-image.size-small, .norsk-task-image.size-small { max-height: 65px; }
+.math-task-image.size-medium, .norsk-task-image.size-medium { max-height: 105px; }
+.math-task-image.size-large, .norsk-task-image.size-large { max-height: 150px; }
+.math-task-image.size-xl, .norsk-task-image.size-xl { max-height: 190px; }
+.math-task-image.size-xxl, .norsk-task-image.size-xxl { max-height: 240px; }
+.math-task-image.size-xxxl, .norsk-task-image.size-xxxl { max-height: 300px; }
+.math-task-image.size-xxxxl, .norsk-task-image.size-xxxxl { max-height: 350px; }
+
+/* 3-delt knapp i sidemenyen */
+.sheet-extra-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.sheet-extra-btn {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  border-right: 1px solid #cbd5e1;
+  background: transparent;
+  transition: all 0.15s;
+}
+
+.sheet-extra-btn:last-child {
+  border-right: none;
+}
+
+.sheet-extra-btn:hover {
+  background: #f1f5f9;
+}
+
+.sheet-extra-btn.active-math {
+  background: #15803d;
+  color: #ffffff;
+}
+
+.sheet-extra-btn.active-norsk {
+  background: #0284c7;
+  color: #ffffff;
+}
 
 /* ==========================================================================
    4. UTSKRIFTSMODAL

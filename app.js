@@ -27,6 +27,22 @@ let currentSheetId = initialSheets[0] ? initialSheets[0].id : "sheet-1";
 let showPageNumbers = localStorage.getItem('leseark_pagenums') !== "false";
 let customZoom = null;
 
+
+// Hent lagret status for ekstraoppgaver ('none', 'math', 'norsk')
+let sheetExtraTask = JSON.parse(localStorage.getItem('leseark_extra_task')) || {};
+
+function getExtraTaskMode(sheetId) {
+  return sheetExtraTask[sheetId] || 'none'; // 'none', 'math', eller 'norsk'
+}
+
+function setExtraTaskMode(e, sheetId, mode) {
+  e.stopPropagation();
+  sheetExtraTask[sheetId] = mode;
+  localStorage.setItem('leseark_extra_task', JSON.stringify(sheetExtraTask));
+  renderSidebar();
+  renderSheet();
+}
+
 function getActiveSheet() {
   return initialSheets.find(s => s.id === currentSheetId) || initialSheets[0];
 }
@@ -130,6 +146,8 @@ function toggleMathTask(e, sheetId) {
     renderSheet();
 }
 
+
+
 function renderSidebar() {
     const container = document.getElementById('sheetsList');
     if (!container) return;
@@ -142,10 +160,13 @@ function renderSidebar() {
         const currentMode = getMode(sheet.id);
         const weekStr = getWeekText(sheet.id);
 
-        const hasMathTask = (sheet.pages || [sheet])
-            .some(page => page.mathTask);
+        // Sjekk om arket har enten matte- eller norsk-oppgave
+        const pages = sheet.pages || [sheet];
+        const hasMathTask = pages.some(page => page.mathTask);
+        const hasNorskTask = pages.some(page => page.norskTask);
 
-        const showMathTask = sheetMathVisibility[sheet.id] === true;
+        // Hent gjeldende valg ('none', 'math', eller 'norsk')
+        const currentExtraMode = getExtraTaskMode(sheet.id);
 
         const btn = document.createElement('div');
 
@@ -189,8 +210,8 @@ function renderSidebar() {
 
             ${!isHidden ? `
 
-                <!-- RAD 2: SIDEVALG -->
-                <div class="sheet-menu-options">
+                <!-- RAD 2: SIDEVALG OG 3-DELT EKSTRAOPPGAVE-VELGER -->
+                <div class="sheet-menu-options flex-wrap">
 
                     <button
                         onclick="setSheetMode(event, '${sheet.id}', 'page1')"
@@ -206,14 +227,36 @@ function renderSidebar() {
                         Side 1 og 2
                     </button>
 
-                    ${hasMathTask ? `
-                        <button
-                            onclick="toggleMathTask(event, '${sheet.id}')"
-                            class="sheet-math-button ${showMathTask ? 'sheet-math-active' : ''}"
-                        >
-                            <i class="fa-solid fa-calculator"></i>
-                            ${showMathTask ? 'Skjul matte' : 'Vis matte'}
-                        </button>
+                    ${(hasMathTask || hasNorskTask) ? `
+                        <div class="sheet-extra-toggle ml-auto">
+                            <button 
+                                onclick="setExtraTaskMode(event, '${sheet.id}', 'none')" 
+                                class="sheet-extra-btn ${currentExtraMode === 'none' ? 'bg-slate-200 font-bold text-slate-800' : ''}"
+                                title="Ingen ekstraoppgave"
+                            >
+                                Ingen
+                            </button>
+
+                            ${hasMathTask ? `
+                                <button 
+                                    onclick="setExtraTaskMode(event, '${sheet.id}', 'math')" 
+                                    class="sheet-extra-btn ${currentExtraMode === 'math' ? 'active-math' : ''}"
+                                    title="Vis matteoppgave"
+                                >
+                                    <i class="fa-solid fa-calculator"></i> Matte
+                                </button>
+                            ` : ''}
+
+                            ${hasNorskTask ? `
+                                <button 
+                                    onclick="setExtraTaskMode(event, '${sheet.id}', 'norsk')" 
+                                    class="sheet-extra-btn ${currentExtraMode === 'norsk' ? 'active-norsk' : ''}"
+                                    title="Vis norskoppgave"
+                                >
+                                    <i class="fa-solid fa-pen-line"></i> Norsk
+                                </button>
+                            ` : ''}
+                        </div>
                     ` : ''}
 
                 </div>
@@ -225,6 +268,7 @@ function renderSidebar() {
         container.appendChild(btn);
     });
 }
+
 
 function selectSheet(id) {
   currentSheetId = id;
@@ -405,45 +449,29 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
 
   const hasNextPageOnSheet = (realPageIndex === 0) && (mode === 'both') && (pagesData.length > 1);
 
-let footerNotice = "";
+  let footerNotice = "";
 
-if (realPageIndex === 0 && hasNextPageOnSheet) {
-
-    // Hent først teksten fra siden, deretter fra selve arket.
+  if (realPageIndex === 0 && hasNextPageOnSheet) {
     if (page.nextPageNotice || activeSheet.nextPageNotice) {
-
-        footerNotice =
-            page.nextPageNotice || activeSheet.nextPageNotice;
-
+      footerNotice = page.nextPageNotice || activeSheet.nextPageNotice;
     } else {
-
-        // Standardtekst dersom ingen egen tekst er angitt.
-        const sheetNum = parseInt(
-            activeSheet.id.replace('sheet-', ''),
-            10
-        );
-
-        footerNotice = (sheetNum <= 6)
-            ? "Ekstra leselekse på neste side."
-            : "Leselekse på neste side.";
+      const sheetNum = parseInt(activeSheet.id.replace('sheet-', ''), 10);
+      footerNotice = (sheetNum <= 6)
+        ? "Ekstra leselekse på neste side."
+        : "Leselekse på neste side.";
     }
-}
+  }
 
   const isSpecialPage = page.type === 'cover' || page.type === 'toc';
-// Finn siste side i dette leseheftearket.
-const lastVisiblePageIndex =
-    (mode === 'both' && pagesData.length > 1)
-        ? pagesData.length - 1
-        : 0;
-
-const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
+  const lastVisiblePageIndex = (mode === 'both' && pagesData.length > 1) ? pagesData.length - 1 : 0;
+  const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
 
   return `
     <div
-    id="paperCanvas-${activeSheet.id}-${realPageIndex}"
-    data-sheet-id="${activeSheet.id}"
-    data-sheet-end="${isLastPageOfSheet}"
-    class="a4-preview print-page text-slate-900 relative flex flex-col justify-between font-trykkskrift size-normal border-none mb-0 print:mb-0">
+      id="paperCanvas-${activeSheet.id}-${realPageIndex}"
+      data-sheet-id="${activeSheet.id}"
+      data-sheet-end="${isLastPageOfSheet}"
+      class="a4-preview print-page text-slate-900 relative flex flex-col justify-between font-trykkskrift size-normal border-none mb-0 print:mb-0">
 
       <!-- TOPPTEKST -->
       ${!isSpecialPage ? `
@@ -460,31 +488,19 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
         </div>
       ` : ''}
 
-
-
       <!-- FORSIDE -->
       ${page.type === 'cover' ? `
         <div class="flex-1 relative flex flex-col items-center text-center overflow-hidden bg-white rounded-2xl border-[3px] border-sky-600 my-1">
-
-          <!-- INDRE RAMME -->
           <div class="absolute inset-1 border border-slate-200 rounded-xl pointer-events-none z-20"></div>
-
-          <!-- BLÅ BØLGER ØVERST -->
           <div class="absolute top-0 left-0 right-0 h-12 overflow-hidden pointer-events-none">
             <div class="absolute -top-10 left-1/4 w-2/3 h-20 bg-sky-100 rounded-full"></div>
             <div class="absolute -top-14 right-0 w-1/2 h-24 bg-sky-200 rounded-full opacity-80"></div>
           </div>
 
-
-
-          <!-- OVERSKRIFT -->
           <div class="relative z-10 mt-12 px-5 w-full">
-
             <h1 class="text-5xl font-bold text-blue-950 leading-tight mt-6">
               ${page.title}
             </h1>
-
-            <!-- DEKORATIV BLÅ STREK -->
             <div class="w-3/4 h-2 mx-auto mt-3 rounded-full bg-sky-400"></div>
 
             ${page.subtitle ? `
@@ -494,7 +510,6 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
             ` : ''}
           </div>
 
-          <!-- INSTRUKSJONSBOKS -->
           ${page.bulletPoints ? `
             <div class="relative z-10 w-[86%] max-w-lg bg-sky-50 border-2 border-sky-400 rounded-2xl px-6 py-6 mt-9 text-left shadow-sm">
               <ul class="space-y-4 text-slate-800 text-lg font-medium">
@@ -508,43 +523,30 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
             </div>
           ` : ''}
 
-          <!-- BILDE MED LIK HVIT RAMME PÅ ALLE SIDER -->
           ${page.coverImage ? `
             <div class="relative z-10 w-[86%] max-w-lg mt-8 mb-5">
               <div class="bg-white border-[3px] border-sky-500 rounded-[26px] p-5 shadow-lg">
                 <div class="w-full aspect-[3/2] flex items-center justify-center">
-                  <img
-                    src="${page.coverImage}"
-                    alt="Barn som leser bøker"
-                    class="w-full h-full object-contain rounded-xl"
-                  >
+                  <img src="${page.coverImage}" alt="Barn som leser bøker" class="w-full h-full object-contain rounded-xl">
                 </div>
               </div>
             </div>
           ` : ''}
 
-          <!-- SKOLENAVN -->
           <div class="relative z-10 mt-auto mb-9 flex items-center justify-center gap-4 w-full px-8">
-
             <div class="h-[2px] flex-1 max-w-20 bg-blue-600"></div>
-
             <span class="text-blue-900 font-bold text-sm tracking-widest uppercase whitespace-nowrap">
               ${page.schoolName || ''}
             </span>
-
             <div class="h-[2px] flex-1 max-w-20 bg-blue-600"></div>
-
           </div>
 
-          <!-- BLÅ BØLGER NEDERST -->
           <div class="absolute bottom-0 left-0 right-0 h-12 overflow-hidden pointer-events-none">
             <div class="absolute -bottom-10 -left-10 w-[120%] h-20 bg-sky-100 rounded-[50%]"></div>
             <div class="absolute -bottom-14 -right-10 w-[120%] h-20 bg-sky-300 rounded-[50%] opacity-80"></div>
           </div>
-
         </div>
       ` : ''}
-
 
       <!-- INNHOLDSFORTEGNELSE -->
       ${page.type === 'toc' ? `
@@ -604,9 +606,9 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
             <div class="my-4 pl-8">
               <h3 class="text-4xl font-bold text-slate-900 mb-4">${page.wordsTitle || 'Les tre ganger:'}</h3>
               <div class="flex justify-between items-start pr-8">
-<div class="${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'flex flex-nowrap justify-between items-center gap-x-3 w-full' : 'flex flex-wrap gap-x-8 gap-y-3 max-w-[360px]'}">
-  ${page.words.map(w => `<span class="reading-font ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'text-3xl whitespace-nowrap' : 'text-4xl'} font-normal text-slate-900">${w.word}</span>`).join('')}
-</div>
+                <div class="${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'flex flex-nowrap justify-between items-center gap-x-3 w-full' : 'flex flex-wrap gap-x-8 gap-y-3 max-w-[360px]'}">
+                  ${page.words.map(w => `<span class="reading-font ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'text-3xl whitespace-nowrap' : 'text-4xl'} font-normal text-slate-900">${w.word}</span>`).join('')}
+                </div>
                 ${page.wordsSideImage ? `<img src="${page.wordsSideImage}" class="h-24 object-contain shrink-0 mt-1 mr-4">` : ''}
               </div>
             </div>
@@ -662,41 +664,31 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
                 <div class="flex justify-between items-center reading-font text-3xl text-slate-900 px-2">
                   ${page.matchTask.words.map(w => `<span class="${page.matchTask.boxed ? 'border-2 border-slate-900 px-3 py-0.5 rounded-sm' : ''}">${w}</span>`).join('')}
                 </div>
-<div class="space-y-4 pt-2">
-
-  ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? `
-
-    <!-- NY BILDEFORDELING FOR ARK 13 OG 14 -->
-    <div class="grid grid-cols-3 gap-4 items-center w-full px-2">
-      ${page.matchTask.row1.map(img => `
-        <div class="flex justify-center items-center">
-          <img src="${img.src}" class="${img.size || 'h-16'} object-contain">
-        </div>
-      `).join('')}
-    </div>
-
-    <div class="grid grid-cols-2 gap-4 items-center w-full px-12">
-      ${page.matchTask.row2.map(img => `
-        <div class="flex justify-center items-center">
-          <img src="${img.src}" class="${img.size || 'h-16'} object-contain">
-        </div>
-      `).join('')}
-    </div>
-
-  ` : `
-
-    <!-- OPPRINNELIG BILDEFORDELING FOR DE ANDRE ARKENE -->
-    <div class="flex justify-between items-center px-2">
-      ${page.matchTask.row1.map(img => `<div class="w-24 flex justify-center items-center"><img src="${img.src}" class="${img.size || 'h-16'} object-contain"></div>`).join('')}
-    </div>
-
-    <div class="flex justify-center items-center gap-12 pr-12">
-      ${page.matchTask.row2.map(img => `<div class="w-24 flex justify-center items-center"><img src="${img.src}" class="${img.size || 'h-16'} object-contain"></div>`).join('')}
-    </div>
-
-  `}
-
-</div>
+                <div class="space-y-4 pt-2">
+                  ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? `
+                    <div class="grid grid-cols-3 gap-4 items-center w-full px-2">
+                      ${page.matchTask.row1.map(img => `
+                        <div class="flex justify-center items-center">
+                          <img src="${img.src}" class="${img.size || 'h-16'} object-contain">
+                        </div>
+                      `).join('')}
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 items-center w-full px-12">
+                      ${page.matchTask.row2.map(img => `
+                        <div class="flex justify-center items-center">
+                          <img src="${img.src}" class="${img.size || 'h-16'} object-contain">
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : `
+                    <div class="flex justify-between items-center px-2">
+                      ${page.matchTask.row1.map(img => `<div class="w-24 flex justify-center items-center"><img src="${img.src}" class="${img.size || 'h-16'} object-contain"></div>`).join('')}
+                    </div>
+                    <div class="flex justify-center items-center gap-12 pr-12">
+                      ${page.matchTask.row2.map(img => `<div class="w-24 flex justify-center items-center"><img src="${img.src}" class="${img.size || 'h-16'} object-contain"></div>`).join('')}
+                    </div>
+                  `}
+                </div>
               </div>
             </div>
           ` : ''}
@@ -708,12 +700,12 @@ const isLastPageOfSheet = realPageIndex === lastVisiblePageIndex;
                 <div class="space-y-1 reading-font text-3xl text-slate-900 w-fit">
                   ${page.topReadingTask.sentences.map(s => `<p class="leading-snug whitespace-nowrap">${s}</p>`).join('')}
                 </div>
-${page.topReadingTask.image ? `
-  <img
-    src="${page.topReadingTask.image}"
-    class="${page.topReadingTask.imageSize || 'h-32'} object-contain shrink-0 ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? (page.topReadingTask.imageMargin || 'mt-6') : 'mt-2'} mr-4 ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'photo-frame' : ''}"
-  >
-` : ''}
+                ${page.topReadingTask.image ? `
+                  <img
+                    src="${page.topReadingTask.image}"
+                    class="${page.topReadingTask.imageSize || 'h-32'} object-contain shrink-0 ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? (page.topReadingTask.imageMargin || 'mt-6') : 'mt-2'} mr-4 ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'photo-frame' : ''}"
+                  >
+                ` : ''}
               </div>
             </div>
           ` : ''}
@@ -742,73 +734,62 @@ ${page.topReadingTask.image ? `
             </div>
           ` : ''}
 
-${typeof renderSoundTask === 'function' ? renderSoundTask(page) : ''}
+          ${typeof renderSoundTask === 'function' ? renderSoundTask(page) : ''}
 
-<!-- MATTEOPPGAVE – VALGFRI PÅ SIDE 2 -->
-${realPageIndex > 0 && page.mathTask && sheetMathVisibility[activeSheet.id] === true ? `
-    <div class="math-task-block mt-4 mx-8 p-3 rounded-xl border-2 border-emerald-300 bg-emerald-50">
+          <!-- EKSTRAOPPGAVE PÅ SIDE 2 (MATTE ELLER NORSK) -->
+          ${(() => {
+            if (realPageIndex === 0) return '';
+            const extraMode = getExtraTaskMode(activeSheet.id);
 
-        <h2 class="text-3xl font-bold text-slate-900 mb-1">
-            ${page.mathTask.title || 'Matteoppgave:'}
-        </h2>
+            // VIS MATTEOPPGAVE
+            if (extraMode === 'math' && page.mathTask) {
+              return `
+                <div class="math-task-block mt-4 mx-8 p-3 rounded-xl border-2 border-emerald-300 bg-emerald-50">
+                  <h2 class="text-3xl font-bold text-slate-900 mb-1">${page.mathTask.title || 'Matteoppgave:'}</h2>
+                  ${page.mathTask.instruction ? `<p class="text-xl text-slate-700 mb-1 text-center whitespace-pre-line font-bold">${page.mathTask.instruction}</p>` : ''}
+                  <div class="flex flex-col text-slate-900" style="gap: ${page.mathTask.taskGap ?? 16}px;">
+                    ${(page.mathTask.tasks || []).map(task => {
+                      const item = typeof task === 'string' ? { text: task } : task;
+                      return `
+                        <div class="math-task-item flex flex-col items-center justify-center gap-2 min-w-0">
+                          ${item.instruction ? `<div class="reading-font math-task-instruction text-center whitespace-pre-line font-bold">${item.instruction}</div>` : ''}
+                          ${item.image ? `<img src="${item.image}" alt="${item.alt || ''}" class="math-task-image object-contain ${item.imageSize || ''}">` : ''}
+                          ${item.text ? `<div class="reading-font text-2xl text-center whitespace-pre-line font-bold">${item.text}</div>` : ''}
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }
 
-        ${page.mathTask.instruction ? `
-            <p class="text-xl text-slate-700 mb-1 text-center whitespace-pre-line font-bold">
-                ${page.mathTask.instruction}
-            </p>
-        ` : ''}
+            // VIS NORSKOPPGAVE / SKRIVEOPPGAVE
+            if (extraMode === 'norsk' && page.norskTask) {
+              return `
+                <div class="norsk-task-block mt-4 mx-8 p-3 rounded-xl border-2 border-sky-300 bg-sky-50">
+                  <h2 class="text-3xl font-bold text-slate-900 mb-1">${page.norskTask.title || 'Skriveoppgave:'}</h2>
+                  ${page.norskTask.instruction ? `<p class="text-xl text-slate-700 mb-1 text-center whitespace-pre-line font-bold">${page.norskTask.instruction}</p>` : ''}
+                  <div class="flex flex-col text-slate-900" style="gap: ${page.norskTask.taskGap ?? 16}px;">
+                    ${(page.norskTask.tasks || []).map(task => {
+                      const item = typeof task === 'string' ? { text: task } : task;
+                      return `
+                        <div class="math-task-item flex flex-col items-center justify-center gap-2 min-w-0">
+                          ${item.instruction ? `<div class="reading-font math-task-instruction text-center whitespace-pre-line font-bold">${item.instruction}</div>` : ''}
+                          ${item.image ? `<img src="${item.image}" alt="${item.alt || ''}" class="norsk-task-image object-contain ${item.imageSize || ''}">` : ''}
+                          ${item.text ? `<div class="reading-font text-2xl text-center whitespace-pre-line font-bold">${item.text}</div>` : ''}
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }
 
-        <div
-            class="flex flex-col text-slate-900"
-            style="gap: ${page.mathTask.taskGap ?? 16}px;"
-        >
-
-            ${(page.mathTask.tasks || []).map(task => {
-                const item = typeof task === 'string'
-                    ? { text: task }
-                    : task;
-
-                return `
-                    <div class="math-task-item flex flex-col items-center justify-center gap-2 min-w-0">
-
-${item.instruction ? `
-<div class="reading-font math-task-instruction text-center whitespace-pre-line font-bold">
-    ${item.instruction}
-</div>
-` : ''}
-
-                        ${item.image ? `
-                            <img
-                                src="${item.image}"
-                                alt="${item.alt || ''}"
-                                class="math-task-image object-contain ${item.imageSize || ''}"
-                            >
-                        ` : ''}
-
-                        ${item.text ? `
-                            <div class="reading-font text-2xl text-center whitespace-pre-line font-bold">
-                                ${item.text}
-                            </div>
-                        ` : ''}
-
-                    </div>
-                `;
-            }).join('')}
+            return '';
+          })()}
 
         </div>
-
-    </div>
-` : ''}
-
-</div>
       ` : ''}
-
-
-
-
-
-
-
 
       <!-- BUNNTEKST OG SIDETALL -->
       ${page.type !== 'cover' ? `
@@ -826,13 +807,18 @@ ${item.instruction ? `
                 </span>
               ` : ''}
 
-              ${realPageIndex === 0 &&
-                hasNextPageOnSheet &&
-                pagesData.slice(1).some(p => p.mathTask) &&
-                sheetMathVisibility[activeSheet.id] === true ? `
-                <span class="inline-block bg-emerald-50 text-emerald-800 font-bold text-base px-3 py-1 rounded-md border border-emerald-200">
-                  Matteoppgaver på baksiden!
-                </span>
+              ${realPageIndex === 0 && hasNextPageOnSheet ? `
+                ${getExtraTaskMode(activeSheet.id) === 'math' && pagesData.slice(1).some(p => p.mathTask) ? `
+                  <span class="inline-block bg-emerald-50 text-emerald-800 font-bold text-base px-3 py-1 rounded-md border border-emerald-200">
+                    Matteoppgaver på baksiden!
+                  </span>
+                ` : ''}
+
+                ${getExtraTaskMode(activeSheet.id) === 'norsk' && pagesData.slice(1).some(p => p.norskTask) ? `
+                  <span class="inline-block bg-sky-50 text-sky-800 font-bold text-base px-3 py-1 rounded-md border border-sky-200">
+                    Skriveoppgave på baksiden!
+                  </span>
+                ` : ''}
               ` : ''}
 
             </div>
@@ -844,13 +830,6 @@ ${item.instruction ? `
           </div>
         </div>
       ` : ''}
-
-
-
-
-
-
-
 
     </div>
   `;
