@@ -302,3 +302,31 @@
         display: none !important; 
     }
 }
+
+
+/* Mer kompakt og oversiktlig ark-liste på laptop */
+@media (min-width: 768px) {
+  .sidebar-panel .sheet-list {
+    max-height: calc(100vh - 235px);
+    gap: 0.45rem;
+  }
+
+  .sidebar-panel .sheet-card,
+  .sidebar-panel .sheet-item {
+    padding: 0.55rem 0.75rem;
+  }
+}
+
+/* Gjør øye-ikonet tydeligere på det arket som er valgt */
+.sheet-menu-active .sheet-menu-eye {
+  color: #0284c7;            /* Tydelig blåfarge (sky-600) som matcher rammen */
+  background-color: #e0f2fe; /* Lys blå bakgrunnsboks (sky-100) */
+  border-radius: 0.45rem;
+  padding: 0.25rem 0.4rem;
+  opacity: 1;
+}
+
+.sheet-menu-active .sheet-menu-eye:hover {
+  background-color: #bae6fd; /* Litt mørkere blå ved hover (sky-200) */
+  color: #0369a1;
+}

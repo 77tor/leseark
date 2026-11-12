@@ -235,7 +235,7 @@ function renderSidebar() {
             <div class="sheet-extra-toggle ml-auto">
               <button 
                 onclick="setExtraTaskMode(event, '${sheet.id}', 'none')" 
-                class="sheet-extra-btn ${currentExtraMode === 'none' ? 'bg-slate-200 font-bold text-slate-800' : ''}"
+                class="sheet-extra-btn ${currentExtraMode === 'none' ? '!bg-slate-700 !text-white font-bold' : ''}"
                 title="Ingen ekstraoppgave"
               >
                 Ingen
