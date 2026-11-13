@@ -1390,3 +1390,85 @@ window.onload = function() {
   renderSidebar();
   renderSheet();
 };
+
+
+// ==========================================
+// INNLOGGING OG VANNMERKE FOR HÅNES SKOLE
+// ==========================================
+const HAANES_AUTH = {
+  user: 'Haanes',
+  pass: 'Hest1234',
+  storageKey: 'haanes_leseark_auth'
+};
+
+function updateAuthButtons(isLoggedIn) {
+  const loginBtn = document.getElementById('sidebarLoginBtn');
+  const logoutBtn = document.getElementById('sidebarLogoutBtn');
+
+  if (isLoggedIn) {
+    if (loginBtn) loginBtn.classList.add('hidden');
+    if (logoutBtn) logoutBtn.classList.remove('hidden');
+  } else {
+    if (loginBtn) loginBtn.classList.remove('hidden');
+    if (logoutBtn) logoutBtn.classList.add('hidden');
+  }
+}
+
+function initAuthWatermark() {
+  const savedState = sessionStorage.getItem(HAANES_AUTH.storageKey);
+  const modal = document.getElementById('loginModal');
+
+  if (savedState === 'logged_in') {
+    document.body.classList.remove('show-watermark');
+    if (modal) modal.classList.add('hidden');
+    updateAuthButtons(true);
+  } else if (savedState === 'guest') {
+    document.body.classList.add('show-watermark');
+    if (modal) modal.classList.add('hidden');
+    updateAuthButtons(false);
+  } else {
+    document.body.classList.add('show-watermark');
+    if (modal) modal.classList.remove('hidden');
+    updateAuthButtons(false);
+  }
+}
+
+function handleLoginSubmit(event) {
+  event.preventDefault();
+  const usernameInput = document.getElementById('loginUsername').value.trim();
+  const passwordInput = document.getElementById('loginPassword').value;
+  const errorMsg = document.getElementById('loginErrorMsg');
+
+  if (usernameInput.toLowerCase() === HAANES_AUTH.user.toLowerCase() && passwordInput === HAANES_AUTH.pass) {
+    sessionStorage.setItem(HAANES_AUTH.storageKey, 'logged_in');
+    document.body.classList.remove('show-watermark');
+    document.getElementById('loginModal').classList.add('hidden');
+    if (errorMsg) errorMsg.classList.add('hidden');
+    updateAuthButtons(true);
+  } else {
+    if (errorMsg) errorMsg.classList.remove('hidden');
+  }
+}
+
+function continueWithWatermark() {
+  sessionStorage.setItem(HAANES_AUTH.storageKey, 'guest');
+  document.body.classList.add('show-watermark');
+  document.getElementById('loginModal').classList.add('hidden');
+  updateAuthButtons(false);
+}
+
+function openLoginModal() {
+  const modal = document.getElementById('loginModal');
+  const errorMsg = document.getElementById('loginErrorMsg');
+  if (errorMsg) errorMsg.classList.add('hidden');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function logoutUser() {
+  sessionStorage.removeItem(HAANES_AUTH.storageKey);
+  document.body.classList.add('show-watermark');
+  updateAuthButtons(false);
+  openLoginModal();
+}
+
+document.addEventListener('DOMContentLoaded', initAuthWatermark);

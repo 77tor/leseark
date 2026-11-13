@@ -330,3 +330,62 @@
   background-color: #bae6fd; /* Litt mørkere blå ved hover (sky-200) */
   color: #0369a1;
 }
+
+/* ==========================================================================
+   10. VANNMERKE
+   ========================================================================== */
+/* Stempel-vannmerke med Hånes skoles logo i midten + rettighetstekst på linje med toppteksten */
+body.show-watermark .a4-preview,
+body.show-watermark .print-page {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Lag 1 (::before): Logoen sentrert midt i stempelet */
+body.show-watermark .a4-preview::before,
+body.show-watermark .print-page::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 310px;
+  height: 310px;
+  background-image: url("haanes-logo.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 39;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Lag 2 (::after): Rettighetstekst rett over topptekst-streken + seglringer, 2026 og hovedbanner */
+body.show-watermark .a4-preview::after,
+body.show-watermark .print-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  opacity: 0.28;
+  pointer-events: none;
+  z-index: 40;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1131'><!-- Rettighetstekst plassert midt mellom Leseark-tittel og Uke-nummer, rett over streken --><text x='400' y='42' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-weight='700' font-size='13' letter-spacing='1.8' fill='%230369a1'>RETTIGHETER FOR SIDEN TILHØRER HÅNES SKOLE</text><!-- Hovedstempel sentrert midt på siden --><g transform='translate(400,565) scale(0.92)' stroke='%230369a1' fill='none'><circle r='265' stroke-width='10'/><circle r='250' stroke-width='3.5' stroke-dasharray='10 6'/><circle r='212' stroke-width='4'/><text x='0' y='190' text-anchor='middle' font-family='Arial Black, Impact, sans-serif' font-weight='900' font-size='28' letter-spacing='5' fill='%230369a1' stroke='none'>2026</text><g transform='rotate(-28)'><rect x='-365' y='-78' width='730' height='156' rx='22' fill='none' stroke-width='9'/><rect x='-351' y='-64' width='702' height='128' rx='14' fill='none' stroke-width='3' stroke-dasharray='10 6'/><text x='0' y='6' text-anchor='middle' font-family='Arial Black, Impact, sans-serif' font-weight='900' font-size='64' letter-spacing='6' fill='%230369a1' stroke='none'>HÅNES SKOLE</text><line x1='-260' y1='22' x2='260' y2='22' stroke-width='2.5'/><text x='0' y='49' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-weight='800' font-size='22' letter-spacing='6' fill='%230369a1' stroke='none'>★ 1. KLASSE • LESEARK ★</text></g></g></svg>");
+}
+
+@media print {
+  body.show-watermark .a4-preview::before,
+  body.show-watermark .print-page::before {
+    opacity: 0.09 !important;
+  }
+  body.show-watermark .a4-preview::after,
+  body.show-watermark .print-page::after {
+    opacity: 0.30 !important;
+  }
+}
