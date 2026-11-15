@@ -6,7 +6,7 @@
    1. FONTER OG TYPOGRAFI
    ========================================================================== */
 
-@font-face { font-family: 'Trykkskrift'; src: url('Skrift/trykkskrift.otf') format('opentype'); font-weight: normal; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Trykkskrift'; src: url('Skrift/Tor-trykkskrift.otf') format('opentype'); font-weight: normal; font-style: normal; font-display: swap; }
 .font-trykkskrift, .font-trykkskrift .reading-font { font-family: 'Trykkskrift', 'Open Sans', sans-serif !important; }
 .size-normal { font-size: 1.2em; }
 .size-normal .reading-font { font-size: 2.3rem !important; line-height: 1.4 !important; }
