@@ -46,8 +46,8 @@ window.lesearkData.push({
         sentences: [
           "Ser du et tre?",
           "Ser du ei lue?",
-          "Ja sier Trine.",
-          "Nei sier Ola."
+          "Ja, sier Trine.",
+          "Nei, sier Ola."
         ],
         image: "Bilder/lue.png",
         imageSize: "h-36 max-w-[160px]"
