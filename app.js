@@ -278,22 +278,104 @@ function renderSidebar() {
 }
 
 
+let skipScrollSyncUntil = 0;
+
 function selectSheet(id) {
-  if (currentSheetId === id) return;
   currentSheetId = id;
 
-  // Oppdater aktiv markering direkte uten å tegne hele menyen på nytt
+  // Vis arket automatisk hvis det er skjult med øye-ikonet
+  if (sheetVisibility[id] === true) {
+    sheetVisibility[id] = false;
+    localStorage.setItem('leseark_visibility', JSON.stringify(sheetVisibility));
+    renderSidebar();
+    renderSheet();
+  } else {
+    highlightAndScrollSidebar(id, false);
+  }
+
+  // Rull mykt til første side i valgt ark på høyresiden
+  const targetPage = document.getElementById(`paperCanvas-${id}-0`);
+  if (targetPage) {
+    skipScrollSyncUntil = Date.now() + 800;
+    targetPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function highlightAndScrollSidebar(activeId, shouldScrollSidebar = true) {
   const menuItems = document.querySelectorAll('#sheetsList .sheet-menu-item');
+  let activeItem = null;
+
   menuItems.forEach(item => {
-    if (item.dataset.sheetId === id) {
+    if (item.dataset.sheetId === activeId) {
       item.classList.add('sheet-menu-active');
+      activeItem = item;
     } else {
       item.classList.remove('sheet-menu-active');
     }
   });
 
-  renderSheet();
+  if (!shouldScrollSidebar || !activeItem) return;
+
+  // Finn elementet som har rullefeltet i venstremenyen (enten #sheetsList eller .sidebar-panel)
+  const listEl = document.getElementById('sheetsList');
+  const sidebarEl = document.querySelector('.sidebar-panel');
+  const scrollBox = (listEl && listEl.scrollHeight > listEl.clientHeight) ? listEl : sidebarEl;
+
+  if (scrollBox) {
+    const boxRect = scrollBox.getBoundingClientRect();
+    const itemRect = activeItem.getBoundingClientRect();
+    const margin = 24;
+
+    if (itemRect.top < boxRect.top + margin) {
+      scrollBox.scrollTop += (itemRect.top - boxRect.top) - margin;
+    } else if (itemRect.bottom > boxRect.bottom - margin) {
+      scrollBox.scrollTop += (itemRect.bottom - boxRect.bottom) + margin;
+    }
+  }
 }
+
+
+// Synkroniser venstremenyen umiddelbart når brukeren ruller på høyresiden
+window.addEventListener('scroll', function(e) {
+  // Ignorer rulling som skjer inne i venstremenyen
+  if (e.target && e.target.closest && e.target.closest('.sidebar-panel')) return;
+
+  // Ikke overstyr rett etter et klikk i venstremenyen
+  if (Date.now() < skipScrollSyncUntil) return;
+
+  const viewport = document.getElementById('viewportContainer');
+  if (!viewport) return;
+
+  const pages = viewport.querySelectorAll('.print-page');
+  if (!pages.length) return;
+
+  const screenMid = window.innerHeight * 0.5;
+  let detectedSheetId = null;
+  let closestDistance = Infinity;
+
+  for (let i = 0; i < pages.length; i++) {
+    const rect = pages[i].getBoundingClientRect();
+
+    // Hvis et ark krysser midtlinjen på skjermen, velg det med en gang
+    if (rect.top <= screenMid && rect.bottom >= screenMid) {
+      detectedSheetId = pages[i].dataset.sheetId;
+      break;
+    }
+
+    // Ellers (når midtlinjen er i det grå mellomrommet): finn arket som er nærmest midten
+    const pageMid = (rect.top + rect.bottom) / 2;
+    const distance = Math.abs(pageMid - screenMid);
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      detectedSheetId = pages[i].dataset.sheetId;
+    }
+  }
+
+  if (detectedSheetId && detectedSheetId !== currentSheetId) {
+    currentSheetId = detectedSheetId;
+    highlightAndScrollSidebar(detectedSheetId, true);
+  }
+}, true);
 
 // BEREGNING AV GLOBAL SIDETELLING FOR HEFTE
 function calculateGlobalPages() {
@@ -855,39 +937,161 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
 }
 
 
-// HOVED-RENDERING (Skjermvisning)
+// HOVED-RENDERING (Skjermvisning – viser alle synlige ark fra venstremenyen etter hverandre)
 function renderSheet() {
   const container = document.getElementById('viewportContainer');
   if (!container) return;
 
-  const activeSheet = getActiveSheet();
-  const pagesData = activeSheet.pages || [activeSheet];
-  const mode = getMode(activeSheet.id);
   const { totalCount, pageMapping } = calculateGlobalPages();
 
-  const visiblePages = pagesData.filter((page, pIdx) =>
-    pIdx === 0 || mode === 'both'
-  );
+  // Filtrer ut alle ark som ikke er skjult i venstremenyen
+  const visibleSheets = initialSheets.filter(sheet => sheetVisibility[sheet.id] !== true);
 
-  container.innerHTML = visiblePages.map(page => {
-    const realPageIndex = pagesData.indexOf(page);
-    const globalPageNumber =
-      pageMapping[`${activeSheet.id}-${realPageIndex}`] || (realPageIndex + 1);
+  if (visibleSheets.length === 0) {
+    container.innerHTML = `
+      <div class="my-auto text-center text-slate-500 p-8 bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <i class="fa-solid fa-eye-slash text-3xl text-slate-300 mb-2"></i>
+        <p class="font-bold text-slate-700">Ingen ark er synlige</p>
+        <p class="text-xs mt-1">Klikk på øye-ikonet i venstremenyen for å vise ark.</p>
+      </div>
+    `;
+    return;
+  }
 
-    return renderPageHTML(
-      activeSheet,
-      page,
-      realPageIndex,
-      globalPageNumber,
-      totalCount,
-      mode
+  container.innerHTML = visibleSheets.map(sheet => {
+    const pagesData = sheet.pages || [sheet];
+    const mode = getMode(sheet.id);
+
+    const visiblePages = pagesData.filter((page, pIdx) =>
+      pIdx === 0 || mode === 'both'
     );
+
+    return visiblePages.map(page => {
+      const realPageIndex = pagesData.indexOf(page);
+      const globalPageNumber =
+        pageMapping[`${sheet.id}-${realPageIndex}`] || (realPageIndex + 1);
+
+      return renderPageHTML(
+        sheet,
+        page,
+        realPageIndex,
+        globalPageNumber,
+        totalCount,
+        mode
+      );
+    }).join('');
   }).join('');
 
   if (typeof updatePageScale === 'function') {
     updatePageScale();
   }
 }
+
+
+// Fanger opp all rulling på siden og synkroniserer + ruller venstremenyen nøyaktig til arket som vises
+(function setupUniversalScrollSync() {
+  let scrollTicking = false;
+
+  function findScrollableParent(el) {
+    let parent = el ? el.parentElement : null;
+    while (parent && parent !== document.body) {
+      const style = window.getComputedStyle(parent);
+      const overflowY = style.overflowY;
+      if ((overflowY === 'auto' || overflowY === 'scroll') && parent.scrollHeight > parent.clientHeight) {
+        return parent;
+      }
+      parent = parent.parentElement;
+    }
+    return null;
+  }
+
+  function syncSidebarToVisiblePage() {
+    const viewport = document.getElementById('viewportContainer');
+    if (!viewport) return;
+
+    // Ikke overstyr mens en klikk-rulling fra venstremenyen pågår
+    if (typeof isManualScrolling !== 'undefined' && isManualScrolling) return;
+
+    const pages = Array.from(viewport.querySelectorAll('.print-page'));
+    if (pages.length === 0) return;
+
+    const rectContainer = viewport.getBoundingClientRect();
+    const visibleTop = Math.max(0, rectContainer.top);
+    const visibleBottom = Math.min(window.innerHeight, rectContainer.bottom);
+
+    // Regn ut hvor mange piksler hvert ark dekker i det synlige vinduet
+    const sheetVisibilityScore = {};
+    let bestSheetId = null;
+    let maxVisiblePixels = 0;
+
+    for (const page of pages) {
+      const rect = page.getBoundingClientRect();
+      const overlapTop = Math.max(visibleTop, rect.top);
+      const overlapBottom = Math.min(visibleBottom, rect.bottom);
+      const visibleHeight = Math.max(0, overlapBottom - overlapTop);
+
+      if (visibleHeight > 0) {
+        const sId = page.dataset.sheetId;
+        sheetVisibilityScore[sId] = (sheetVisibilityScore[sId] || 0) + visibleHeight;
+
+        if (sheetVisibilityScore[sId] > maxVisiblePixels) {
+          maxVisiblePixels = sheetVisibilityScore[sId];
+          bestSheetId = sId;
+        }
+      }
+    }
+
+    if (bestSheetId && bestSheetId !== currentSheetId) {
+      currentSheetId = bestSheetId;
+
+      const menuItems = document.querySelectorAll('#sheetsList .sheet-menu-item');
+      let activeItem = null;
+
+      menuItems.forEach(item => {
+        if (item.dataset.sheetId === bestSheetId) {
+          item.classList.add('sheet-menu-active');
+          activeItem = item;
+        } else {
+          item.classList.remove('sheet-menu-active');
+        }
+      });
+
+      // Rull venstremenyen slik at det aktive kortet alltid holder seg synlig
+      if (activeItem) {
+        const scrollContainer = findScrollableParent(activeItem);
+        if (scrollContainer) {
+          const containerRect = scrollContainer.getBoundingClientRect();
+          const itemRect = activeItem.getBoundingClientRect();
+          const margin = 20;
+
+          if (itemRect.top < containerRect.top + margin) {
+            scrollContainer.scrollTo({
+              top: scrollContainer.scrollTop + (itemRect.top - containerRect.top) - margin,
+              behavior: 'smooth'
+            });
+          } else if (itemRect.bottom > containerRect.bottom - margin) {
+            scrollContainer.scrollTo({
+              top: scrollContainer.scrollTop + (itemRect.bottom - containerRect.bottom) + margin,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
+    }
+  }
+
+  document.addEventListener('scroll', function(e) {
+    if (e.target && e.target.closest && e.target.closest('.sidebar-panel')) return;
+
+    if (scrollTicking) return;
+    scrollTicking = true;
+
+    requestAnimationFrame(() => {
+      syncSidebarToVisiblePage();
+      scrollTicking = false;
+    });
+  }, true);
+})();
 
 
 // VENTER TIL ALLE BILDER OG SKRIFTTYPER ER KLARE
