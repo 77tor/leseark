@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leseark 1. Klasse</title>
+  <title>Lesehefte 1. Klasse</title>
   <link rel="icon" type="image/svg+xml" href="leselekser-favicon.svg">
   
   <!-- Tailwind CSS -->
@@ -38,24 +38,26 @@
 <body class="bg-slate-100 h-screen font-sans text-slate-800 flex flex-col md:flex-row overflow-hidden">
 
 <!-- Sidebar Navigasjon / Kontrollpanel -->
-  <aside class="no-print w-full md:w-[440px] lg:w-[465px] bg-white border-r border-slate-300 p-4 flex flex-col justify-between shrink-0 shadow-sm z-10 overflow-y-auto sidebar-panel">
+  <aside class="no-print w-full md:w-[440px] lg:w-[450px] bg-white border-r border-slate-300 p-4 flex flex-col justify-between shrink-0 shadow-sm z-10 overflow-y-auto sidebar-panel">
 
     <div class="space-y-6">
 
 <!-- Tittel / Logo -->
-<div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+<div class="flex items-center gap-3 pb-2">
 
     <img
         src="leselekser-favicon.svg"
         alt="Logo"
-        class="w-9 h-9 object-contain flex-shrink-0"
+        onclick="openAppSwitchModal()"
+        title="Bytt til Arbeidshefte for 1. trinn"
+        class="w-10 h-10 object-contain flex-shrink-0 cursor-pointer hover:opacity-90 transition"
     >
 
-    <div>
-        <h1 class="font-display font-bold text-lg leading-tight text-slate-800">
-            Leseark 1. Klasse
+    <div class="min-w-0">
+        <h1 class="font-sans font-bold text-[17px] leading-tight tracking-tight text-slate-900 truncate">
+            Lesehefte 1. Klasse
         </h1>
-        <p class="text-xs text-slate-500">
+        <p class="text-xs text-slate-500 truncate">
             Utskriftsklare leselekser
         </p>
     </div>
@@ -63,7 +65,7 @@
     <button
       id="sidebarLoginBtn"
       onclick="openLoginModal()"
-      class="ml-auto px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 rounded-lg text-xs font-bold transition flex items-center gap-1.5"
+      class="ml-auto shrink-0 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-900 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
       title="Logg inn for å fjerne vannmerke"
     >
       <i class="fa-solid fa-lock text-[11px]"></i>
@@ -73,11 +75,11 @@
     <button
       id="sidebarLogoutBtn"
       onclick="logoutUser()"
-      class="ml-auto hidden px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 rounded-lg text-xs font-semibold transition flex items-center gap-1.5"
+      class="ml-auto shrink-0 hidden px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
       title="Logg ut"
     >
-      <i class="fa-solid fa-right-from-bracket text-[11px]"></i>
-      <span>Logg ut</span>
+      <i class="fa-solid fa-check text-[11px]"></i>
+      <span>Hånes skole (Logg ut)</span>
     </button>
 </div>
 
@@ -653,6 +655,58 @@
     </div>
   </div>
 
+
+<!-- MODAL FOR Å BYTTE TIL ARBEIDSHEFTE -->
+<div
+  id="appSwitchModal"
+  onclick="if(event.target === this) closeAppSwitchModal()"
+  class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[75] hidden flex items-center justify-center p-4"
+>
+  <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+    
+    <!-- Header -->
+    <div class="bg-sky-700 px-6 py-4 text-white flex items-center gap-3">
+      <div class="bg-white/15 p-2.5 rounded-xl shrink-0">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold leading-tight">Bytt verktøy</h3>
+        <p class="text-xs text-sky-100">1. trinn – Utskriftsklare hefter</p>
+      </div>
+    </div>
+
+    <!-- Innhold -->
+    <div class="p-6 space-y-4">
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Vil du gå til nettsiden for <strong>Arbeidshefte for 1. trinn</strong>?
+      </p>
+
+      <div class="space-y-2.5 pt-1">
+        <a
+          href="https://77tor.github.io/arbeidshefte-1a/"
+          class="w-full py-2.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-md transition text-sm flex items-center justify-center gap-2"
+        >
+          <span>Gå til Arbeidshefte for 1. trinn</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+
+        <button
+          type="button"
+          onclick="closeAppSwitchModal()"
+          class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition text-sm"
+        >
+          Bli i Leseark
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
   <!-- DATAFILER -->
   <script src="data/ark_00.js"></script>

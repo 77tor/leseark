@@ -1684,4 +1684,14 @@ function logoutUser() {
   openLoginModal();
 }
 
+function openAppSwitchModal() {
+  const modal = document.getElementById('appSwitchModal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeAppSwitchModal() {
+  const modal = document.getElementById('appSwitchModal');
+  if (modal) modal.classList.add('hidden');
+}
+
 document.addEventListener('DOMContentLoaded', initAuthWatermark);
