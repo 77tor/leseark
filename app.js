@@ -415,7 +415,7 @@ function updatePageScale() {
 
     if (!pageW || !pageH) return;
 
-    const padding = 20;
+    const padding = 8;
     const containerW = container.clientWidth - padding;
     const containerH = container.clientHeight - padding;
 
@@ -432,9 +432,9 @@ function updatePageScale() {
 
     pages.forEach((page, index) => {
 
+        page.style.marginTop = '0px';
         page.style.transform = `scale(${scale})`;
         page.style.transformOrigin = 'top center';
-
         // Finn neste side.
         const nextPage = pages[index + 1];
 
@@ -591,63 +591,72 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
 
 <!-- FORSIDE -->
       ${page.type === 'cover' ? `
-        <div style="position: absolute; top: 12mm; left: 12mm; right: 12mm; bottom: 12mm;" class="flex flex-col items-center text-center overflow-hidden bg-white rounded-2xl border-[3px] border-sky-600">
+        <div style="position: absolute; top: 14mm; left: 14mm; right: 14mm; bottom: 14mm;" class="flex flex-col items-center text-center overflow-hidden bg-white rounded-2xl border-[2px] border-sky-700">
           <div class="absolute inset-1 border border-slate-200 rounded-xl pointer-events-none z-20"></div>
-          <div class="absolute top-0 left-0 right-0 h-12 overflow-hidden pointer-events-none">
-            <div class="absolute -top-10 left-1/4 w-2/3 h-20 bg-sky-100 rounded-full"></div>
-            <div class="absolute -top-14 right-0 w-1/2 h-24 bg-sky-200 rounded-full opacity-80"></div>
+          <div class="absolute top-0 left-0 right-0 h-10 overflow-hidden pointer-events-none">
+            <div class="absolute -top-9 left-1/4 w-2/3 h-16 bg-sky-100 rounded-full"></div>
+            <div class="absolute -top-12 right-0 w-1/2 h-20 bg-sky-200 rounded-full opacity-80"></div>
           </div>
 
-          <div class="relative z-10 mt-12 px-5 w-full">
-            <h1 class="text-5xl font-bold text-blue-950 leading-tight mt-6">
+          <div class="relative z-10 mt-10 px-5 w-full">
+            <h1 class="text-[44px] font-bold text-slate-900 leading-tight mt-3">
               ${page.title}
             </h1>
-            <div class="w-3/4 h-2 mx-auto mt-3 rounded-full bg-sky-400"></div>
+            <div class="w-[74%] h-[4px] mx-auto mt-2.5 rounded-full bg-sky-400"></div>
 
             ${page.subtitle ? `
-              <p class="text-xl text-slate-500 font-medium mt-4">
+              <p class="text-[22px] text-slate-500 font-medium mt-3">
                 ${page.subtitle}
               </p>
             ` : ''}
           </div>
 
-          ${page.bulletPoints ? `
-            <div class="relative z-10 w-[86%] max-w-lg bg-sky-50 border-2 border-sky-400 rounded-2xl px-6 py-6 mt-9 text-left shadow-sm">
-              <ul class="space-y-4 text-slate-800 text-lg font-medium">
+${page.bulletPoints ? `
+            <div class="relative z-10 w-[68%] bg-sky-50/70 border border-sky-300 rounded-2xl px-5 py-3.5 mt-5 text-left">
+              <ul class="space-y-1.5 text-slate-800 text-[16px] font-medium">
                 ${page.bulletPoints.map(bp => `
                   <li class="flex items-start gap-3">
-                    <span class="inline-block w-3 h-3 rounded-full bg-blue-700 mt-2 shrink-0"></span>
-                    <span class="leading-relaxed">${bp}</span>
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-sky-600 mt-1.5 shrink-0"></span>
+                    <span class="leading-snug">${bp}</span>
                   </li>
                 `).join('')}
               </ul>
             </div>
           ` : ''}
 
-          ${page.coverImage ? `
-            <div class="relative z-10 w-[86%] max-w-lg mt-8 mb-5">
-              <div class="bg-white border-[3px] border-sky-500 rounded-[26px] p-5 shadow-lg">
-                <div class="w-full aspect-[3/2] flex items-center justify-center">
-                  <img src="${page.coverImage}" alt="Barn som leser bøker" class="w-full h-full object-contain rounded-xl">
+${page.coverImage ? `
+            <div class="relative z-10 w-[85%] mt-5">
+              <div class="bg-sky-50/80 border-[2px] border-sky-500 rounded-3xl px-3 py-5">
+                <div class="w-full h-[305px] flex items-center justify-center">
+                  <img src="${page.coverImage}" alt="Barn som leser bøker" class="w-full h-full object-contain">
                 </div>
               </div>
             </div>
           ` : ''}
 
-          <div class="relative z-10 mt-auto mb-9 flex items-center justify-center gap-4 w-full px-8">
-            <div class="h-[2px] flex-1 max-w-20 bg-blue-600"></div>
-            <span class="text-blue-900 font-bold text-sm tracking-widest uppercase whitespace-nowrap">
-              ${page.schoolName || ''}
-            </span>
-            <div class="h-[2px] flex-1 max-w-20 bg-blue-600"></div>
+<!-- Navneboks (samme bredde som forklaringsboksen) -->
+          <div class="relative z-10 w-[68%] bg-white border border-slate-300 rounded-xl px-5 pt-8 pb-5 my-auto">
+            <div class="flex items-end gap-2.5 text-slate-600 text-[16px] font-medium">
+              <span>Navn:</span>
+              <div class="flex-1 border-b border-sky-500 mb-1"></div>
+            </div>
           </div>
 
-          <div class="absolute bottom-0 left-0 right-0 h-12 overflow-hidden pointer-events-none">
-            <div class="absolute -bottom-10 -left-10 w-[120%] h-20 bg-sky-100 rounded-[50%]"></div>
-            <div class="absolute -bottom-14 -right-10 w-[120%] h-20 bg-sky-300 rounded-[50%] opacity-80"></div>
+<div class="relative z-10 mt-auto mb-7 flex items-center justify-center gap-4 w-full px-10">
+            <div class="h-[2px] flex-1 max-w-28 bg-sky-400"></div>
+            <span class="text-slate-700 font-extrabold text-sm tracking-widest uppercase whitespace-nowrap">
+              ${page.schoolName || ''}
+            </span>
+            <div class="h-[2px] flex-1 max-w-28 bg-sky-400"></div>
+          </div>
+
+          <div class="absolute bottom-0 left-0 right-0 h-10 overflow-hidden pointer-events-none">
+            <div class="absolute -bottom-9 -left-10 w-[120%] h-16 bg-sky-100 rounded-[50%]"></div>
+            <div class="absolute -bottom-12 -right-10 w-[120%] h-16 bg-sky-300 rounded-[50%] opacity-80"></div>
           </div>
         </div>
       ` : ''}
+
 
       <!-- INNHOLDSFORTEGNELSE -->
       ${page.type === 'toc' ? `
