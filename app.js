@@ -663,7 +663,7 @@ ${page.coverImage ? `
         <div class="flex-1 flex flex-col justify-start py-4 px-6 font-trykkskrift">
           <div class="border-b-2 border-indigo-500 pb-3 mb-5 flex justify-between items-end">
             <h2 class="text-5xl font-bold text-slate-900">${page.title || 'Innholdsfortegnelse'}</h2>
-            <span class="text-base font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Oversikt over leseark</span>
+            <span class="text-base font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Hånes skole</span>
           </div>
           <div class="space-y-4 text-slate-800">
             ${(() => {
@@ -1411,7 +1411,7 @@ async function startPrintProcess(scope, includeCover, printMode) {
         await new Promise(resolve => setTimeout(resolve, 100));
 
         if (printMode === 'booklet') {
-            document.title = 'Leseark 1. klasse - PDF for hefte';
+            document.title = 'Lesehefte 1. klasse - PDF for hefte';
         }
 
         // Lytt på alle måter nettleseren kan signalisere at utskriften er ferdig
