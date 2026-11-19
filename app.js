@@ -612,7 +612,7 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
           </div>
 
 ${page.bulletPoints ? `
-            <div class="relative z-10 w-[65%] mt-6 bg-slate-50/90 border-[2px] border-sky-300 rounded-2xl px-6 py-4 text-left">
+            <div class="relative z-10 w-[65%] mt-6 bg-sky-100/80 border-[2px] border-sky-300 rounded-2xl px-6 py-4 text-left">
               <ul class="space-y-1.5 text-slate-800 text-[16px] font-medium">
                 ${page.bulletPoints.map(bp => `
                   <li class="flex items-start gap-3">
@@ -626,7 +626,7 @@ ${page.bulletPoints ? `
 
 ${page.coverImage ? `
             <div class="relative z-10 w-[83%] mt-5">
-              <div class="bg-sky-50/80 border-[3.5px] border-sky-600 rounded-3xl px-3 py-5">
+              <div class="bg-sky-100/80 border-[3.5px] border-sky-600 rounded-3xl px-3 py-5">
                 <div class="w-full h-[305px] flex items-center justify-center">
                   <img src="${page.coverImage}" alt="Barn som leser bøker" class="w-full h-full object-contain">
                 </div>
