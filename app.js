@@ -602,7 +602,7 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
             <h1 class="text-[44px] font-bold text-slate-900 leading-tight mt-3">
               ${page.title}
             </h1>
-            <div class="w-[74%] h-[5px] mx-auto mt-2.5 rounded-full bg-sky-400"></div>
+            <div class="w-[74%] h-[6px] mx-auto mt-2.5 rounded-full bg-sky-400"></div>
 
             ${page.subtitle ? `
               <p class="text-[22px] text-slate-500 font-medium mt-3">
