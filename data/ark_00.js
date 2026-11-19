@@ -11,7 +11,7 @@ window.lesearkData.unshift({
     {
       pageNumber: 1,
       type: "cover",
-      title: "Lesehefte for 1. trinn",
+      title: "Lesehefte for 1. klasse",
       subtitle: "Leselekser for høsten i 1. klasse",
       coverImage: "Bilder/forside_lesing.png",
       schoolName: "Hånes skoleenhet",
