@@ -591,7 +591,7 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
 
 <!-- FORSIDE -->
       ${page.type === 'cover' ? `
-        <div style="position: absolute; top: 14mm; left: 14mm; right: 14mm; bottom: 14mm;" class="flex flex-col items-center text-center overflow-hidden bg-white rounded-2xl border-[2px] border-sky-700">
+        <div style="position: absolute; top: 14mm; left: 14mm; right: 14mm; bottom: 14mm;" class="flex flex-col items-center text-center overflow-hidden bg-white rounded-2xl border-[3px] border-sky-700">
           <div class="absolute inset-1 border border-slate-200 rounded-xl pointer-events-none z-20"></div>
           <div class="absolute top-0 left-0 right-0 h-10 overflow-hidden pointer-events-none">
             <div class="absolute -top-9 left-1/4 w-2/3 h-16 bg-sky-100 rounded-full"></div>
@@ -602,7 +602,7 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
             <h1 class="text-[44px] font-bold text-slate-900 leading-tight mt-3">
               ${page.title}
             </h1>
-            <div class="w-[74%] h-[4px] mx-auto mt-2.5 rounded-full bg-sky-400"></div>
+            <div class="w-[74%] h-[5px] mx-auto mt-2.5 rounded-full bg-sky-400"></div>
 
             ${page.subtitle ? `
               <p class="text-[22px] text-slate-500 font-medium mt-3">
@@ -612,7 +612,7 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
           </div>
 
 ${page.bulletPoints ? `
-            <div class="relative z-10 w-[68%] bg-sky-50/70 border border-sky-300 rounded-2xl px-5 py-3.5 mt-5 text-left">
+            <div class="relative z-10 w-[65%] mt-6 bg-slate-50/90 border-[2px] border-sky-300 rounded-2xl px-6 py-4 text-left">
               <ul class="space-y-1.5 text-slate-800 text-[16px] font-medium">
                 ${page.bulletPoints.map(bp => `
                   <li class="flex items-start gap-3">
@@ -625,8 +625,8 @@ ${page.bulletPoints ? `
           ` : ''}
 
 ${page.coverImage ? `
-            <div class="relative z-10 w-[85%] mt-5">
-              <div class="bg-sky-50/80 border-[2px] border-sky-500 rounded-3xl px-3 py-5">
+            <div class="relative z-10 w-[83%] mt-5">
+              <div class="bg-sky-50/80 border-[3.5px] border-sky-600 rounded-3xl px-3 py-5">
                 <div class="w-full h-[305px] flex items-center justify-center">
                   <img src="${page.coverImage}" alt="Barn som leser bøker" class="w-full h-full object-contain">
                 </div>
@@ -635,14 +635,14 @@ ${page.coverImage ? `
           ` : ''}
 
 <!-- Navneboks (samme bredde som forklaringsboksen) -->
-          <div class="relative z-10 w-[68%] bg-white border border-slate-300 rounded-xl px-5 pt-8 pb-5 my-auto">
-            <div class="flex items-end gap-2.5 text-slate-600 text-[16px] font-medium">
+          <div class="relative z-10 w-[65%] my-auto bg-white border-[1.5px] border-sky-300 rounded-2xl px-6 pt-8 pb-3 text-left">
+            <div class="flex items-end gap-2.5 text-slate-600 text-[18px] font-medium">
               <span>Navn:</span>
-              <div class="flex-1 border-b border-sky-500 mb-1"></div>
+              <div class="flex-1 border-[1.5px] border-sky-700 mb-2"></div>
             </div>
           </div>
 
-<div class="relative z-10 mt-auto mb-7 flex items-center justify-center gap-4 w-full px-10">
+          <div class="relative z-10 mb-7 flex items-center justify-center gap-4 w-full px-10">
             <div class="h-[2px] flex-1 max-w-28 bg-sky-400"></div>
             <span class="text-slate-700 font-extrabold text-sm tracking-widest uppercase whitespace-nowrap">
               ${page.schoolName || ''}
