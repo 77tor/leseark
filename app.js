@@ -1007,16 +1007,25 @@ ${page.words && page.words.length > 0 ? `
             </div>
           ` : ''}
 
-          ${page.sentenceTask ? `
+${page.sentenceTask ? `
             <div class="my-6 pl-8">
               <h3 class="text-4xl font-bold text-slate-900 mb-4">${page.sentenceTaskTitle || 'Les tre ganger:'}</h3>
-              <div class="space-y-4 max-w-lg">
-                ${page.sentenceTask.map(item => `
-                  <div class="flex items-center gap-6">
-                    <span class="reading-font text-3xl text-slate-900 min-w-[120px]">${item.text}</span>
-                    ${item.image ? `<img src="${item.image}" class="h-10 object-contain">` : ''}
-                  </div>
-                `).join('')}
+              <div class="flex justify-between items-center w-full pr-12">
+                <div class="space-y-4 max-w-lg">
+                  ${page.sentenceTask.map(item => `
+                    <div class="flex items-center gap-6">
+                      <span class="reading-font text-3xl text-slate-900 min-w-[120px]">${item.text}</span>
+                      ${item.image ? `<img src="${item.image}" class="h-10 object-contain">` : ''}
+                    </div>
+                  `).join('')}
+                </div>
+                ${page.sentenceTaskImage ? `
+                  <img
+                    src="${page.sentenceTaskImage}"
+                    class="object-contain shrink-0 ${page.sentenceTaskImageSize || 'h-32'} ${page.sentenceTaskImageStyle || ''}"
+                    style="${page.sentenceTaskImageCustomStyle || ''}"
+                  >
+                ` : ''}
               </div>
             </div>
           ` : ''}
