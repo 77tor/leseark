@@ -16,12 +16,29 @@ window.lesearkData.push({
       learnedLetters: "å s l o r e m a v j ø t",
       learnedLettersSmall: "v j r m t a ø s t v o å",
       
-      wordsTitle: "Les tre ganger:",
+wordsTitle: "Les tre ganger:",
       words: [
-        { word: "mø" }, { word: "ro" }, { word: "jo" },
-        { word: "to" }, { word: "ål" }, { word: "ja" }
-      ],
+        // Linje 1: 2-lydsord
+        { word: "jo" },
+        { word: "to" },
+        { word: "ål" },
+        { word: "ås" },
+        { word: "ja" },
+        { word: "ta" },
+        { word: "mø" },
+        { word: "ro" },
 
+        { lineBreak: true },
+
+        // Linje 2: 3-lydsord
+        { word: "båt" },
+        { word: "tåa" },
+        { word: "mål" },
+        { word: "våt" },
+        { word: "jål" },
+        { word: "låt" }
+      ],
+      wordsSideImage: "Bilder/maal.png", // Bildet av mål til høyre for ordene
 // Oppgave 3 med 4 bilder øverst og 3 nederst
       matchTaskTitle: "Les og sett strek til riktig bilde:",
       matchTask: {

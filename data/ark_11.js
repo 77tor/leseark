@@ -16,7 +16,7 @@ window.lesearkData.push({
         // Mandag og tirsdag
         {
           title: "Leselekse mandag og tirsdag:",
-          words: "hå  hi  ha  he  hy  hei  hår  hest",
+          words: "hå  hi  ha  he  ho  hy  hei  hår  hest",
           sentences: [
             "Hans har en hest.",
             "Hest er fine dyr.",
@@ -28,7 +28,7 @@ window.lesearkData.push({
         // Onsdag og torsdag
         {
           title: "Leselekse onsdag og torsdag:",
-          words: "fi, fe, få, fo, fest, fire, fis",
+          words: "fi  fe  få  fo  fy  fis  far  fire",
           sentences: [
             "Runar fisker.",
             "Får han fisk?",

@@ -16,11 +16,30 @@ window.lesearkData.push({
       learnedLetters: "B b a O R S b i l e V r o A S",
       learnedLettersSmall: "i b s e r T t a E v o l T t i",
       
-      wordsTitle: "Les tre ganger:",
+wordsTitle: "Les tre ganger:",
       words: [
-        { word: "ro" }, { word: "ta" }, { word: "re" },
-        { word: "bi" }, { word: "ba" }, { word: "te" }
+        // Linje 1: 2-lydsord
+        { word: "ba" },
+        { word: "be" },
+        { word: "bi" },
+        { word: "ta" },
+        { word: "te" },
+        { word: "ti" },
+        { word: "ro" },
+        { word: "re" },
+
+        { lineBreak: true },
+
+        // Linje 2: 3-lydsord
+        { word: "bil" },
+        { word: "rot" },
+        { word: "bit" },
+        { word: "til" },
+        { word: "tre" },
+        { word: "Tor" },
       ],
+
+      wordsSideImage: "Bilder/traktor.png", // Bildet av traktor til høyre for ordene
 
       // Ny oppgavetype nederst på Side 1
       sentenceTaskTitle: "Les tre ganger:",

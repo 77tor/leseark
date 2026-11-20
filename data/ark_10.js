@@ -16,7 +16,7 @@ window.lesearkData.push({
         // Mandag og tirsdag
         {
           title: "Leselekse mandag og tirsdag:",
-          words: "py  pa  pu  på  ap  op  yp  åp  pil  pus  pen",
+          words: "py  pa  pu  på  po ap  yp  åp  pil  pus  pen",
           sentences: [
             "Mia ser en pinne.",
             "Se, en pil og bue.",

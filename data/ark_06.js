@@ -16,10 +16,19 @@ window.lesearkData.push({
       learnedLetters: "i s l o r e b m a v b ø",
       learnedLettersSmall: "r m b a l ø t e ø o v i",
       
-      wordsTitle: "Les tre ganger:",
+wordsTitle: "Les tre ganger:",
       words: [
-        { word: "mø" }, { word: "mi" }, { word: "om" }, { word: "øm" }, { word: "øre" },
-        { word: "mor" }, { word: "øks" }, { word: "øve" }, { word: "mat" }, { word: "mur" }
+        { word: "mø" },
+        { word: "mi" }, 
+	{ word: "mo" }, 
+	{ word: "om" }, 
+	{ word: "øm" }, 
+	{ word: "ør" },
+	{ word: "øs" }, 
+	{ word: "os" },
+
+        { lineBreak: true },
+        { word: "mor" }, { word: "øks" }, { word: "øve" }, { word: "mat" }, { word: "mur" }, { word: "øre" }
       ],
       wordsSideImage: "Bilder/oks.png", // Bildet av øksa til høyre for ordene
 

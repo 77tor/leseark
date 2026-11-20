@@ -16,10 +16,26 @@ window.lesearkData.push({
       learnedLetters: "I – S – L – O – S – L – I – S – O – L",
       learnedLettersSmall: "i – s – l – o – i – i – s – i – o – s – l – o",
       
-      wordsTitle: "Les tre ganger:",
+wordsTitle: "Les tre ganger:",
       words: [
-        { word: "is" }, { word: "si" }, { word: "li" }, { word: "lo" },
-        { word: "sil" }, { word: "sol" }, { word: "oli" }, { word: "lis" }
+        // Linje 1: 2-lydsord
+        { word: "lo" },
+        { word: "ol" },
+        { word: "so" },
+        { word: "os" },
+        { word: "il" },
+        { word: "li" },
+        { word: "si" },
+        { word: "is" },
+        { lineBreak: true }, // Tvinger neste ord ned på linje 2
+
+        // Linje 2: 3-lydsord
+        { word: "sol" },
+        { word: "los" },
+        { word: "sil" },
+        { word: "isi" },
+        { word: "sos" },
+        { word: "lol" }
       ],
 
       soundTaskType: "centerLetters",
@@ -33,8 +49,8 @@ window.lesearkData.push({
       },
 
       soundTaskLetters: [
-        { char: "O", color: "text-red-600" },
-        { char: "L", color: "text-blue-600" }
+        { char: "o", color: "text-red-600" },
+        { char: "l", color: "text-blue-600" }
       ]
     },
 

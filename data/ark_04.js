@@ -16,10 +16,27 @@ window.lesearkData.push({
       learnedLetters: "I S L O R E V A",
       learnedLettersSmall: "i s l o r e v a",
       
-      wordsTitle: "Les tre ganger:",
+wordsTitle: "Les tre ganger:",
       words: [
-        { word: "va" }, { word: "ve" }, { word: "vi" },
-        { word: "al" }, { word: "ar" }, { word: "av" }
+        // Linje 1: 2-lydsord
+        { word: "sa" },
+        { word: "av" },
+        { word: "vi" },
+        { word: "ri" },
+        { word: "ve" },
+        { word: "al" },
+        { word: "ar" },
+        { word: "ra" },
+
+        { lineBreak: true },
+
+        // Linje 2: 3-lydsord
+        { word: "var" },
+        { word: "sal" },
+        { word: "vis" },
+        { word: "rav" },
+        { word: "las" },
+        { word: "rev" }
       ],
 
       soundTaskType: "centerLetters",
@@ -33,8 +50,8 @@ window.lesearkData.push({
       },
 
       soundTaskLetters: [
-        { char: "V", color: "text-blue-600" },
-        { char: "A", color: "text-red-600" }
+        { char: "v", color: "text-blue-600" },
+        { char: "a", color: "text-red-600" }
       ]
     },
 

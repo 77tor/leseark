@@ -16,11 +16,30 @@ window.lesearkData.push({
       learnedLetters: "i s l o r e m a v d u t å",
       learnedLettersSmall: "l v r m t a å d s t v o u",
       
-      wordsTitle: "Les tre ganger:",
+wordsTitle: "Les tre ganger:",
       words: [
-        { word: "ål" }, { word: "ås" }, { word: "tå" }, { word: "må" }, { word: "så" }
-      ],
+        // Linje 1: 2-lydsord (lagt til "du" for 6 ord på linjen)
+        { word: "du" },
+        { word: "da" },
+        { word: "ut" },
+        { word: "ål" },
+        { word: "ås" },
+        { word: "tå" },
+        { word: "må" },
+        { word: "så" },
 
+
+        { lineBreak: true },
+
+        // Linje 2: 3-lydsord med d og u
+        { word: "due" },
+        { word: "tur" },
+        { word: "dal" },
+        { word: "bad" },
+        { word: "sur" },
+        { word: "dam" }
+      ],
+      wordsSideImage: "Bilder/due.png", // Bildet av due til høyre for ordene
       // Strek-oppgave med rammer på ord (3 bilder i row1, 2 bilder i row2)
       matchTaskTitle: "Les og sett strek til riktig bilde.",
       matchTask: {
@@ -46,8 +65,8 @@ window.lesearkData.push({
         sentences: [
           "Ser du et tre?",
           "Ser du ei lue?",
-          "Ja, sier Trine.",
-          "Nei, sier Ola."
+          "Ja sier Trine.",
+          "Nei sier Ola."
         ],
         image: "Bilder/lue.png",
         imageSize: "h-36 max-w-[160px]"

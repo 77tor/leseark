@@ -28,7 +28,7 @@ window.lesearkData.push({
         // Onsdag og torsdag
         {
           title: "Leselekse onsdag og torsdag:",
-          words: "koko, kaka, kiki, bæ, be, bo, bær, tær, lær",
+          words: "bæ, be, bo, bær, tær, lær, koko, kaka, kiki",
           sentences: [
             "Bær er bra, sier Bea.",
             "Rips er bær, sier Ina.",

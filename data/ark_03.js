@@ -16,10 +16,28 @@ window.lesearkData.push({
       learnedLetters: "I S L O R E",
       learnedLettersSmall: "i   s   l   o   r   e",
       
-      wordsTitle: "Les tre ganger:",
+wordsTitle: "Les tre ganger:",
       words: [
-        { word: "ri" }, { word: "ro" }, { word: "re" },
-        { word: "el" }, { word: "es" }, { word: "er" }
+        // Linje 1: 2-lydsord
+        { word: "ri" },
+        { word: "ro" },
+        { word: "re" },
+        { word: "se" },
+        { word: "es" },
+        { word: "er" },
+        { word: "si" },
+        { word: "is" },
+
+        { lineBreak: true },
+
+        // Linje 2: 3-lydsord
+        { word: "ris" },
+        { word: "ros" },
+        { word: "ser" },
+        { word: "les" },
+        { word: "sil" },
+        { word: "lis" },
+        { word: "res" }
       ],
 
       soundTaskType: "centerLetters",
@@ -33,8 +51,8 @@ window.lesearkData.push({
       },
 
       soundTaskLetters: [
-        { char: "E", color: "text-red-600" },
-        { char: "R", color: "text-blue-600" }
+        { char: "e", color: "text-red-600" },
+        { char: "r", color: "text-blue-600" }
       ]
     },
 

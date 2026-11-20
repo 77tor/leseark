@@ -3,6 +3,7 @@ window.lesearkData = window.lesearkData || [];
 window.lesearkData.push({
   id: "sheet-1",
   title: "Leseark 1 – is",
+  uppercaseLetters: false,  // Sett til true for STORE BOKSTAVER (IS), false for små (is)
   subtitle: "Bokstaver: I, S",
   nextPageNotice: "Ekstra leselekse på baksiden.",
   
@@ -20,6 +21,16 @@ window.lesearkData.push({
       wordsTitle: "Les tre ganger:",
       words: [
         { word: "is" },
+        { word: "si" },
+        { word: "s" },
+        { word: "i" },
+        { word: "si" },
+        { word: "si" },
+        { word: "is" },
+        { word: "is" },
+        { word: "i" },
+        { word: "s" },
+        { word: "is" },
         { word: "si" }
       ],
 
@@ -34,8 +45,8 @@ window.lesearkData.push({
       },
 
       soundTaskLetters: [
-        { char: "S", color: "text-blue-600" },
-        { char: "I", color: "text-red-600" }
+        { char: "s", color: "text-blue-600" },
+        { char: "i", color: "text-red-600" }
       ]
     },
 
