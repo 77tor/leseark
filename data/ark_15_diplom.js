@@ -2,7 +2,7 @@ window.lesearkData = window.lesearkData || [];
 
 window.lesearkData.push({
   id: "sheet-diplom",
-  title: "Gratulerer! Du kan alle bokstavene",
+  title: "Gratulerer! Du har lært alle bokstavene",
   subtitle: "Hele alfabetet: A–Å",
   nextPageNotice: "Leseutfordring på baksiden!",
 
