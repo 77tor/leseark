@@ -3,18 +3,25 @@ const initialSheets = window.lesearkData || [];
 
 // Standard ukenummer
 const defaultWeekMapping = {
-  "sheet-1": "Uke 38",
-  "sheet-2": "Uke 39",
-  "sheet-3": "Uke 41",
-  "sheet-4": "Uke 42",
-  "sheet-5": "Uke 43",
+  "sheet-rim-1": "Uke 34",
+  "sheet-rim-2": "Uke 35",
+  "sheet-rim-3": "Uke 36",
+  "sheet-1": "Uke 37",
+  "sheet-2": "Uke 38",
+  "sheet-3": "Uke 39",
+  "sheet-4": "Uke 41",
+  "sheet-5": "Uke 42",
+  "sheet-rep-1": "Uke 43",
   "sheet-6": "Uke 44",
   "sheet-7": "Uke 45",
   "sheet-8": "Uke 46",
   "sheet-9": "Uke 47",
   "sheet-10": "Uke 48",
-  "sheet-11": "Uke 49",
-  "sheet-12": "Uke 50"
+  "sheet-rep-2": "Uke 49",
+  "sheet-11": "Uke 50",
+  "sheet-12": "Uke 51",
+  "sheet-13": "Uke 2",
+  "sheet-14": "Uke 3"
 };
 
 // Lagring av tilstand
@@ -48,6 +55,10 @@ function getActiveSheet() {
 }
 
 function getMode(sheetId) {
+  const sheet = initialSheets.find(s => s.id === sheetId);
+  if (sheet && (!sheet.pages || sheet.pages.length <= 1)) {
+    return "page1";
+  }
   return sheetMode[sheetId] || "both";
 }
 
@@ -163,8 +174,9 @@ function renderSidebar() {
     const currentMode = getMode(sheet.id);
     const weekStr = getWeekText(sheet.id);
 
-    // Sjekk om arket har enten matte- eller norsk-oppgave
+// Sjekk om arket har mer enn én side, og om det har matte- eller norsk-oppgave
     const pages = sheet.pages || [sheet];
+    const hasTwoPages = pages.length > 1;
     const hasMathTask = pages.some(page => page.mathTask);
     const hasNorskTask = pages.some(page => page.norskTask);
 
@@ -212,24 +224,26 @@ function renderSidebar() {
 
       </div>
 
-      ${!isHidden ? `
+      ${!isHidden && (hasTwoPages || hasMathTask || hasNorskTask) ? `
 
         <!-- RAD 2: SIDEVALG OG 3-DELT EKSTRAOPPGAVE-VELGER -->
         <div class="sheet-menu-options flex-wrap">
 
-          <button
-            onclick="setSheetMode(event, '${sheet.id}', 'page1')"
-            class="sheet-mode-button ${currentMode === 'page1' ? 'sheet-mode-active' : ''}"
-          >
-            Kun side 1
-          </button>
+          ${hasTwoPages ? `
+            <button
+              onclick="setSheetMode(event, '${sheet.id}', 'page1')"
+              class="sheet-mode-button ${currentMode === 'page1' ? 'sheet-mode-active' : ''}"
+            >
+              Kun side 1
+            </button>
 
-          <button
-            onclick="setSheetMode(event, '${sheet.id}', 'both')"
-            class="sheet-mode-button ${currentMode === 'both' ? 'sheet-mode-active' : ''}"
-          >
-            Side 1 og 2
-          </button>
+            <button
+              onclick="setSheetMode(event, '${sheet.id}', 'both')"
+              class="sheet-mode-button ${currentMode === 'both' ? 'sheet-mode-active' : ''}"
+            >
+              Side 1 og 2
+            </button>
+          ` : ''}
 
           ${(hasMathTask || hasNorskTask) ? `
             <div class="sheet-extra-toggle ml-auto">
@@ -268,7 +282,7 @@ function renderSidebar() {
       ` : ''}
     `;
 
-    container.appendChild(btn);
+container.appendChild(btn);
   });
 
   // Gjenopprett rulleposisjonen slik at menyen ikke hopper
@@ -536,10 +550,256 @@ function renderSoundTask(page) {
   return '';
 }
 
+
+
+function renderRhymeMatchTask(page) {
+  if (!page.rhymeMatchTask) return '';
+  const task = page.rhymeMatchTask;
+
+  return `
+    <div class="mt-2 px-8 flex flex-col">
+      <div class="mb-4">
+        <h3 class="text-2xl font-bold text-slate-900 leading-tight">
+          ${task.title || 'Hvilke ord rimer?'}
+        </h3>
+        <p class="text-base text-slate-700 mt-0.5">
+          ${task.instruction || 'Sett strek mellom ordene som rimer.'}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-44 gap-y-4 items-center justify-items-center">
+        ${task.rows.map(row => `
+          <div class="flex items-center justify-center w-24 h-20">
+            <img src="${row.left.image}" alt="${row.left.alt || ''}" class="max-h-full max-w-full object-contain">
+          </div>
+          <div class="flex items-center justify-center w-24 h-20">
+            <img src="${row.right.image}" alt="${row.right.alt || ''}" class="max-h-full max-w-full object-contain">
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderSyllableTask(page) {
+  if (!page.syllableTask) return '';
+  const task = page.syllableTask;
+
+  return `
+    <div class="mt-7 pt-5 border-t-2 border-slate-200 px-8 flex flex-col">
+      <div class="mb-4">
+        <h3 class="text-2xl font-bold text-slate-900 leading-tight">
+          ${task.title || 'Hvor mange stavelser?'}
+        </h3>
+        <p class="text-base text-slate-700 mt-0.5">
+          ${task.instruction || 'Marker hvor mange stavelser du hører i ordet.'}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-20 gap-y-5 items-center justify-items-center">
+        ${task.items.map(item => `
+          <div class="flex flex-col items-center">
+            <div class="flex items-center justify-center w-28 h-24 mb-2">
+              <img src="${item.image}" alt="${item.alt || ''}" class="max-h-full max-w-full object-contain">
+            </div>
+            <div class="flex items-center gap-2.5">
+              ${[1, 2, 3, 4].map(num => `
+                <span class="w-8 h-8 rounded-full bg-amber-300 border-2 border-amber-400 text-slate-900 font-bold text-lg flex items-center justify-center shadow-xs">
+                  ${num}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+
 function renderLetterRow(rawString) {
   if (!rawString) return '';
   const items = rawString.trim().split(/\s+/);
   return items.map(item => `<span>${item}</span>`).join('');
+}
+
+
+
+
+function renderLetterBanner(lettersInput, useUppercase = false) {
+  let cleanStr = Array.isArray(lettersInput)
+    ? lettersInput.join('')
+    : String(lettersInput || '').trim();
+
+  const isAlphabetSheet =
+    cleanStr.toLowerCase().includes('gratulerer') ||
+    cleanStr.toLowerCase().includes('alfabet');
+
+  if (isAlphabetSheet) {
+    cleanStr = 'AÅ';
+  } else if (cleanStr.toLowerCase().includes('repetisjon')) {
+    const parenMatch = cleanStr.match(/\(([^)]+)\)/);
+    cleanStr = parenMatch ? parenMatch[1] : cleanStr.replace(/repetisjon/i, '');
+  } else if (/[-–—]/.test(cleanStr)) {
+    cleanStr = cleanStr.split(/[-–—]/).pop().trim();
+  }
+
+  // Henter ut kun rene bokstaver (uten komma og mellomrom)
+  let rawLetters = cleanStr.split('').filter(c => /[a-zæøåA-ZÆØÅ]/.test(c));
+  const isManyLetters = !isAlphabetSheet && rawLetters.length > 3;
+
+  // Fjerner duplikater på repetisjonsark slik at hver bokstav bare vises én gang
+  if (isManyLetters) {
+    rawLetters = [...new Set(rawLetters.map(c => c.toLowerCase()))];
+  }
+
+  const displayChars = isAlphabetSheet
+    ? ['a', 'til', 'å']
+    : rawLetters.map(c =>
+        isManyLetters ? c : (useUppercase ? c.toUpperCase() : c.toLowerCase())
+      );
+
+  const vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'æ', 'ø', 'å'];
+
+  // Bokstaver som bruker loft (øvre sone) og kjeller (nedre sone)
+  const ascenders = ['b', 'd', 'f', 'h', 'i', 'j', 'k', 'l', 't', 'å'];
+  const descenders = ['g', 'j', 'p', 'q', 'y'];
+
+  const hasTop = displayChars.some(c => c === c.toUpperCase() || ascenders.includes(c));
+  const hasBottom = displayChars.some(c => c === c.toLowerCase() && descenders.includes(c));
+
+  // Utsnitt som sentrerer bokstavene inni den faste boksen
+  let viewY = 28;
+  let viewH = 56;
+  let svgHeight = 58;
+
+  if (hasTop && hasBottom) {
+    viewY = 6;
+    viewH = 102;
+    svgHeight = 76;
+  } else if (hasTop) {
+    viewY = 6;
+    viewH = 78;
+    svgHeight = 74;
+  } else if (hasBottom) {
+    viewY = 28;
+    viewH = 78;
+    svgHeight = 74;
+  }
+
+  // Mindre bokstaver når det er repetisjonsboks
+  if (isManyLetters) {
+    svgHeight = Math.round(svgHeight * 0.42); // ca. 31px høyde per bokstav
+  }
+
+  const svgWidth = isManyLetters ? 44 : 82;
+  const strokeW = isManyLetters ? '3.5' : '4.5';
+
+  const makeLetterSvg = (displayChar, idx) => {
+    if (displayChar === 'til') {
+      return `
+        <svg viewBox="0 ${viewY} 115 ${viewH}" style="height: ${svgHeight}px;" class="w-auto overflow-visible select-none">
+          <text
+            x="57.5"
+            y="78"
+            text-anchor="middle"
+            class="font-trykkskrift"
+            font-size="76"
+            font-weight="700"
+            fill="#ffffff"
+          >til</text>
+        </svg>
+      `;
+    }
+
+    const isVowel = vowels.includes(displayChar.toLowerCase());
+    const fillColor = isVowel ? '#f00000' : '#0084ff';
+
+    return `
+      <svg viewBox="0 ${viewY} ${svgWidth} ${viewH}" style="height: ${svgHeight}px;" class="w-auto overflow-visible select-none">
+        <text
+          x="${svgWidth / 2}"
+          y="78"
+          text-anchor="middle"
+          class="font-trykkskrift"
+          font-size="92"
+          font-weight="700"
+          fill="${fillColor}"
+          stroke="#ffffff"
+          stroke-width="${strokeW}"
+          paint-order="stroke fill"
+          stroke-linejoin="round"
+        >${displayChar}</text>
+      </svg>
+    `;
+  };
+
+  // Fordeler på 2 linjer hvis det er mange bokstaver (f.eks. 5 på linje 1 og 5 på linje 2)
+  let letterContent = '';
+  if (isManyLetters) {
+    const mid = Math.ceil(displayChars.length / 2);
+    const row1 = displayChars.slice(0, mid).map((ch, idx) => makeLetterSvg(ch, idx)).join('');
+    const row2 = displayChars.slice(mid).map((ch, idx) => makeLetterSvg(ch, idx + mid)).join('');
+    letterContent = `
+      <div class="flex-1 flex flex-col items-center justify-center gap-1.5 mt-0.5">
+        <div class="flex items-center justify-center gap-2">${row1}</div>
+        <div class="flex items-center justify-center gap-2">${row2}</div>
+      </div>
+    `;
+  } else {
+    const row = displayChars.map((ch, idx) => makeLetterSvg(ch, idx)).join('');
+    letterContent = `
+      <div class="flex-1 flex items-center justify-center ${isAlphabetSheet ? 'gap-1' : 'gap-4'}">
+        ${row}
+      </div>
+    `;
+  }
+
+  const headerText = isAlphabetSheet
+    ? 'Hele alfabetet:'
+    : (isManyLetters ? 'Repetisjon av bokstavene:' : 'Ukens bokstaver:');
+
+  const headerSpans = headerText.split('').map((ch, idx) => {
+    const startSize = isManyLetters ? 23.5 : 29.5;
+    const endSize = isManyLetters ? 18.5 : 22.5;
+    const size = (startSize - (idx * ((startSize - endSize) / Math.max(1, headerText.length - 1)))).toFixed(1);
+    return `<tspan font-size="${size}">${ch}</tspan>`;
+  }).join('');
+
+  const svgHeaderWidth = isManyLetters ? 'w-[228px]' : 'w-[232px]';
+  const boxPaddingX = isManyLetters ? 'px-3.5' : 'px-5';
+
+  return `
+    <div class="inline-flex flex-col items-center h-[144px] bg-white rounded-xl p-[4px] shadow-md border-[1.5px] border-slate-400">
+      <div class="w-full h-full bg-black rounded-[8px] ${boxPaddingX} pt-1.5 pb-2.5 flex flex-col items-center justify-between">
+        
+        <!-- Buet overskrift + lys blå bue -->
+        <div class="flex flex-col items-center shrink-0">
+          <svg viewBox="0 0 245 42" class="${svgHeaderWidth} h-[38px] overflow-visible select-none">
+            <defs>
+              <path id="ukensBue" d="M 8 33 Q 122.5 19 237 33" />
+            </defs>
+            <text
+              fill="#ffffff"
+              text-anchor="middle"
+              class="font-trykkskrift"
+              font-weight="700"
+            >
+              <textPath href="#ukensBue" startOffset="50%">${headerSpans}</textPath>
+            </text>
+            <path
+              d="M 6 37 Q 122.5 22.5 239 37 Q 122.5 29 6 37 Z"
+              fill="#38bdf8"
+            />
+          </svg>
+        </div>
+
+        <!-- Sentrert bokstavfelt inni det resterende svarte arealet -->
+        ${letterContent}
+
+      </div>
+    </div>
+  `;
 }
 
 
@@ -574,18 +834,21 @@ function renderPageHTML(activeSheet, page, realPageIndex, globalPageNumber, tota
       data-sheet-end="${isLastPageOfSheet}"
       class="a4-preview print-page text-slate-900 relative flex flex-col justify-between font-trykkskrift size-normal border-none mb-0 print:mb-0">
 
-      <!-- TOPPTEKST -->
+<!-- TOPPTEKST -->
       ${!isSpecialPage ? `
         <div style="transform: translateY(-12px);" class="flex justify-between items-end h-[25px] text-lg leading-none font-bold text-slate-700 mb-2 pb-2 border-b-2 border-slate-300 relative">
           <span>${activeSheet.title || ''}</span>
-          <span>${weekTextForSheet}</span>
+          <span>Hånes skole${weekTextForSheet ? ` – ${weekTextForSheet}` : ''}</span>
         </div>
       ` : ''}
 
-      <!-- HEADER BILDE -->
-      ${page.headerImage && !isSpecialPage ? `
+<!-- HEADER BOKSTAVER (3-delt svart felt) -->
+      ${(page.letters || activeSheet.letters || page.headerImage) && !isSpecialPage ? `
         <div class="flex justify-center mb-2">
-          <img src="${page.headerImage}" class="h-36 object-contain">
+          ${renderLetterBanner(
+            page.letters || activeSheet.letters || activeSheet.title,
+            page.uppercaseLetters ?? activeSheet.uppercaseLetters ?? false
+          )}
         </div>
       ` : ''}
 
@@ -658,14 +921,14 @@ ${page.coverImage ? `
       ` : ''}
 
 
-      <!-- INNHOLDSFORTEGNELSE -->
+<!-- INNHOLDSFORTEGNELSE -->
       ${page.type === 'toc' ? `
-        <div class="flex-1 flex flex-col justify-start py-4 px-6 font-trykkskrift">
-          <div class="border-b-2 border-indigo-500 pb-3 mb-5 flex justify-between items-end">
-            <h2 class="text-5xl font-bold text-slate-900">${page.title || 'Innholdsfortegnelse'}</h2>
+        <div class="flex-1 flex flex-col justify-start py-2 px-6 font-trykkskrift">
+          <div class="border-b-2 border-indigo-500 pb-2 mb-3 flex justify-between items-end">
+            <h2 class="text-4xl font-bold text-slate-900">${page.title || 'Innholdsfortegnelse'}</h2>
             <span class="text-base font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Hånes skole</span>
           </div>
-          <div class="space-y-4 text-slate-800">
+          <div class="space-y-2 text-slate-800">
             ${(() => {
               let currentPageCounter = 3;
               return (window.lesearkData || [])
@@ -682,7 +945,7 @@ ${page.coverImage ? `
                   currentPageCounter += pageCount;
 
                   return `
-                    <div class="flex justify-between items-baseline border-b border-slate-100 pb-1.5 whitespace-nowrap">
+                    <div class="flex justify-between items-baseline border-b border-slate-100 pb-1 whitespace-nowrap">
                       <div class="flex items-baseline gap-2 min-w-0">
                         <span class="font-bold text-indigo-600 text-base shrink-0 w-16">${weekText}</span>
                         <span class="font-semibold text-slate-900 text-base shrink-0">${sheetTitle}</span>
@@ -703,23 +966,26 @@ ${page.coverImage ? `
         <div class="flex flex-col justify-between flex-1 my-1">
 
           ${page.learnedLetters ? `
-            <div class="mb-4 pl-8">
+            <div class="mb-4 pl-8 pr-8">
               <h2 class="text-4xl font-bold text-slate-900 mb-3">${page.learnedLettersTitle || 'Les tre ganger:'}</h2>
-              <div class="space-y-2 pl-2 max-w-xl">
-                <div class="reading-font text-3xl text-slate-900 flex justify-between items-center">${renderLetterRow(page.learnedLetters)}</div>
-                <div class="reading-font text-3xl text-slate-800 flex justify-between items-center">${renderLetterRow(page.learnedLettersSmall)}</div>
+              <div class="space-y-2 pl-2 ${activeSheet.id === 'sheet-diplom' ? 'w-full' : 'max-w-xl'}">
+                <div class="reading-font ${activeSheet.id === 'sheet-diplom' ? 'text-xl tracking-tight' : 'text-3xl'} text-slate-900 flex justify-between items-center">${renderLetterRow(page.learnedLetters)}</div>
+                <div class="reading-font ${activeSheet.id === 'sheet-diplom' ? 'text-xl tracking-tight' : 'text-3xl'} text-slate-800 flex justify-between items-center">${renderLetterRow(page.learnedLettersSmall)}</div>
               </div>
             </div>
           ` : ''}
 
-          ${page.words && page.words.length > 0 ? `
+${page.words && page.words.length > 0 ? `
             <div class="my-4 pl-8">
               <h3 class="text-4xl font-bold text-slate-900 mb-4">${page.wordsTitle || 'Les tre ganger:'}</h3>
               <div class="flex justify-between items-start pr-8">
-                <div class="${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'flex flex-nowrap justify-between items-center gap-x-3 w-full' : 'flex flex-wrap gap-x-8 gap-y-3 max-w-[360px]'}">
-                  ${page.words.map(w => `<span class="reading-font ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'text-3xl whitespace-nowrap' : 'text-4xl'} font-normal text-slate-900">${w.word}</span>`).join('')}
+                <div class="${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'flex flex-nowrap justify-between items-center gap-x-3 w-full' : `flex flex-wrap gap-y-3 ${page.wordsSideImage ? 'gap-x-5 max-w-[435px]' : 'gap-x-8 max-w-xl w-full'}`}">
+                  ${page.words.map(w => w.lineBreak
+                    ? `<div class="basis-full h-0"></div>`
+                    : `<span class="reading-font ${['sheet-13', 'sheet-14'].includes(activeSheet.id) ? 'text-3xl whitespace-nowrap' : 'text-4xl'} font-normal text-slate-900">${w.word}</span>`
+                  ).join('')}
                 </div>
-                ${page.wordsSideImage ? `<img src="${page.wordsSideImage}" class="h-24 object-contain shrink-0 mt-1 mr-4">` : ''}
+                ${page.wordsSideImage ? `<img src="${page.wordsSideImage}" class="h-24 object-contain shrink-0 mt-1 mr-2">` : ''}
               </div>
             </div>
           ` : ''}
@@ -755,14 +1021,14 @@ ${page.coverImage ? `
             </div>
           ` : ''}
 
-          ${page.readingSentences ? `
+${page.readingSentences ? `
             <div class="my-4 pl-8">
               <h3 class="text-4xl font-bold text-slate-900 mb-3">${page.readingSentencesTitle || 'Les tre ganger:'}</h3>
               <div class="flex justify-between items-start w-full pr-8">
                 <div class="space-y-2 reading-font text-3xl text-slate-900 w-fit">
                   ${page.readingSentences.map(s => `<p class="leading-normal whitespace-nowrap">${s}</p>`).join('')}
                 </div>
-                ${page.readingSentencesImage ? `<img src="${page.readingSentencesImage}" class="object-contain shrink-0 ${page.readingSentencesImageStyle || ''}" style="max-height: 180px;">` : ''}
+                ${page.readingSentencesImage ? `<img src="${page.readingSentencesImage}" class="object-contain shrink-0 ${page.readingSentencesImageStyle || ''}" style="max-height: 180px; ${page.readingSentencesImageCustomStyle || ''}">` : ''}
               </div>
             </div>
           ` : ''}
@@ -844,7 +1110,21 @@ ${page.coverImage ? `
             </div>
           ` : ''}
 
+          ${page.extraWords && page.extraWords.length > 0 ? `
+            <div class="mt-4 mb-auto pl-8 pr-8">
+              ${page.extraWordsTitle ? `<h2 class="text-4xl font-bold text-slate-900 mb-4">${page.extraWordsTitle}</h2>` : ''}
+              <div class="grid ${activeSheet.id === 'sheet-diplom' ? 'grid-cols-5' : 'grid-cols-7'} gap-x-4 gap-y-2.5 reading-font text-3xl text-slate-900">
+                ${page.extraWords.map(w => w.lineBreak
+                  ? `<div class="col-span-7 h-3"></div>`
+                  : `<div>${w.word}</div>`
+                ).join('')}
+              </div>
+            </div>
+          ` : ''}
+
           ${typeof renderSoundTask === 'function' ? renderSoundTask(page) : ''}
+          ${typeof renderRhymeMatchTask === 'function' ? renderRhymeMatchTask(page) : ''}
+          ${typeof renderSyllableTask === 'function' ? renderSyllableTask(page) : ''}
 
           <!-- EKSTRAOPPGAVE PÅ SIDE 2 (MATTE ELLER NORSK) -->
           ${(() => {
@@ -901,7 +1181,7 @@ ${page.coverImage ? `
         </div>
       ` : ''}
 
-      <!-- BUNNTEKST OG SIDETALL -->
+<!-- BUNNTEKST OG SIDETALL -->
       ${page.type !== 'cover' ? `
         <div
           style="position: absolute; left: 12mm; right: 12mm; bottom: 7mm;"
@@ -911,22 +1191,29 @@ ${page.coverImage ? `
 
             <div class="flex items-center gap-2 flex-wrap">
 
-              ${footerNotice ? `
-                <span class="inline-block bg-amber-50 text-amber-800 font-bold text-base px-3 py-1 rounded-md border border-amber-200">
-                  ${footerNotice}
-                </span>
-              ` : ''}
+              ${(() => {
+                const isEvenPage = globalPageNumber % 2 === 0;
+                const displayFooterNotice = footerNotice
+                  ? (isEvenPage ? footerNotice.replace(/baksiden/gi, 'neste side') : footerNotice)
+                  : '';
+
+                return displayFooterNotice ? `
+                  <span class="inline-block bg-amber-50 text-amber-800 font-bold text-base px-3 py-1 rounded-md border border-amber-200">
+                    ${displayFooterNotice}
+                  </span>
+                ` : '';
+              })()}
 
               ${realPageIndex === 0 && hasNextPageOnSheet ? `
                 ${getExtraTaskMode(activeSheet.id) === 'math' && pagesData.slice(1).some(p => p.mathTask) ? `
                   <span class="inline-block bg-emerald-50 text-emerald-800 font-bold text-base px-3 py-1 rounded-md border border-emerald-200">
-                    Matteoppgaver på baksiden!
+                    ${globalPageNumber % 2 === 0 ? 'Matteoppgaver på neste side!' : 'Matteoppgaver på baksiden!'}
                   </span>
                 ` : ''}
 
                 ${getExtraTaskMode(activeSheet.id) === 'norsk' && pagesData.slice(1).some(p => p.norskTask) ? `
                   <span class="inline-block bg-sky-50 text-sky-800 font-bold text-base px-3 py-1 rounded-md border border-sky-200">
-                    Skriveoppgave på baksiden!
+                    ${globalPageNumber % 2 === 0 ? 'Skriveoppgave på neste side!' : 'Skriveoppgave på baksiden!'}
                   </span>
                 ` : ''}
               ` : ''}
@@ -944,6 +1231,7 @@ ${page.coverImage ? `
     </div>
   `;
 }
+
 
 
 // HOVED-RENDERING (Skjermvisning – viser alle synlige ark fra venstremenyen etter hverandre)
@@ -1191,20 +1479,6 @@ function buildPrintPlan(scope, includeCover) {
     const isCover = sheet.id === 'sheet-0';
     const mode = getMode(sheet.id);
 
-    // Hefteformat: sett inn blank side ved behov når arkene fra venstremenyen velges
-    if (
-      scope === 'selected' &&
-      !isCover &&
-      nextPageNumber % 2 === 0
-    ) {
-      plan.push({
-        type: 'blank',
-        pageNumber: nextPageNumber
-      });
-
-      nextPageNumber++;
-      blankPages++;
-    }
 
     // Bestem hvilke sider som skal skrives ut
     const visiblePages = pagesData.filter((_, pageIndex) => {
@@ -1695,3 +1969,189 @@ function closeAppSwitchModal() {
 }
 
 document.addEventListener('DOMContentLoaded', initAuthWatermark);
+
+
+// =========================================================
+// DIPLOM-MODAL OG MASSEUTSKRIFT FOR KLASSEN
+// =========================================================
+
+function openDiplomModal() {
+  const modal = document.getElementById('diplomModal');
+  const dateInput = document.getElementById('diplomDateInput');
+  if (dateInput && !dateInput.value) {
+    const today = new Date();
+    dateInput.value = today.toLocaleDateString('nb-NO', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+  modal.classList.remove('hidden');
+  renderDiplomPreview();
+}
+
+function closeDiplomModal() {
+  document.getElementById('diplomModal').classList.add('hidden');
+}
+
+
+function buildSingleDiplomaHTML(studentName, classText, dateText, teacherText) {
+  const upperAlphabet = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å".split(" ");
+  const lowerAlphabet = "a b c d e f g h i j k l m n o p q r s t u v w x y z æ ø å".split(" ");
+  const vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'æ', 'ø', 'å'];
+
+  const formatLetters = (letters) => letters.map(letter => {
+    const isVowel = vowels.includes(letter.toLowerCase());
+    return `<span class="${isVowel ? 'text-rose-600' : 'text-sky-600'} font-bold">${letter}</span>`;
+  }).join(' ');
+
+  const coloredUpperAlphabet = formatLetters(upperAlphabet);
+  const coloredLowerAlphabet = formatLetters(lowerAlphabet);
+
+  return `
+    <div class="diploma-sheet bg-white text-slate-900 relative overflow-hidden shadow-xl font-trykkskrift flex flex-col justify-between"
+         style="width: 210mm; height: 297mm; padding: 12mm;">
+      
+      <!-- Ytre dobbel gull- og himmelblå diplomramme -->
+      <div class="w-full h-full rounded-3xl border-[5px] border-amber-400 p-2 relative flex flex-col justify-between bg-gradient-to-b from-amber-50/50 via-white to-sky-50/50">
+        <div class="w-full h-full rounded-2xl border-[2px] border-sky-400/80 px-10 py-8 flex flex-col items-center justify-between text-center relative">
+
+          <!-- Hjørnestjerner -->
+          <div class="absolute top-4 left-5 text-3xl select-none">⭐</div>
+          <div class="absolute top-4 right-5 text-3xl select-none">⭐</div>
+          <div class="absolute bottom-4 left-5 text-3xl select-none">🌟</div>
+          <div class="absolute bottom-4 right-5 text-3xl select-none">🌟</div>
+
+          <!-- Toppbanner -->
+          <div class="w-full flex flex-col items-center mt-1">
+            <div class="inline-flex items-center gap-2 bg-amber-100 border border-amber-300 text-amber-800 px-5 py-1 rounded-full text-sm font-bold tracking-wider uppercase mb-3">
+              <span>✨</span>
+              <span>Bokstavmester i 1. klasse</span>
+              <span>✨</span>
+            </div>
+
+            <h1 class="text-[64px] font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 leading-none drop-shadow-sm">
+              DIPLOM
+            </h1>
+
+            <div class="flex items-center justify-center gap-3 w-2/3 mt-3">
+              <div class="h-[3px] flex-1 rounded-full bg-gradient-to-r from-transparent to-amber-400"></div>
+              <span class="text-amber-500 text-xl">🏆</span>
+              <div class="h-[3px] flex-1 rounded-full bg-gradient-to-l from-transparent to-amber-400"></div>
+            </div>
+          </div>
+
+          <!-- Elevens navn -->
+          <div class="w-full my-2">
+            <p class="text-xl text-slate-600 font-medium mb-2">Dette diplomet tildeles</p>
+            <div class="mx-auto max-w-lg bg-white border-2 border-amber-300 rounded-2xl px-8 py-4 shadow-sm">
+              <p class="text-[44px] font-bold text-slate-900 leading-tight break-words">
+                ${studentName}
+              </p>
+            </div>
+          </div>
+
+<!-- Rosende tekst -->
+          <div class="max-w-2xl px-2">
+            <p class="text-[25px] font-semibold text-slate-800 leading-relaxed">
+              Du har jobbet så godt med bokstaver, lyder og lesing.<br>
+              Vi er kjempe-stolte av deg!
+            </p>
+          </div>
+
+          <!-- Pokal / illustrasjon -->
+          <div class="my-1 flex flex-col items-center">
+            <img src="Bilder/pokal.png" alt="Pokal" class="h-44 object-contain drop-shadow-md" />
+          </div>
+
+          <!-- Fargerik alfabet-bord (store og små bokstaver) -->
+          <div class="w-full bg-white/90 border-2 border-sky-200 rounded-2xl px-4 py-3 shadow-inner space-y-1.5">
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Alle bokstavene du nå kan:</p>
+            <p class="text-[19px] tracking-wider leading-snug">
+              ${coloredUpperAlphabet}
+            </p>
+            <p class="text-[24px] tracking-wider leading-snug">
+              ${coloredLowerAlphabet}
+            </p>
+          </div>
+
+          <!-- Dato og underskrift -->
+          <div class="w-full grid grid-cols-2 gap-10 pt-3 px-4 text-slate-700">
+            <div class="flex flex-col items-center">
+              <p class="text-base font-bold text-slate-800 min-h-[24px]">${dateText}</p>
+              <div class="w-full border-t-2 border-slate-400 mt-1 pt-1 text-xs uppercase tracking-wider text-slate-500 font-bold">
+                Dato
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <p class="text-base font-bold text-slate-800 min-h-[24px]">${teacherText}</p>
+              <div class="w-full border-t-2 border-slate-400 mt-1 pt-1 text-xs uppercase tracking-wider text-slate-500 font-bold">
+                ${classText || 'Skole / Lærer'}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+function getDiplomaNamesList() {
+  const raw = document.getElementById('diplomStudentNames')?.value || '';
+  return raw
+    .split('\n')
+    .map(name => name.trim())
+    .filter(name => name.length > 0);
+}
+
+function renderDiplomPreview() {
+  const container = document.getElementById('diplomPreviewContainer');
+  const countInfo = document.getElementById('diplomCountInfo');
+  if (!container) return;
+
+  const names = getDiplomaNamesList();
+  const classText = document.getElementById('diplomClassInput')?.value || '';
+  const dateText = document.getElementById('diplomDateInput')?.value || '';
+  const teacherText = document.getElementById('diplomTeacherInput')?.value || '';
+
+  if (countInfo) {
+    countInfo.textContent = names.length === 1
+      ? '1 diplom klart til utskrift'
+      : `${names.length} diplomer klare til utskrift`;
+  }
+
+  const displayList = names.length > 0 ? names : ['Elevens navn'];
+
+  container.innerHTML = displayList.map(name => `
+    <div style="transform: scale(0.68); transform-origin: top center; margin-bottom: -95mm;">
+      ${buildSingleDiplomaHTML(name, classText, dateText, teacherText)}
+    </div>
+  `).join('');
+}
+
+function printClassDiplomas() {
+  const names = getDiplomaNamesList();
+  if (names.length === 0) {
+    alert('Skriv inn minst ett elevnavn før du skriver ut diplomene!');
+    return;
+  }
+
+  const classText = document.getElementById('diplomClassInput')?.value || '';
+  const dateText = document.getElementById('diplomDateInput')?.value || '';
+  const teacherText = document.getElementById('diplomTeacherInput')?.value || '';
+  const printRoot = document.getElementById('diplomPrintRoot');
+
+  printRoot.innerHTML = names
+    .map(name => buildSingleDiplomaHTML(name, classText, dateText, teacherText))
+    .join('');
+
+  document.body.classList.add('printing-diplomas');
+  window.print();
+
+  setTimeout(() => {
+    document.body.classList.remove('printing-diplomas');
+    printRoot.innerHTML = '';
+  }, 500);
+}

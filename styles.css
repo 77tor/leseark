@@ -389,3 +389,24 @@ body.show-watermark .print-page::after {
     opacity: 0.30 !important;
   }
 }
+
+@media print {
+  body.printing-diplomas > *:not(#diplomPrintRoot) {
+    display: none !important;
+  }
+  body.printing-diplomas #diplomPrintRoot {
+    display: block !important;
+  }
+  body.printing-diplomas .diploma-sheet {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always;
+    break-after: page;
+  }
+  body.printing-diplomas .diploma-sheet:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+}
