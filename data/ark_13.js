@@ -23,8 +23,10 @@ window.lesearkData.push({
       sentenceTask: [
         { text: "Ali drikker cola." },
         { text: "Vi skal ha quiz." },
-        { text: "En cup er en premie." }
+        { text: "Chili er sterkt." }
       ],
+      sentenceTaskImage: "Bilder/chili.png",
+      sentenceTaskImageSize: "h-20",
 
       // Strek-oppgave
       matchTaskTitle: "Les og sett strek til riktig bilde.",

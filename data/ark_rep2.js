@@ -45,8 +45,9 @@ window.lesearkData.push({
         "En liten mus bor under et tre.",
         "Pappa maler den nye døra blå."
       ],
-      readingSentencesImage: "Bilder/bat_paa_sjoen.png",
-      readingSentencesImageStyle: "photo-frame"
+      readingSentencesImage: "Bilder/pappa_dor.png",
+      readingSentencesImageStyle: "photo-frame",
+      readingSentencesImageCustomStyle: "max-height: 145px; margin-top: 12px; margin-left: 16px;"
     },
 
     // --- SIDE 2: Ekstra leselekse ---
@@ -64,7 +65,7 @@ window.lesearkData.push({
       mouseImage: "Bilder/snomann.png",
       imageStyle: "photo-frame",
       imageMargin: "ml-8",
-      imageSize: "max-h-48 max-w-[240px]",
+      imageSize: "max-h-40 max-w-[150px]",
 
       extraWordsTitle: "Ekstra - øveord med bokstavene vi har lært:",
       extraWords: [

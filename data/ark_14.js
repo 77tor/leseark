@@ -27,10 +27,12 @@ window.lesearkData.push({
       // Setningsoppgave
       sentenceTaskTitle: "Les setningene tre ganger:",
       sentenceTask: [
-        { text: "Vi ser en zebra." },
+        { text: "Vi spiser pizza." },
         { text: "Pappa tar taxi." },
-        { text: "Vi lager wok." }
+        { text: "Mor liker kiwi." }
       ],
+      sentenceTaskImage: "Bilder/pizza.png",
+      sentenceTaskImageSize: "h-32",
 
       // Strek-oppgave
       matchTaskTitle: "Les og sett strek til riktig bilde.",
