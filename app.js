@@ -2025,21 +2025,35 @@ function buildSingleDiplomaHTML(studentName, classText, dateText, teacherText) {
       <div class="w-full h-full rounded-3xl border-[5px] border-amber-400 p-2 relative flex flex-col justify-between bg-gradient-to-b from-amber-50/50 via-white to-sky-50/50">
         <div class="w-full h-full rounded-2xl border-[2px] border-sky-400/80 px-10 py-8 flex flex-col items-center justify-between text-center relative">
 
-          <!-- Hjørnestjerner -->
-          <div class="absolute top-4 left-5 text-3xl select-none">⭐</div>
-          <div class="absolute top-4 right-5 text-3xl select-none">⭐</div>
-          <div class="absolute bottom-4 left-5 text-3xl select-none">🌟</div>
-          <div class="absolute bottom-4 right-5 text-3xl select-none">🌟</div>
+<!-- Hjørnepynt og stjerner -->
+          <img src="Bilder/pynt_v.png" alt="Hjørnepynt venstre" class="absolute -top-3 left-2 w-24 h-24 object-contain drop-shadow-sm select-none pointer-events-none" />
+          <img src="Bilder/pynt_h.png" alt="Hjørnepynt høyre" class="absolute -top-3 right-2 w-24 h-24 object-contain drop-shadow-sm select-none pointer-events-none" />
+          <img src="Bilder/pynt_vn.png" alt="Hjørnepynt venstre" class="absolute -bottom-3 left-2 w-24 h-24 object-contain drop-shadow-sm select-none pointer-events-none" />
+          <img src="Bilder/pynt_hn.png" alt="Hjørnepynt høyre" class="absolute -bottom-3 right-2 w-24 h-24 object-contain drop-shadow-sm select-none pointer-events-none" />
 
-          <!-- Toppbanner -->
-          <div class="w-full flex flex-col items-center mt-1">
-            <div class="inline-flex items-center gap-2 bg-amber-100 border border-amber-300 text-amber-800 px-5 py-1 rounded-full text-sm font-bold tracking-wider uppercase mb-3">
-              <span>✨</span>
-              <span>Bokstavmester i 1. klasse</span>
-              <span>✨</span>
+<!-- Toppbanner -->
+          <div class="w-full flex flex-col items-center -mt-3">
+            <!-- Diplombånd med splitta ender (ribbon) -->
+            <div class="relative inline-flex items-center justify-center mb-5 select-none">
+              <!-- Venstre splitta båndende -->
+              <div class="w-7 h-9 bg-amber-200 border-y border-l border-amber-300 -mr-2 mt-2"
+                   style="clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 28% 50%);">
+              </div>
+
+              <!-- Selve midtbåndet med teksten -->
+              <div class="relative z-10 inline-flex items-center justify-center gap-2.5 h-9 bg-gradient-to-b from-amber-100 to-amber-200/90 border border-amber-400 text-amber-900 px-7 rounded-sm shadow-sm text-sm font-bold tracking-wider uppercase leading-none">
+                <img src="Bilder/stjerne.png" alt="" class="w-4 h-4 object-contain" />
+                <span class="pt-1 leading-none">Bokstavmester i 1. klasse</span>
+                <img src="Bilder/stjerne.png" alt="" class="w-4 h-4 object-contain" />
+              </div>
+
+              <!-- Høyre splitta båndende -->
+              <div class="w-7 h-9 bg-amber-200 border-y border-r border-amber-300 -ml-2 mt-2"
+                   style="clip-path: polygon(0 0, 100% 0, 72% 50%, 100% 100%, 0 100%);">
+              </div>
             </div>
 
-            <h1 class="text-[64px] font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 leading-none drop-shadow-sm">
+<h1 class="text-[64px] font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 leading-[1.15] pt-1 drop-shadow-sm">
               DIPLOM
             </h1>
 
@@ -2050,13 +2064,20 @@ function buildSingleDiplomaHTML(studentName, classText, dateText, teacherText) {
             </div>
           </div>
 
-          <!-- Elevens navn -->
+<!-- Elevens navn med gullmerke -->
           <div class="w-full my-2">
             <p class="text-xl text-slate-600 font-medium mb-2">Dette diplomet tildeles</p>
-            <div class="mx-auto max-w-lg bg-white border-2 border-amber-300 rounded-2xl px-8 py-4 shadow-sm">
+            <div class="relative mx-auto max-w-lg bg-gradient-to-r from-amber-50/60 via-white to-amber-50/60 border-2 border-amber-300 rounded-2xl px-10 py-4 shadow-sm">
               <p class="diploma-custom-font text-[44px] font-bold text-slate-900 leading-tight break-words">
                 ${studentName}
               </p>
+
+              <!-- Eget gullmerke i hjørnet -->
+              <img
+                src="Bilder/gullmerke.png"
+                alt="Gullmerke"
+                class="absolute -top-7 -right-7 w-24 h-24 object-contain drop-shadow-md rotate-12 pointer-events-none select-none"
+              />
             </div>
           </div>
 
@@ -2086,9 +2107,9 @@ function buildSingleDiplomaHTML(studentName, classText, dateText, teacherText) {
 
           <!-- Dato og underskrift -->
           <div class="w-full grid grid-cols-2 gap-10 pt-3 px-4 text-slate-700">
-            <div class="flex flex-col items-center">
+<div class="flex flex-col items-center">
               <p class="diploma-custom-font text-xl font-bold text-slate-800 min-h-[28px]">${dateText}</p>
-              <div class="w-full border-t-2 border-slate-400 mt-1 pt-1 text-xs uppercase tracking-wider text-slate-500 font-bold">
+              <div class="diploma-custom-font w-full border-t-2 border-slate-400 mt-1 pt-1 text-sm tracking-wider text-slate-600 font-bold">
                 Dato
               </div>
             </div>
