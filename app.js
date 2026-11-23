@@ -2054,13 +2054,13 @@ function buildSingleDiplomaHTML(studentName, classText, dateText, teacherText) {
           <div class="w-full my-2">
             <p class="text-xl text-slate-600 font-medium mb-2">Dette diplomet tildeles</p>
             <div class="mx-auto max-w-lg bg-white border-2 border-amber-300 rounded-2xl px-8 py-4 shadow-sm">
-              <p class="text-[44px] font-bold text-slate-900 leading-tight break-words">
+              <p class="diploma-custom-font text-[44px] font-bold text-slate-900 leading-tight break-words">
                 ${studentName}
               </p>
             </div>
           </div>
 
-<!-- Rosende tekst -->
+          <!-- Rosende tekst -->
           <div class="max-w-2xl px-2">
             <p class="text-[25px] font-semibold text-slate-800 leading-relaxed">
               Du har jobbet så godt med bokstaver, lyder og lesing.<br>
@@ -2087,14 +2087,14 @@ function buildSingleDiplomaHTML(studentName, classText, dateText, teacherText) {
           <!-- Dato og underskrift -->
           <div class="w-full grid grid-cols-2 gap-10 pt-3 px-4 text-slate-700">
             <div class="flex flex-col items-center">
-              <p class="text-base font-bold text-slate-800 min-h-[24px]">${dateText}</p>
+              <p class="diploma-custom-font text-xl font-bold text-slate-800 min-h-[28px]">${dateText}</p>
               <div class="w-full border-t-2 border-slate-400 mt-1 pt-1 text-xs uppercase tracking-wider text-slate-500 font-bold">
                 Dato
               </div>
             </div>
             <div class="flex flex-col items-center">
-              <p class="text-base font-bold text-slate-800 min-h-[24px]">${teacherText}</p>
-              <div class="w-full border-t-2 border-slate-400 mt-1 pt-1 text-xs uppercase tracking-wider text-slate-500 font-bold">
+              <p class="diploma-custom-font text-xl font-bold text-slate-800 min-h-[28px]">${teacherText}</p>
+              <div class="diploma-custom-font w-full border-t-2 border-slate-400 mt-1 pt-1 text-sm tracking-wider text-slate-600 font-bold">
                 ${classText || 'Skole / Lærer'}
               </div>
             </div>
@@ -2105,7 +2105,6 @@ function buildSingleDiplomaHTML(studentName, classText, dateText, teacherText) {
     </div>
   `;
 }
-
 
 function getDiplomaNamesList() {
   const raw = document.getElementById('diplomStudentNames')?.value || '';
@@ -2138,6 +2137,12 @@ function renderDiplomPreview() {
       ${buildSingleDiplomaHTML(name, classText, dateText, teacherText)}
     </div>
   `).join('');
+}
+
+function updateDiplomFont() {
+  const select = document.getElementById('diplomFontSelect');
+  if (!select) return;
+  document.documentElement.style.setProperty('--diplom-user-font', select.value);
 }
 
 function printClassDiplomas() {

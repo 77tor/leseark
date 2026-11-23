@@ -267,109 +267,6 @@
 
 
 
-<!-- MODAL FOR KLASSEDIPLOMER -->
-<div id="diplomModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 print:hidden">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
-    
-    <!-- Topplinje i modalen -->
-    <div class="px-6 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-white flex justify-between items-center shrink-0">
-      <div class="flex items-center gap-3">
-        <span class="text-3xl">🏆</span>
-        <div>
-          <h2 class="text-xl font-bold leading-tight">Diplomgenerator – Hele alfabetet (A–Å)</h2>
-          <p class="text-amber-50 text-sm">Lim inn alle elevnavnene og skriv ut ett personlig diplom til hver elev</p>
-        </div>
-      </div>
-      <button onclick="closeDiplomModal()" class="text-white/90 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
-    </div>
-
-    <!-- Innhold: Venstre side (skjema) + Høyre side (forhåndsvisning) -->
-    <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
-      
-      <!-- Venstre kolonne: Innstillinger og elevliste -->
-      <div class="lg:col-span-4 p-5 bg-slate-50 border-r border-slate-200 overflow-y-auto space-y-4">
-        <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1">
-            Elevnavn (ett navn per linje):
-          </label>
-          <textarea
-            id="diplomStudentNames"
-            rows="9"
-            oninput="renderDiplomPreview()"
-            placeholder="Emma&#10;Noah&#10;Olivia&#10;Lukas&#10;Sofia"
-            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-slate-800 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 outline-none text-base"
-          ></textarea>
-          <p id="diplomCountInfo" class="text-xs text-slate-500 mt-1 font-medium">0 diplomer klare til utskrift</p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Klasse / Skole:</label>
-            <input
-              type="text"
-              id="diplomClassInput"
-              value="1. klasse – Hånes skole"
-              oninput="renderDiplomPreview()"
-              class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm text-slate-800"
-            />
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Dato:</label>
-            <input
-              type="text"
-              id="diplomDateInput"
-              oninput="renderDiplomPreview()"
-              class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm text-slate-800"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Lærerens hilsen / underskrift:</label>
-          <input
-            type="text"
-            id="diplomTeacherInput"
-            value="Hilsen lærerne på 1. trinn"
-            oninput="renderDiplomPreview()"
-            class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm text-slate-800"
-          />
-        </div>
-      </div>
-
-      <!-- Høyre kolonne: Live forhåndsvisning -->
-      <div class="lg:col-span-8 p-6 bg-slate-200/80 overflow-y-auto flex flex-col items-center gap-6">
-        <div class="text-xs font-semibold text-slate-600 bg-white/80 px-3 py-1 rounded-full shadow-sm">
-          Forhåndsvisning av diplomene (ett A4-ark per elev ved utskrift)
-        </div>
-        <div id="diplomPreviewContainer" class="flex flex-col items-center gap-8 w-full"></div>
-      </div>
-
-    </div>
-
-    <!-- Bunnlinje med utskriftsknapp -->
-    <div class="px-6 py-4 bg-white border-t border-slate-200 flex justify-between items-center shrink-0">
-      <button
-        type="button"
-        onclick="closeDiplomModal()"
-        class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50"
-      >
-        Lukk
-      </button>
-      <button
-        type="button"
-        onclick="printClassDiplomas()"
-        class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md flex items-center gap-2"
-      >
-        <span>🖨️</span>
-        <span>Skriv ut alle diplomer</span>
-      </button>
-    </div>
-
-  </div>
-</div>
-
-<!-- SKJULT BEHOLDER SOM KUN VISES NÅR DIPLOMER SKRIVES UT -->
-<div id="diplomPrintRoot" class="hidden"></div>
 
 <!-- UTSKRIFTSMODAL (HOVEDMODAL) -->
   <div
@@ -838,99 +735,122 @@
   </div>
 </div>
 
-
 <!-- MODAL FOR KLASSEDIPLOMER -->
-<div id="diplomModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 print:hidden">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
+<div id="diplomModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 print:hidden">
+  <div id="diplomModalCard" class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full h-[90vh] max-h-[700px] flex flex-col overflow-hidden border border-slate-200">
     
     <!-- Topplinje i modalen -->
-    <div class="px-6 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-white flex justify-between items-center shrink-0">
-      <div class="flex items-center gap-3">
-        <span class="text-3xl">🏆</span>
+    <div class="diplom-header px-5 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 text-white flex justify-between items-center shrink-0">
+      <div class="flex items-center gap-2.5">
+        <span class="text-xl sm:text-2xl">🏆</span>
         <div>
-          <h2 class="text-xl font-bold leading-tight">Diplomgenerator – Hele alfabetet (A–Å)</h2>
-          <p class="text-amber-50 text-sm">Lim inn alle elevnavnene og skriv ut ett personlig diplom til hver elev</p>
+          <h2 class="text-base sm:text-lg font-bold leading-tight">Diplomgenerator – Hele alfabetet (A–Å)</h2>
+          <p class="diplom-subtitle text-amber-50 text-xs">Lim inn elevnavn og skriv ut ett personlig diplom til hver elev</p>
         </div>
       </div>
       <button onclick="closeDiplomModal()" class="text-white/90 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
     </div>
 
-    <!-- Innhold: Venstre side (skjema) + Høyre side (forhåndsvisning) -->
-    <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+    <!-- Innhold: Venstre side (skjema uten rulling) + Høyre side (forhåndsvisning) -->
+    <div class="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-12 overflow-hidden">
       
-      <!-- Venstre kolonne: Innstillinger og elevliste -->
-      <div class="lg:col-span-4 p-5 bg-slate-50 border-r border-slate-200 overflow-y-auto space-y-4">
-        <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1">
-            Elevnavn (ett navn per linje):
-          </label>
+      <!-- Venstre kolonne: Tilpasser seg høyden automatisk uten rullefelt -->
+      <div class="diplom-left md:col-span-5 p-3.5 bg-slate-50 border-r border-slate-200 flex flex-col justify-between gap-2.5 overflow-hidden min-h-0">
+        
+        <!-- Fleksibel navneboks -->
+        <div class="flex-1 min-h-0 flex flex-col">
+          <div class="flex justify-between items-baseline gap-2 mb-1 shrink-0">
+            <label class="block text-xs font-bold text-slate-700">
+              Elevnavn (ett per linje):
+            </label>
+            <span id="diplomCountInfo" class="text-[11px] text-slate-500 font-semibold whitespace-nowrap">0 diplomer klare</span>
+          </div>
           <textarea
             id="diplomStudentNames"
-            rows="9"
             oninput="renderDiplomPreview()"
-            placeholder="Emma&#10;Noah&#10;Olivia&#10;Lukas&#10;Sofia"
-            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-slate-800 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 outline-none text-base"
+            placeholder="Emma&#10;Noah&#10;Olivia"
+            class="w-full flex-1 min-h-[38px] rounded-xl border border-slate-300 px-3 py-1.5 text-slate-800 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 outline-none text-sm leading-snug resize-none"
           ></textarea>
-          <p id="diplomCountInfo" class="text-xs text-slate-500 mt-1 font-medium">0 diplomer klare til utskrift</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <!-- Faste bunnfelter -->
+        <div class="shrink-0 space-y-2">
+
+<!-- Valg av skrifttype for navn, klasse, dato og hilsen -->
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Klasse / Skole:</label>
-            <input
-              type="text"
-              id="diplomClassInput"
-              value="1. klasse – Hånes skole"
-              oninput="renderDiplomPreview()"
-              class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm text-slate-800"
-            />
+            <label class="block text-xs font-bold text-slate-700 mb-0.5">Skrifttype (navn, klasse, dato, hilsen):</label>
+            <select
+              id="diplomFontSelect"
+              onchange="updateDiplomFont()"
+              class="w-full rounded-lg border border-slate-300 px-2 py-1 text-xs text-slate-800 bg-white focus:ring-2 focus:ring-amber-400 outline-none"
+            >
+              <option value="'TorTrykkskrift', sans-serif">Trykkskrift (standard)</option>
+              <option value="'TorStavskrift', cursive">Stavskrift</option>
+              <option value="'Caveat', cursive">Løkke & krussedull (Caveat)</option>
+              <option value="'Pacifico', cursive">Festlig løkkeskrift (Pacifico)</option>
+              <option value="'Dancing Script', cursive">Klassisk kalligrafi (Dancing Script)</option>
+            </select>
           </div>
+
+          <div class="grid grid-cols-12 gap-2">
+            <div class="col-span-6">
+              <label class="block text-xs font-bold text-slate-700 mb-0.5">Klasse / Skole:</label>
+              <input
+                type="text"
+                id="diplomClassInput"
+                value="1. klasse – Hånes skole"
+                oninput="renderDiplomPreview()"
+                class="w-full rounded-lg border border-slate-300 px-2 py-1 text-xs text-slate-800"
+              />
+            </div>
+            <div class="col-span-6">
+              <label class="block text-xs font-bold text-slate-700 mb-0.5">Dato:</label>
+              <input
+                type="text"
+                id="diplomDateInput"
+                oninput="renderDiplomPreview()"
+                class="w-full rounded-lg border border-slate-300 px-2 py-1 text-xs text-slate-800"
+              />
+            </div>
+          </div>
+
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Dato:</label>
+            <label class="block text-xs font-bold text-slate-700 mb-0.5">Lærerens hilsen / underskrift:</label>
             <input
               type="text"
-              id="diplomDateInput"
+              id="diplomTeacherInput"
+              value="Hilsen lærerne på 1. trinn"
               oninput="renderDiplomPreview()"
-              class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm text-slate-800"
+              class="w-full rounded-lg border border-slate-300 px-2.5 py-1 text-xs sm:text-sm text-slate-800"
             />
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Lærerens hilsen / underskrift:</label>
-          <input
-            type="text"
-            id="diplomTeacherInput"
-            value="Hilsen lærerne på 1. trinn"
-            oninput="renderDiplomPreview()"
-            class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm text-slate-800"
-          />
-        </div>
       </div>
 
-      <!-- Høyre kolonne: Live forhåndsvisning -->
-      <div class="lg:col-span-8 p-6 bg-slate-200/80 overflow-y-auto flex flex-col items-center gap-6">
-        <div class="text-xs font-semibold text-slate-600 bg-white/80 px-3 py-1 rounded-full shadow-sm">
-          Forhåndsvisning av diplomene (ett A4-ark per elev ved utskrift)
+<!-- Høyre kolonne: Live forhåndsvisning fra helt øverst og kant-i-kant -->
+      <div class="diplom-right md:col-span-7 p-1.5 sm:p-2 bg-slate-200/80 overflow-y-auto flex flex-col items-center gap-1.5 min-h-0">
+        <div class="text-[11px] font-semibold text-slate-600 bg-white/80 px-2.5 py-0.5 rounded-full shadow-sm shrink-0">
+          Forhåndsvisning (ett A4-ark per elev)
         </div>
-        <div id="diplomPreviewContainer" class="flex flex-col items-center gap-8 w-full"></div>
+        <div id="diplomPreviewContainer" class="flex flex-col items-center gap-2 w-full"></div>
       </div>
 
     </div>
 
     <!-- Bunnlinje med utskriftsknapp -->
-    <div class="px-6 py-4 bg-white border-t border-slate-200 flex justify-between items-center shrink-0">
+    <div class="diplom-footer px-5 py-2.5 bg-white border-t border-slate-200 flex justify-between items-center shrink-0">
       <button
         type="button"
         onclick="closeDiplomModal()"
-        class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50"
+        class="px-4 py-1.5 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 text-sm"
       >
         Lukk
       </button>
       <button
         type="button"
         onclick="printClassDiplomas()"
-        class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md flex items-center gap-2"
+        class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md flex items-center gap-2 text-sm"
       >
         <span>🖨️</span>
         <span>Skriv ut alle diplomer</span>
@@ -942,7 +862,88 @@
 
 <!-- SKJULT BEHOLDER SOM KUN VISES NÅR DIPLOMER SKRIVES UT -->
 <div id="diplomPrintRoot" class="hidden"></div>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Pacifico&display=swap" rel="stylesheet">
+
 <style>
+@font-face {
+  font-family: 'TorTrykkskrift';
+  src: url('Skrift/Tor-trykkskrift.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TorStavskrift';
+  src: url('Skrift/stavskrift.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Standard font på selve diplomet */
+.diploma-sheet,
+.diploma-sheet * {
+  font-family: 'TorTrykkskrift', sans-serif !important;
+}
+
+/* De 4 tilpassbare feltene bruker den valgte skrifttypen */
+.diploma-sheet .diploma-custom-font {
+  font-family: var(--diplom-user-font, 'TorTrykkskrift'), sans-serif !important;
+}
+
+/* Fyller bredden i forhåndsvisningen fra helt øverst */
+#diplomPreviewContainer .diploma-sheet {
+  zoom: 0.62 !important;
+  margin-top: 0 !important;
+}
+
+/* Stor skjerm (stasjonær / ekstern monitor): Fyller hele bredden til høyre */
+@media screen and (min-height: 900px) {
+  #diplomModalCard {
+    max-width: 1100px !important;
+    height: 88vh !important;
+    max-height: 920px !important;
+  }
+  #diplomPreviewContainer .diploma-sheet {
+    zoom: 0.99 !important;
+  }
+}
+
+/* Kompakt visning på laptopskjermer: Maksimal bredde i forhåndsvisningsruten */
+@media screen and (max-height: 850px) {
+  #diplomModalCard {
+    max-width: 920px !important;
+    height: 95vh !important;
+    max-height: none !important;
+  }
+  #diplomModal .diplom-header {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+  }
+  #diplomModal .diplom-subtitle {
+    display: none !important;
+  }
+  #diplomModal .diplom-left {
+    padding: 0.65rem 0.85rem !important;
+    gap: 0.45rem !important;
+  }
+  #diplomModal .diplom-right {
+    padding: 0.35rem !important;
+  }
+  #diplomModal .diplom-footer {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+  }
+  #diplomPreviewContainer .diploma-sheet {
+    zoom: 0.90 !important;
+  }
+}
+
 @media print {
   body.printing-diplomas > *:not(#diplomPrintRoot) {
     display: none !important;
@@ -955,6 +956,7 @@
     height: 297mm !important;
     margin: 0 !important;
     box-shadow: none !important;
+    zoom: 1 !important;
     page-break-after: always;
     break-after: page;
   }
