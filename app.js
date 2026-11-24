@@ -2049,7 +2049,7 @@ function buildSingleDiplomaHTML(studentName, classText, dateText, teacherText) {
               </div>
             </div>
 
-<h1 class="text-[64px] font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 leading-[1.15] pt-1 drop-shadow-sm">
+<h1 class="text-[70px] font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 leading-[1.15] pt-1 drop-shadow-sm">
               DIPLOM
             </h1>
 
