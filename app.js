@@ -55,11 +55,7 @@ function getActiveSheet() {
 }
 
 function getMode(sheetId) {
-  const sheet = initialSheets.find(s => s.id === sheetId);
-  if (sheet && (!sheet.pages || sheet.pages.length <= 1)) {
-    return "page1";
-  }
-  return sheetMode[sheetId] || "both";
+  return sheetMode[sheetId] || 'both';
 }
 
 function getWeekText(sheetId) {
