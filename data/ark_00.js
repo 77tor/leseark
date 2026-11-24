@@ -16,7 +16,7 @@ window.lesearkData.unshift({
       coverImage: "Bilder/forside_lesing.png",
       schoolName: "Hånes skoleenhet",
       bulletPoints: [
-        "Leseark med alle bokstavene vi lærer på skolen.",
+        "Leseark med alle bokstavene i alfabetet.",
         "Husk å les bokstavlyden «k». Eks: les <u>kkk</u>, ikke <u>kå</u>.",
         "Les tekstene 3 ganger for repetert lesing og leseflyt.",
         "Se arbeidsplanen for riktig leseark for de ulike ukene."
