@@ -40,14 +40,14 @@ window.lesearkData.push({
 
       readingSentencesTitle: "Les tre ganger:",
       readingSentences: [
-        "Guro ser en gul båt på sjøen.",
-        "Maja og Jon går tur i skogen.",
-        "En liten mus bor under et tre.",
-        "Pappa maler den nye døra blå."
+        "Guro ser en gul båt.",
+        "Maja og Jon går tur.",
+        "Ei mus bor under et tre.",
+        "Pappa maler døra blå."
       ],
       readingSentencesImage: "Bilder/pappa_dor.png",
       readingSentencesImageStyle: "photo-frame",
-      readingSentencesImageCustomStyle: "max-height: 145px; margin-top: 12px; margin-left: 16px;"
+      readingSentencesImageCustomStyle: "max-height: 200px; margin-top: 12px; margin-left: 16px;"
     },
 
     // --- SIDE 2: Ekstra leselekse ---
@@ -56,8 +56,8 @@ window.lesearkData.push({
       extraMargin: "mt-8",
       extraTitle: "Ekstra leselekse:",
       extraSentences: [
-        "Ida og Mons går ut i den dype snøen.",
-        "De drar en gul og rød akebrett-pulk.",
+        "Ida og Mons går ut i snøen.",
+        "De aker på akebrett.",
         "På toppen av bakken står en snømann.",
         "Den har en blå lue og en gulrot til nese.",
         "Ungene ler og aker ned igjen."

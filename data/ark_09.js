@@ -18,7 +18,7 @@ window.lesearkData.push({
           title: "Leselekse mandag og tirsdag:",
           words: "gå, ga, gu, gul, gir, gli, gre, grå",
           sentences: [
-            "Nina vil ut å ri.",
+            "Gro vil ut å ri.",
             "Mamma sier ja.",
             "Det er gøy å ri."
           ],
@@ -28,10 +28,10 @@ window.lesearkData.push({
         // Onsdag og torsdag
         {
           title: "Leselekse onsdag og torsdag:",
-          words: "ni, ne, nå, noe, nes, nav, noe",
+          words: "ni, ne, nå, noe, nes, nav, nut",
           sentences: [
-            "Gro vil også ut.",
-            "Hun vil spille ball.",
+            "Nina vil også ut.",
+            "Nå vil hun spille fotball.",
             "Ballen er borte."
           ],
           image: "Bilder/ball.png",

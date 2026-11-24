@@ -58,7 +58,7 @@ window.lesearkData.push({
       extraTitle: "Ekstra leselekse:",
       extraMargin: "mt-8",
       extraSentences: [
-        "Ola eier en stor bil.",
+        "Ola har en stor bil.",
         "Siri vil sitte i bilen.",
         "Tore sitter i setet.",
         "Bilen raser bort.",
@@ -85,7 +85,7 @@ window.lesearkData.push({
         { lineBreak: true },
 
         // 4-lydsord
-        { word: "stol" }, { word: "stor" }, { word: "stiv" }, { word: "blir" }, { word: "brev" }, { word: "bror" },{ word: "vilt" }, 
+        { word: "stol" }, { word: "stor" }, { word: "stiv" }, { word: "blir" }, { word: "brev" }, { word: "bror" },{ word: "leve" }, 
 	{ word: "rive" }, { word: "vise" }, { word: "vare" }, { word: "bare" }, { word: "base" }, { word: "rase" }, { word: "rose" },
       ]
     }

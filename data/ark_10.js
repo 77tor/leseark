@@ -50,8 +50,8 @@ window.lesearkData.push({
         "Det er et rart troll.",
         "Trollet har fint hår.",
         "Trollet heter Pål.",
-        "Pål er redd for lyn.",
-        "Pål liker å fly."
+        "Pål liker å fly.",
+        "Pål er redd for lyn."
       ],
       mouseImage: "Bilder/troll.png",
       imageMargin: "relative -left-[20px] mt-[40px]",

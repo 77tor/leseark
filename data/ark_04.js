@@ -61,11 +61,11 @@ wordsTitle: "Les tre ganger:",
       extraTitle: "Ekstra lekse:",
       extraSentences: [
         "Ei mus må ha mat.",
-        "Den kan ta mel.",
-        "Ei mus kan gå ei mil.",
+        "Den liker ost.",
+        "Ei mus er ikke lett å lure.",
         "Kan vi ha mus i et hus?"
       ],
-      mouseImage: "Bilder/mus.png", // Eventuelt "Bilder/mus_ost.png" dersom filen har spesifikt navn
+      mouseImage: "Bilder/mus_felle.png", // Eventuelt "Bilder/mus_ost.png" dersom filen har spesifikt navn
       imageMargin: "ml-8",
       imageSize: "max-h-72 max-w-[220px]",
 

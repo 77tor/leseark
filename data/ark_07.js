@@ -20,13 +20,13 @@ wordsTitle: "Les tre ganger:",
       words: [
         // Linje 1: 2-lydsord
         { word: "jo" },
-        { word: "to" },
+        { word: "ja" },
         { word: "ål" },
         { word: "ås" },
-        { word: "ja" },
-        { word: "ta" },
-        { word: "mø" },
-        { word: "ro" },
+        { word: "lå" },
+        { word: "så" },
+        { word: "må" },
+        { word: "tå" },
 
         { lineBreak: true },
 
@@ -35,7 +35,7 @@ wordsTitle: "Les tre ganger:",
         { word: "tåa" },
         { word: "mål" },
         { word: "våt" },
-        { word: "jål" },
+        { word: "jus" },
         { word: "låt" }
       ],
       wordsSideImage: "Bilder/maal.png", // Bildet av mål til høyre for ordene

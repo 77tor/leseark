@@ -19,7 +19,7 @@ window.lesearkData.push({
           words: "hå  hi  ha  he  ho  hy  hei  hår  hest",
           sentences: [
             "Hans har en hest.",
-            "Hest er fine dyr.",
+            "Hester er fine dyr.",
             "Hans rir fort."
           ],
           image: "Bilder/gutt_hest.png",
@@ -50,7 +50,7 @@ window.lesearkData.push({
         "Bier elsker å jobbe.",
         "Bier flyr fra blomst til blomst.",
         "De lager honning.",
-        "Alle biene er flinke og glade."
+        "Bier gjør en viktig jobb."
       ],
       mouseImage: "Bilder/bie.png",
       imageMargin: "relative -left-[80px] mt-[-50px]",

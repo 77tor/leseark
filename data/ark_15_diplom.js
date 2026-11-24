@@ -34,7 +34,7 @@ window.lesearkData.push({
         { word: "hurra" }
       ],
 
-      readingSentencesTitle: "Gratulerer! Les teksten tre ganger:",
+      readingSentencesTitle: "Les teksten tre ganger:",
       readingSentences: [
         "Hurra! Nå har jeg lært alle bokstavene.",
         "Jeg kan lese ord helt selv.",

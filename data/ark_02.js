@@ -59,10 +59,11 @@ wordsTitle: "Les tre ganger:",
       pageNumber: 2,
       extraTitle: "Ekstra lekse:",
       extraSentences: [
-        "Si sol når du ser lyset.",
-        "Si solo fem ganger.",
+        "Si sol.",
+        "Si solo.",
+        "Sola er varm.",
         "Solo er en brus.",
-        "Vi ler og koser oss."
+
       ],
       mouseImage: "Bilder/solo.png",
       imageMargin: "ml-[140px]",

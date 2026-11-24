@@ -22,8 +22,8 @@ wordsTitle: "Les tre ganger:",
         { word: "du" },
         { word: "da" },
         { word: "ut" },
-        { word: "ål" },
-        { word: "ås" },
+        { word: "ur" },
+        { word: "do" },
         { word: "tå" },
         { word: "må" },
         { word: "så" },
@@ -65,8 +65,8 @@ wordsTitle: "Les tre ganger:",
         sentences: [
           "Ser du et tre?",
           "Ser du ei lue?",
-          "Ja sier Trine.",
-          "Nei sier Ola."
+          "Ja, sier Trine.",
+          "Nei, sier Ola."
         ],
         image: "Bilder/lue.png",
         imageSize: "h-36 max-w-[160px]"

@@ -66,15 +66,15 @@ window.lesearkData.push({
 
   extraTitle: "Ekstra leselekser:",
   extraSentences: [
-    "Mamma har kjøpt Q-tips.",
-    "Vi skal ha quiz i dag.",
-    "Ali liker cola.",
-    "Mia har vært på cup i helga."
+    "Mamma kjører Mia.",
+    "Mia skal på cup i helga.",
+    "Når cupen er ferdig er det quiz.",
+    "Mia vinner cupen, men ikke quizen."
   ],
 
   mouseImage: "Bilder/cup.png",
   imageMargin: "mt-6",
-  imageSize: "max-h-56 max-w-[250px]",
+  imageSize: "max-h-56 max-w-[230px]",
   imageStyle: "photo-frame",
 
 

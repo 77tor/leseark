@@ -36,7 +36,7 @@ wordsTitle: "Les tre ganger:",
       readingSentencesTitle: "Les tre ganger:",
       readingSentences: [
         "Mor leser avis.",
-        "Se et tre.",
+        "Se et høyt tre.",
         "Mormor er søt.",
         "Kua sier mø."
       ],

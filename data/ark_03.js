@@ -63,7 +63,7 @@ wordsTitle: "Les tre ganger:",
       extraSentences: [
         "Jon har en syl.",
         "Han får et sår.",
-        "Da er han sur.",
+        "Da blir han sur.",
         "Er du sur?"
       ],
       mouseImage: "Bilder/syl.png",

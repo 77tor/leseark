@@ -58,7 +58,7 @@ wordsTitle: "Les tre ganger:",
         "Ser du ei mus?",
         "Ei mus kan bo i en mur.",
         "Pek på musa.",
-        "Musa er en lur mus.",
+        "Musa er ei lur mus.",
         "Musa ler."
       ],
       mouseImage: "Bilder/mus_i_mur.png", // Bildet av musa i murveggen

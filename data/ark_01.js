@@ -57,8 +57,8 @@ window.lesearkData.push({
       extraSentences: [
         "Siri ser en gul is.",
         "Per ser en sel.",
-        "Ole vil se i en isbjørn.",
-        "Sola er gul og fin."
+        "Ole vil se en isbjørn.",
+        "Sola er gul."
       ],
       mouseImage: "Bilder/tekst_01.png",
       imageStyle: "photo-frame",

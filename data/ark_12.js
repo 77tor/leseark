@@ -18,7 +18,7 @@ window.lesearkData.push({
           title: "Leselekse mandag og tirsdag:",
           words: "kø, ku, ka, ke, ær, æs, æl, kul, kam, kne",
           sentences: [
-            "Kim er kul, sa Siri.",
+            "Kim er kul, sier Siri.",
             "Kan du ake?",
             "Vi kan ake."
           ],
