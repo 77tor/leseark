@@ -557,17 +557,17 @@ function renderRhymeMatchTask(page) {
   const task = page.rhymeMatchTask;
 
   return `
-    <div class="mt-2 px-8 flex flex-col">
+    <div class="mt-1 px-8 flex flex-col">
       <div class="mb-4">
-        <h3 class="text-2xl font-bold text-slate-900 leading-tight">
+        <h3 class="text-[28px] font-bold text-slate-900 leading-tight">
           ${task.title || 'Hvilke ord rimer?'}
         </h3>
-        <p class="text-base text-slate-700 mt-0.5">
+        <p class="text-xl text-slate-700 mt-1">
           ${task.instruction || 'Sett strek mellom ordene som rimer.'}
         </p>
       </div>
 
-      <div class="grid grid-cols-2 gap-x-44 gap-y-4 items-center justify-items-center">
+      <div class="grid grid-cols-2 gap-x-44 gap-y-5 items-center justify-items-center">
         ${task.rows.map(row => `
           <div class="flex items-center justify-center w-24 h-20">
             <img src="${row.left.image}" alt="${row.left.alt || ''}" class="max-h-full max-w-full object-contain">
@@ -586,20 +586,20 @@ function renderSyllableTask(page) {
   const task = page.syllableTask;
 
   return `
-    <div class="mt-7 pt-5 border-t-2 border-slate-200 px-8 flex flex-col">
+    <div class="mt-6 pt-4 mb-auto border-t-2 border-slate-200 px-8 flex flex-col">
       <div class="mb-4">
-        <h3 class="text-2xl font-bold text-slate-900 leading-tight">
+        <h3 class="text-[28px] font-bold text-slate-900 leading-tight">
           ${task.title || 'Hvor mange stavelser?'}
         </h3>
-        <p class="text-base text-slate-700 mt-0.5">
+        <p class="text-xl text-slate-700 mt-1">
           ${task.instruction || 'Marker hvor mange stavelser du hører i ordet.'}
         </p>
       </div>
 
-      <div class="grid grid-cols-2 gap-x-20 gap-y-5 items-center justify-items-center">
+      <div class="grid grid-cols-2 gap-x-20 gap-y-16 items-center justify-items-center">
         ${task.items.map(item => `
           <div class="flex flex-col items-center">
-            <div class="flex items-center justify-center w-28 h-24 mb-2">
+            <div class="flex items-center justify-center w-28 h-24 mb-2.5">
               <img src="${item.image}" alt="${item.alt || ''}" class="max-h-full max-w-full object-contain">
             </div>
             <div class="flex items-center gap-2.5">
