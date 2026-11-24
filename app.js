@@ -188,6 +188,13 @@ function renderSidebar() {
       ${isHidden ? 'sheet-menu-hidden' : ''}
     `;
 
+// Bryt teksten etter "&" og "Gratulerer!" i tavlemodus
+    const displayTitle = isBoardMode
+      ? sheet.title
+          .replace('& ', '&<br>')
+          .replace('Gratulerer! ', 'Gratulerer!<br>')
+      : sheet.title;
+
     btn.innerHTML = `
       <!-- RAD 1: ARKNAVN, UKENUMMER OG VIS/SKJUL -->
       <div class="sheet-menu-header">
@@ -200,7 +207,7 @@ function renderSidebar() {
           <i class="fa-solid fa-file-lines sheet-menu-icon"></i>
 
           <span class="sheet-menu-name ${isHidden ? 'line-through' : ''}">
-            ${sheet.title}
+            ${displayTitle}
           </span>
 
           ${weekStr ? `
@@ -1555,6 +1562,31 @@ function closeBookletModal() {
   isPrintInProgress = false;
   window.pendingPrintConfig = null;
 }
+
+
+
+let isBoardMode = false;
+
+function toggleBoardMode() {
+  isBoardMode = !isBoardMode;
+  document.body.classList.toggle('board-mode', isBoardMode);
+
+  const btn = document.getElementById('boardModeBtn');
+  if (btn) {
+    btn.innerHTML = isBoardMode
+      ? '<i class="fa-solid fa-xmark"></i>'
+      : '<i class="fa-solid fa-chalkboard-user"></i>';
+    btn.title = isBoardMode ? 'Avslutt tavlemodus' : 'Tavlemodus (Storskjerm)';
+    btn.classList.toggle('text-sky-600', isBoardMode);
+  }
+
+  renderSidebar();
+
+  // Oppdater zoomen automatisk slik at arket fyller den nye, bredere plassen
+  customZoom = null;
+  setTimeout(updatePageScale, 50);
+}
+
 
 // EKSEKVERE UTSKRIFT
 let isPrintInProgress = false;

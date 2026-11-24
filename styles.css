@@ -410,3 +410,49 @@ body.show-watermark .print-page::after {
     break-after: auto;
   }
 }
+
+
+/* TAVLEMODUS / STORSKJERM */
+body.board-mode .sidebar-panel {
+  width: 300px !important;
+  min-width: 300px !important;
+  padding-top: 12px !important;
+}
+
+/* Skjul kun elementer som IKKE er eller inneholder arklisten (#sheetsList) */
+body.board-mode .sidebar-panel > *:not(#sheetsList):not(:has(#sheetsList)),
+body.board-mode .sidebar-panel :has(#sheetsList) > *:not(#sheetsList):not(:has(#sheetsList)),
+body.board-mode .sidebar-panel button:not(#sheetsList button),
+body.board-mode .sidebar-panel input,
+body.board-mode .sidebar-panel label {
+  display: none !important;
+}
+
+/* Skjul underknapper, uketags, øye-ikon, dokumentikon og skjulte ark */
+body.board-mode .sheet-menu-options,
+body.board-mode .sheet-menu-week,
+body.board-mode .sheet-menu-eye,
+body.board-mode .sheet-menu-icon,
+body.board-mode .sheet-menu-hidden {
+  display: none !important;
+}
+
+/* Gi full plass til hele ark-tittelen uten avkutting (...) */
+body.board-mode .sheet-menu-item {
+  padding: 10px 14px !important;
+  margin-bottom: 6px !important;
+}
+
+body.board-mode .sheet-menu-title {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+body.board-mode .sheet-menu-name {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  white-space: normal !important;
+  line-height: 1.25 !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
